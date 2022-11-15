@@ -15,7 +15,7 @@ import os
 
 def parsing_args():
     '''generate the command line arguments using argparse'''
-    usage = 'create_crops.py [-h] -f <file> -d <dir>'
+    usage = 'create_crops.py [-h]'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage

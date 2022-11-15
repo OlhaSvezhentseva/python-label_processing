@@ -107,8 +107,8 @@ class Predict_Labels():
             dataframe[header] = dataframe[header].astype('str').str.\
                 extractall('(\d+.\d+)').unstack().fillna('0').sum(axis=1).astype(float)
         dataframe = dataframe.loc[ dataframe['score'] >= self.threshold ]
-        #TODO add "0" to empty cells
-        #dataframe.fillna('0', inplace=True)
+        #NOTE: This should do it
+        dataframe = dataframe.fillna('0')
         location = os.path.dirname(os.path.realpath(self.jpg_dir)) 
         filename = f"{Path(self.jpg_dir).stem}_predictions.csv"
         csv_path = f"{location}/{filename}"
