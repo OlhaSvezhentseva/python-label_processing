@@ -1,0 +1,3 @@
+- add classes argument (for example "1" = class, "2" = box, "3" = handwritten/typed - add to help)
+- have an other folder "notebooks" for Jupyter notebooks, py files go to "script" folder
+- Margot: upgrade to python 3.10
