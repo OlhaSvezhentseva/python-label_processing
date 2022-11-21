@@ -1,5 +1,4 @@
 """
-""
 Module containing all functions concerning the application of the 
 model and to use the predicted coordinates for cropping the predicted labels.  
 """
