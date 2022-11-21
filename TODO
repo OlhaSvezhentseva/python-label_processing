@@ -3,3 +3,9 @@
 - Margot: upgrade to python 3.10
 - Add option for location of directory
 
+OCR:
+- to have an output with singles txt files (1 per picture)
+- dataframe output with filenames and ocr output (2 columns)
+- output as xml files (1 per picture)
+- output as Json-files (1 big json file)
+- find a way to make all the crops straight (better results)!!!!! Priority
