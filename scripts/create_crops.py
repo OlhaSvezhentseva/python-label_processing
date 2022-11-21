@@ -12,6 +12,11 @@ cropped labels of every picture as seperate images in each of these directories.
 import apply_model
 import argparse
 import os
+#import warnings
+#warnings.simplefilter("ignore", UserWarning) #new
+#import pandas as pd
+#from pandas.core.common import SettingWithCopyWarning #new
+#warnings.simplefilter(action="ignore", category=SettingWithCopyWarning) #new
 
 def parsing_args():
     '''generate the command line arguments using argparse'''
@@ -60,6 +65,7 @@ def get_classtype(class_bool):
         classes = ["box"]
     return classes
 
+#classes = ["handwritten", "typed"]
 
 # does not execute main if the script is imported as a module
 if __name__ == '__main__': 
@@ -69,8 +75,7 @@ if __name__ == '__main__':
     jpeg_dir = args.jpg_dir
     classes = get_classtype(args.classes)
     
-    predictions = apply_model.Predict_Labels(model_path,
-                                                              classes, jpeg_dir)
+    predictions = apply_model.Predict_Labels(model_path, classes, jpeg_dir)
     
     # 2. Call Model
     model = predictions.get_model()
