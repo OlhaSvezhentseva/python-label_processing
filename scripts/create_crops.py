@@ -1,22 +1,18 @@
-#!/usr/bin/env python3
-
 '''
-Takes the csv with the labelnames and the directory with the images as an input 
-and creates a new directory with in the current working directory. This directory
-contains one subdirectory for each picture in the input directory with the 
-cropped labels of every picture as seperate images in each of these directories.
+Execute the apply_model script. Below, uncomment the classes of the chosen model.
+Takes as inputs: the path to the jpg (jpg_dir) and the path to the model (model).
+Outputs: the labels in the pictures are segmented and cropped out of the picture,
+         becoming their own file named after their jpg of origin and class.
 '''
-
-#TODO make this different, so that only one picture is loaded in at a time
 
 import apply_model
 import argparse
 import os
 #import warnings
-#warnings.simplefilter("ignore", UserWarning) #new
+#warnings.simplefilter("ignore", UserWarning)
 #import pandas as pd
-#from pandas.core.common import SettingWithCopyWarning #new
-#warnings.simplefilter(action="ignore", category=SettingWithCopyWarning) #new
+#from pandas.core.common import SettingWithCopyWarning
+#warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
 
 def parsing_args():
     '''generate the command line arguments using argparse'''
@@ -77,11 +73,11 @@ if __name__ == '__main__':
     
     predictions = apply_model.Predict_Labels(model_path, classes, jpeg_dir)
     
-    # 2. Call Model
+    # 1. Call Model
     model = predictions.get_model()
-    # 3. Models Predictions
+    # 2. Models Predictions
     df = predictions.class_prediction(model)
-    # 4. Filter model predictions and save csv
+    # 3. Filter model predictions and save csv
     df = predictions.clean_predictions(df)
-    # 5. cropping
+    # 4. cropping
     apply_model.create_crops(jpeg_dir, df)
