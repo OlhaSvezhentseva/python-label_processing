@@ -1,7 +1,9 @@
 """
+""
 Module containing all functions concerning the application of the 
 model and to use the predicted coordinates for cropping the predicted labels.  
 """
+
 import glob
 import cv2
 import os
@@ -105,10 +107,10 @@ class Predict_Labels():
         colnames = ['score','xmin', 'ymin', 'xmax', 'ymax']
         for header in colnames:
             dataframe[header] = dataframe[header].astype('str').str.\
-                extractall('(\d+.\d+)').unstack().fillna('0').sum(axis=1).astype(float)
+                extractall('(\d+.\d+)').unstack().fillna('').sum(axis=1).astype(float)
         dataframe = dataframe.loc[ dataframe['score'] >= self.threshold ]
         #NOTE: This should do it
-        dataframe = dataframe.fillna('0')
+        dataframe[['xmin', 'ymin','xmax','ymax']] = dataframe[['xmin', 'ymin','xmax','ymax']].fillna('0') #new
         location = os.path.dirname(os.path.realpath(self.jpg_dir)) 
         filename = f"{Path(self.jpg_dir).stem}_predictions.csv"
         csv_path = f"{location}/{filename}"
