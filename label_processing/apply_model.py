@@ -28,10 +28,10 @@ class Predict_Labels():
         Args:
             path_to_model (str): string that contains the path to the model
             classes (list): list that contains the classes that should be used
-            jpg_dir (str): string with path to the directory containing the 
-                original jpgs
-            threshold (float, optional): Threshold value for scores. 
-                Defaults to 0.8.
+            jpg_dir (str): string with path to the directory containing the
+                           original jpgs
+            threshold (float, optional): Threshold value for scores.
+                                         Defaults to 0.8.
         """
         self.path_to_model = path_to_model
         self.classes = classes
@@ -40,13 +40,12 @@ class Predict_Labels():
         
     def get_model(self):
         """
-        Call trained object detection model *model_labels_class.pth*. 
-        The model was trained with the Detecto python package which is built on top 
+        Call trained object detection model, for example *model_labels_class.pth*.
+        The model was trained with the Detecto python package which is built on top
         of PyTorch.
             
         Returns:
-            model : trained object detection model
-            
+            model: trained object detection model
         """
         print("Calling trained object detection model")
         model_type = Model.DEFAULT
@@ -59,17 +58,15 @@ class Predict_Labels():
 
     def class_prediction(self, model):
         """
-        Uses the trained model created by Detecto and tries to predict boxes of all 
-        files in a directory. It then returns a pandas Dataframe.
+        Uses the trained model created by Detecto and tries to predict the labelling of all
+        files in a directory. It then returns a Pandas Dataframe.
 
         Args:
-            model(detecto.core.Model): access to object detection model 
-                *model_labels_class.pth* and pretrained PyTorch model 
-                (fasterrcnn_resnet50_fpn)
-
+            model(detecto.core.Model): access to object detection model and pretrained PyTorch model
+                                       (fasterrcnn_resnet50_fpn)
+                                       
         Returns:
             DataFrame: pandas Dataframe with the results
-
         """
         all_predictions = []
         print("Predicting coordinates")
@@ -95,9 +92,8 @@ class Predict_Labels():
         Creates a clean dataframe only with boxes exceeding a given threshold score.
 
         Args:
-            dataframe(pandas.DataFrame): pandas Dataframe with prediction 
-                coordinates and scores labels
-
+            dataframe(pandas.DataFrame): pandas Dataframe with predicted coordinates and labels' scores
+            
         Returns:
             DataFrame: pandas Dataframe with the trimmed results
         """
@@ -120,15 +116,14 @@ class Predict_Labels():
 
 def load_dataframe(filepath_csv):
     """
-    loads the csv file using pandas
+    Loads the csv file using Pandas.
 
     Args:
-        filepath_csv(str): string containing the path to the csv with the 
-            qresults from applying the model
-        
-    
+        filepath_csv(str): string containing the path to the csv with the
+                           results from applying the model
+                           
     Returns:
-        Dataframe: The csv as a pandas Dataframe-object
+        Dataframe: The csv as a Pandas Dataframe
     """
     #NOTE: maybe this function is not necessary
     dataframe = pd.read_csv(filepath_csv)
@@ -137,11 +132,11 @@ def load_dataframe(filepath_csv):
 
 def load_jpgs(filepath):
     """
-    Loads the jpg file using the opencv module
+    Loads the jpg file using the opencv module.
 
     Returns:
-        dict: dictionary with filenames as keys and cv2.imread() outputs 
-        as values 
+        dict: dictionary with filenames as keys and cv2.imread() outputs
+              as values
     """
     with open(filepath) as f:
         jpg = cv2.imread(filepath)
@@ -150,7 +145,8 @@ def load_jpgs(filepath):
     
     
 def crop_picture(img_raw,path,filename,**coordinates):
-    """crops the picture using the given coordinates
+    """
+    Crops the picture using the given coordinates.
 
     Args:
         img_raw (numpy matrix): input jpg converted to numpy matrix by cv2
@@ -169,13 +165,13 @@ def crop_picture(img_raw,path,filename,**coordinates):
 
 def make_file_name(label_id, pic_class, occurence):
     """
-    Creates a fitting filename
+    Creates a fitting filename.
 
     Args:
-        label_id (str): string containing the label id 
+        label_id (str): string containing the label id
         pic_class (str): class of the label
-        occurence (int): count of how many times the label class already 
-            occured in the picure
+        occurence (int): counts how many times the label class already
+                         occured in the picure
     """
     #remove occurences of _label in filename to make the name look nicer
     label_id = re.sub(r"_+label", "", label_id) 
@@ -184,11 +180,11 @@ def make_file_name(label_id, pic_class, occurence):
 
 def create_crops(jpg_dir, dataframe):
     """
-    creates crops by using the csv from applying the model and the original 
-    pictures inside a directory
+    Creates crops by using the csv from applying the model and the original
+    pictures inside a directory.
 
     Args:
-        file (str): path to csv file 
+        file (str): path to csv file
         directory (str): path to directory with jpgs
     """
     #create a new_directory
