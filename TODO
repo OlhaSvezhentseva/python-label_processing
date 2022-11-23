@@ -1,6 +1,6 @@
 - add classes argument (for example "1" = class, "2" = box, "3" = handwritten/typed - add to help)
 - have an other folder "notebooks" for Jupyter notebooks, py files go to "script" folder *DONE*
-- Margot: upgrade to python 3.10 DONE
+- Margot: upgrade to python 3.10 DONE - the function def get_classtype(class_bool) still doesn't work with Python 3.10
 - Add option for location of directory
 
 OCR:
