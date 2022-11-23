@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[2]:
-
-
 from PIL import Image
 import pytesseract as pt
 import os
@@ -16,13 +10,7 @@ import sys
 import json
 
 
-# In[4]:
-
-
 pt.pytesseract.tesseract_cmd = r"/opt/homebrew/Cellar/tesseract/5.2.0/bin/tesseract"
-
-
-# In[10]:
 
 
 # get grayscale image
@@ -81,15 +69,15 @@ def improved_image_to_string(img, config):
     canny_var = canny(gray)
     return pt.image_to_string(thresh, config = config)
 
+"""
 Try to add options:
 - to have an output with singles txt files (1 per picture)
 - dataframe output with filenames and ocr output (2 columns)
 - output as xml files(1 per picture)
 - find a way to make all the crops straight (better results)!!!!! Priority
-# In[13]:
+"""
 
-
-# path for the folder for getting the images
+# path to jpgs
 path ="/Users/Margot/Desktop/typed"
   
 # link to the file in which output needs to be kept
