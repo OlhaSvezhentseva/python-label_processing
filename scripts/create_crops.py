@@ -14,6 +14,8 @@ import os
 #from pandas.core.common import SettingWithCopyWarning
 #warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
 
+CLS_AMOUNT = 3
+
 def parsing_args():
     '''generate the command line arguments using argparse'''
     usage = 'create_crops.py [-h]'
@@ -29,8 +31,12 @@ def parsing_args():
     parser.add_argument(
             '-c', '--classes',
             metavar='',
-            action=argparse.BooleanOptionalAction,
-            help='optional argument: select whether classes should be used'
+            choices = range(1,3),
+            type=int,
+            default = 1,
+            action="store",
+            help=('optional argument: select whether classes should be used. 1 : only box,'
+                 '2 : classes, 3 : handwritten/typed. Default is only \'box\'')
             )
     
     parser.add_argument(
@@ -49,19 +55,39 @@ def parsing_args():
             help='path to the model to be used'
             )
     
+    parser.add_argument(
+            '-o', '--out_dir',
+            metavar='',
+            type=str,
+            Default = os.getcwd(),
+            help=(
+                'Directory in which the result crops will be stored. Default is'
+                'the users current working directory'
+            )
+    )
+    
     args = parser.parse_args()
 
     return args
 
-def get_classtype(class_bool):
-    if class_bool:
-        classes = ["location", "nuri", "uce", "taxonomy", "antweb",
+
+def get_classtype(class_int):
+    """
+    returns the right classes
+
+    Args:
+        class_int (int): integer for class selection
+
+    Returns:
+        list: list with the selected classes
+    """
+    if class_int == 1:
+        return ["box"]
+    elif class_int == 2:
+        return ["location", "nuri", "uce", "taxonomy", "antweb",
                 "casent_number", "dna", "other", "collection"]
     else:
-        classes = ["box"]
-    return classes
-
-#classes = ["handwritten", "typed"]
+        return ["handwritten", "typed"]
 
 # does not execute main if the script is imported as a module
 if __name__ == '__main__': 
@@ -80,4 +106,4 @@ if __name__ == '__main__':
     # 3. Filter model predictions and save csv
     df = predictions.clean_predictions(df)
     # 4. cropping
-    apply_model.create_crops(jpeg_dir, df)
+    apply_model.create_crops(jpeg_dir, df, out_dir = args.out_dir)

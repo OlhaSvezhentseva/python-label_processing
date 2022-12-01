@@ -178,7 +178,7 @@ def make_file_name(label_id, pic_class, occurence):
     filename = f"{label_id}_label_{pic_class}_{occurence}.jpg"
     return filename
 
-def create_crops(jpg_dir, dataframe):
+def create_crops(jpg_dir, dataframe, out_dir = os.getcwd()):
     """
     Creates crops by using the csv from applying the model and the original
     pictures inside a directory.
@@ -193,8 +193,7 @@ def create_crops(jpg_dir, dataframe):
         new_dir = f"{os.path.basename(os.path.dirname(dir_path))}_cropped"
     else:
         new_dir = f"{os.path.basename(dir_path)}_cropped"
-    cwd = os.getcwd()
-    path = (f"{cwd}/{new_dir}/")
+    path = (f"{out_dir}/{new_dir}/")
     #create directory
     Path(path).mkdir(parents=True, exist_ok=True)
     
@@ -217,4 +216,4 @@ def create_crops(jpg_dir, dataframe):
                            'xmax':int(row.xmax),'ymax':int(row.ymax)}
             crop_picture(image_raw,path,filename,**coordinates)
             classes.append(pic_class)
-    print(f"The images have been successfully saved in {cwd}/{new_dir}")
+    print(f"The images have been successfully saved in {out_dir}/{new_dir}")
