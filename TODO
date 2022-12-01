@@ -1,11 +1,12 @@
-- add classes argument (for example "1" = class, "2" = box, "3" = handwritten/typed - add to help)
+- add classes argument (for example "1" = class, "2" = box, "3" = handwritten/typed - add to help) *DONE*
 - have an other folder "notebooks" for Jupyter notebooks, py files go to "script" folder *DONE*
 - Margot: upgrade to python 3.10 *DONE* - the function def get_classtype(class_bool) still doesn't work with Python 3.10
-- Add option for location of directory
+- Add option for location of directory *DONE*
 
 OCR:
 - to have an output with singles txt files (1 per picture)
 - dataframe output with filenames and ocr output (2 columns)
 - output as xml files (1 per picture)
 - output as Json-files (1 big json file)
-- find a way to make all the crops straight (better results)!!!!! Priority
+- find a way to make all the crops straight (better results)!!!!! Priority -> https://pyimagesearch.com/2022/01/31/correcting-text-orientation-with-tesseract-and-python/
+  We should check that out
