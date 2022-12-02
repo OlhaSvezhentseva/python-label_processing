@@ -14,3 +14,4 @@ OCR-pytesseract:
 
 OCR-Keras:
 - test to create own OCR model https://keras-ocr.readthedocs.io/en/latest/examples/fine_tuning_recognizer.html 
+- https://github.com/DeepSystems/supervisely-tutorials/blob/master/anpr_ocr/src/image_ocr.ipynb
