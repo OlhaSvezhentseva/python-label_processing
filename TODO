@@ -3,10 +3,14 @@
 - Margot: upgrade to python 3.10 *DONE* - the function def get_classtype(class_bool) still doesn't work with Python 3.10
 - Add option for location of directory *DONE*
 
-OCR:
+OCR-pytesseract:
 - to have an output with singles txt files (1 per picture)
+- add option only apply OCR on typed images - from the handwritten/typed model
 - dataframe output with filenames and ocr output (2 columns)
 - output as xml files (1 per picture)
 - output as Json-files (1 big json file)
 - find a way to make all the crops straight (better results)!!!!! Priority -> https://pyimagesearch.com/2022/01/31/correcting-text-orientation-with-tesseract-and-python/
   We should check that out
+
+OCR-Keras:
+- test to create own OCR model https://keras-ocr.readthedocs.io/en/latest/examples/fine_tuning_recognizer.html 
