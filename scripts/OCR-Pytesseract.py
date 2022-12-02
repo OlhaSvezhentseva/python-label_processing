@@ -1,5 +1,5 @@
 from PIL import Image
-import pytesseract as pt
+import pytesseract
 import os
 import cv2
 import re
@@ -10,7 +10,7 @@ import sys
 import json
 
 
-pt.pytesseract.tesseract_cmd = r"/opt/homebrew/Cellar/tesseract/5.2.0/bin/tesseract"
+pytesseract.pytesseract.tesseract_cmd = r"/opt/homebrew/Cellar/tesseract/5.2.0/bin/tesseract" 
 
 
 # get grayscale image
@@ -62,49 +62,32 @@ def deskew(image):
 def match_template(image, template):
     return cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED) 
 
-def improved_image_to_string(img, config):
+def improved_image_to_string(img, languages, config):
     gray = get_grayscale(img)
     thresh = thresholding(gray)
     opening_var = opening(gray)
     canny_var = canny(gray)
-    return pt.image_to_string(thresh, config = config)
+    return pytesseract.image_to_string(thresh, languages, config)
 
-"""
-Try to add options:
-- to have an output with singles txt files (1 per picture)
-- dataframe output with filenames and ocr output (2 columns)
-- output as xml files(1 per picture)
-- find a way to make all the crops straight (better results)!!!!! Priority
-"""
+# apply OCR
+def OCR(path, output, config, languages):
+    print("Start OCR")
+    for filepath in glob.glob(os.path.join(f"{path}/*.jpg")):
+        filename = os.path.basename(filepath)
+        print(f"Performing OCR on {os.path.basename(filepath)}!")
+        img = cv2.imread(filepath)
+        file1 = open(output, "a+")
+        file1.write(filename+"\n") 
+        non_processed = pytesseract.image_to_string(img, languages, config)
+        #processed = improved_image_to_string(img, languages, config)
+        file1.write(non_processed+"\n")
+        file1.close()
+    print("Successful")
 
-# path to jpgs
-path ="/Users/Margot/Desktop/typed"
-  
-# link to the file in which output needs to be kept
-output ="/Users/Margot/Desktop/typed/ocrOutput.txt" #output as one single txt file
-custom_config = r'--oem 3 --psm 6'
+path = "/Users/Margot/Desktop/tests_OCR/pictures_typed copie" #path to cropped pictures
+output = "/Users/Margot/Desktop/ocrOutput18.txt" #output as one single txt file
+config=r'--psm 3 --oem 3' #psm4, 3 and 12 is good - 5 assumes that the text is vertical
+languages = 'eng+deu+fra+ita+spa+por'
 
-# iterating the images inside the folder
-print("Start OCR")
-for filepath in glob.glob(os.path.join(f"{path}/*.jpg")):
-    filename = os.path.basename(filepath)
-    print(f"Performing OCR on {os.path.basename(filepath)}!")
-    img = cv2.imread(filepath)
-# applying ocr using pytesseract for python
-    non_processed = pt.image_to_string(img, config=custom_config)
-    processed = improved_image_to_string(img, custom_config)
-# saving the  text for appending it to the output.txt file
-# a + parameter used for creating the file if not present
-# and if present then append the text content
-    file1 = open(output, "a+")
-# providing the name of the image
-    file1.write(filename+"\n") 
-# providing the content in the image
-    file1.write(processed+"\n")
-    file1.close()
-print("Successful")
-# for printing the output file
-#file2 = open(fullTempPath, 'r')
-#print(file2.read()
-#file2.close()       
+OCR(path, output, config, languages)
 
