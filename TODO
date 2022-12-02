@@ -4,6 +4,7 @@
 - Add option for location of directory *DONE*
 - add mcOS version of create_crops.py 
 - add option to create directory for each classes - cropping outputs
+- correct out_dir directory
 
 
 OCR-pytesseract:
