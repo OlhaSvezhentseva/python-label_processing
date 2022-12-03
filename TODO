@@ -10,5 +10,5 @@ OCR:
 - output as Json-files (1 big json file)
 - find a way to make all the crops straight (better results)!!!!! Priority -> https://pyimagesearch.com/2022/01/31/correcting-text-orientation-with-tesseract-and-python/
   We should check that out
-- add an option for only handwritten -> if handwritten is selected -> only crop non handwritten
+
 
