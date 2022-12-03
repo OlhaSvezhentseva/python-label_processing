@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 '''
 Execute the apply_model script. Below, uncomment the classes of the chosen model.
 Takes as inputs: the path to the jpg (jpg_dir) and the path to the model (model).
