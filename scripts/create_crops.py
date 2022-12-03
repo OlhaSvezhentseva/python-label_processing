@@ -60,7 +60,7 @@ def parsing_args():
             '-o', '--out_dir',
             metavar='',
             type=str,
-            Default = os.getcwd(),
+            default = os.getcwd(),
             help=(
                 'Directory in which the result crops will be stored. Default is'
                 'the users current working directory'
