@@ -1,10 +1,12 @@
+Segmentation:
+*DONE*
 - add classes argument (for example "1" = class, "2" = box, "3" = handwritten/typed - add to help) *DONE*
 - have an other folder "notebooks" for Jupyter notebooks, py files go to "script" folder *DONE*
-- Margot: upgrade to python 3.10 *DONE* - the function def get_classtype(class_bool) still doesn't work with Python 3.10
-- Add option for location of directory *DONE*
+- Margot: upgrade to python 3.10 *DONE* - the function def get_classtype(class_bool) still doesn't work with Python 3.10 *DONE*
+*TODO*
+- Add option for location of directory - Not working - correct out_dir directory
 - add mcOS version of create_crops.py 
 - add option to create directory for each classes - cropping outputs
-- correct out_dir directory
 
 
 OCR-pytesseract:
