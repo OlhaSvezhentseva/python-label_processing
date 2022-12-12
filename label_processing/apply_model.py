@@ -87,7 +87,7 @@ class Predict_Labels():
         dataframe = pd.DataFrame(all_predictions)
         return dataframe
 
-    def clean_predictions(self, dataframe):
+    def clean_predictions(self, dataframe, out_dir = None):
         #TODO add outdir also here
         """
         Creates a clean dataframe only with boxes exceeding a given threshold score.
@@ -107,11 +107,12 @@ class Predict_Labels():
         dataframe = dataframe.loc[ dataframe['score'] >= self.threshold ]
         #NOTE: This should do it
         dataframe[['xmin', 'ymin','xmax','ymax']] = dataframe[['xmin', 'ymin','xmax','ymax']].fillna('0') #new
-        location = os.path.dirname(os.path.realpath(self.jpg_dir)) 
+        if out_dir is None:
+            out_dir = os.path.dirname(os.path.realpath(self.jpg_dir))     
         filename = f"{Path(self.jpg_dir).stem}_predictions.csv"
-        csv_path = f"{location}/{filename}"
+        csv_path = f"{out_dir}/{filename}"
         dataframe.to_csv(csv_path)
-        print(f"{filename} has been successfully saved in {location}")
+        print(f"The csv_file {filename} has been successfully saved in {out_dir}")
         #returns csv_path as
         return dataframe
 

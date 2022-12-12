@@ -62,8 +62,8 @@ def parsing_args():
             type=str,
             default = os.getcwd(),
             help=(
-                'Directory in which the result crops will be stored. Default is'
-                'the users current working directory'
+                'Directory in which the resulting crops and the csv will be stored.'
+                'Default is the users current working directory'
             )
     )
     
@@ -105,6 +105,6 @@ if __name__ == '__main__':
     # 2. Models Predictions
     df = predictions.class_prediction(model)
     # 3. Filter model predictions and save csv
-    df = predictions.clean_predictions(df)
+    df = predictions.clean_predictions(df, out_dir = args.out_dir)
     # 4. cropping
     apply_model.create_crops(jpeg_dir, df, out_dir = args.out_dir)
