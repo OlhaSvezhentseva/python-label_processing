@@ -1,6 +1,6 @@
 """
-Module containing all functions concerning the application of the 
-model and to use the predicted coordinates for cropping the predicted labels.  
+Module containing all functions concerning the application of the segmenation
+models and to use the predicted coordinates for cropping the labels.  
 """
 
 import glob
@@ -30,7 +30,7 @@ class Predict_Labels():
             classes (list): list that contains the classes that should be used
             jpg_dir (str): string with path to the directory containing the
                            original jpgs
-            threshold (float, optional): Threshold value for scores.
+            threshold (float, optional): threshold value for scores.
                                          Defaults to 0.8.
         """
         self.path_to_model = path_to_model
@@ -88,15 +88,14 @@ class Predict_Labels():
         return dataframe
 
     def clean_predictions(self, dataframe, out_dir = None):
-        #TODO add outdir also here
         """
-        Creates a clean dataframe only with boxes exceeding a given threshold score.
+        Creates a clean dataframe only with boxes´ coordinates exceeding a given threshold score.
 
         Args:
-            dataframe(pandas.DataFrame): pandas Dataframe with predicted coordinates and labels' scores
+            dataframe(pandas.DataFrame): Pandas Dataframe with predicted coordinates and labels' scores
             
         Returns:
-            DataFrame: pandas Dataframe with the trimmed results
+            DataFrame: Pandas Dataframe with the trimmed results
         """
         print("Filter coordinates")
         dataframe = dataframe
@@ -105,7 +104,6 @@ class Predict_Labels():
             dataframe[header] = dataframe[header].astype('str').str.\
                 extractall('(\d+.\d+)').unstack().fillna('').sum(axis=1).astype(float)
         dataframe = dataframe.loc[ dataframe['score'] >= self.threshold ]
-        #NOTE: This should do it
         dataframe[['xmin', 'ymin','xmax','ymax']] = dataframe[['xmin', 'ymin','xmax','ymax']].fillna('0') #new
         if out_dir is None:
             out_dir = os.path.dirname(os.path.realpath(self.jpg_dir))     
@@ -113,8 +111,8 @@ class Predict_Labels():
         csv_path = f"{out_dir}/{filename}"
         dataframe.to_csv(csv_path)
         print(f"The csv_file {filename} has been successfully saved in {out_dir}")
-        #returns csv_path as
         return dataframe
+
 
 def load_dataframe(filepath_csv):
     """
@@ -127,7 +125,6 @@ def load_dataframe(filepath_csv):
     Returns:
         Dataframe: The csv as a Pandas Dataframe
     """
-    #NOTE: maybe this function is not necessary
     dataframe = pd.read_csv(filepath_csv)
     return dataframe
 
@@ -142,7 +139,6 @@ def load_jpgs(filepath):
     """
     with open(filepath) as f:
         jpg = cv2.imread(filepath)
-
     return jpg
     
     
@@ -164,7 +160,6 @@ def crop_picture(img_raw,path,filename,**coordinates):
     cv2.imwrite(filepath, crop)
 
 
-
 def make_file_name(label_id, pic_class, occurence):
     """
     Creates a fitting filename.
@@ -173,9 +168,8 @@ def make_file_name(label_id, pic_class, occurence):
         label_id (str): string containing the label id
         pic_class (str): class of the label
         occurence (int): counts how many times the label class already
-                         occured in the picure
+                         occured in the picture
     """
-    #remove occurences of _label in filename to make the name look nicer
     label_id = re.sub(r"_+label", "", label_id) 
     filename = f"{label_id}_label_{pic_class}_{occurence}.jpg"
     return filename
@@ -188,32 +182,26 @@ def create_crops(jpg_dir, dataframe, out_dir = os.getcwd()):
     Args:
         file (str): path to csv file
         directory (str): path to directory with jpgs
+        out_dir (str): path to the target directory to save the cropped jpgs
     """
-    #create a new_directory
     dir_path = jpg_dir
-    if dir_path[-1] == "/" : #check if the directory parsed has a slash at the end
+    if dir_path[-1] == "/" :
         new_dir = f"{os.path.basename(os.path.dirname(dir_path))}_cropped"
     else:
         new_dir = f"{os.path.basename(dir_path)}_cropped"
     path = (f"{out_dir}/{new_dir}/")
-    #create directory
     Path(path).mkdir(parents=True, exist_ok=True)
     
     for filepath in glob.glob(os.path.join(dir_path, '*.jpg')):
         filename = os.path.basename(filepath)
         match = dataframe[dataframe.filename == filename]
         image_raw = load_jpgs(filepath)
-        #sets the name for the dircetory, that should be created
         label_id = Path(filename).stem
-        #list of classes in order to check for doubles 
         classes = []
-        #loops through dataframe and returns every object as a Series
         for _,row in match.iterrows(): 
             pic_class = row['class']
             occ = classes.count(pic_class) + 1 
-            #create filename
             filename = make_file_name(label_id, pic_class, occ)
-            #coordinates as dic to parse them to crop_picture method
             coordinates = {'xmin':int(row.xmin),'ymin':int(row.ymin),
                            'xmax':int(row.xmax),'ymax':int(row.ymax)}
             crop_picture(image_raw,path,filename,**coordinates)
