@@ -88,6 +88,7 @@ class Predict_Labels():
         return dataframe
 
     def clean_predictions(self, dataframe):
+        #TODO add outdir also here
         """
         Creates a clean dataframe only with boxes exceeding a given threshold score.
 
