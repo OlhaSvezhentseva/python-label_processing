@@ -4,11 +4,11 @@ Segmentation:
 - have an other folder "notebooks" for Jupyter notebooks, py files go to "script" folder *DONE*
 - Margot: upgrade to python 3.10 *DONE* - the function def get_classtype(class_bool) still doesn't work with Python 3.10 *DONE*
 - Add option for location of directory - Not working - correct out_dir directory *DONE*
+- calculate accuracy rate for the australian dataset after segmentation (Margot) *DONE*
 
 *TODO*
 - add mcOS version of create_crops.py (Margot)
 - add option to create directory for each classes - cropping outputs (Leonardo)
-- calculate accuracy rate for the australian dataset after segmentation (Margot)
 
 
 OCR-pytesseract:
