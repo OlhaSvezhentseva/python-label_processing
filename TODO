@@ -14,10 +14,12 @@ Segmentation:
 OCR-pytesseract:
 *TODO*
 - Outputs could be an option (1 just one txt file, 2 one text file per picture, 3 both, 4 one json per picture (5 one big json), 6 pandas dataframe, 7 one xml per file) (Leonardo)
-- Do tutorial: https://medium.com/saarthi-ai/how-to-build-your-own-ocr-a5bb91b622ba - create own text detection model with YOLO and Darknet - create training dataset with 100 pictures (Margot)
+- Check OCR accuracy (Margot)
+- Post OCR code on Gitlab (Margot)
 
 *DONE*
 - run more test on pre-processing of images *DONE*
+- Do tutorial: https://medium.com/saarthi-ai/how-to-build-your-own-ocr-a5bb91b622ba - create own text detection model with YOLO and Darknet - create training dataset with 100 pictures (Margot) *DONE*
 
 *Ressources*
 - find a way to make all the crops straight (better results)!!!!! Priority -> https://pyimagesearch.com/2022/01/31/correcting-text-orientation-with-tesseract-and-python/
