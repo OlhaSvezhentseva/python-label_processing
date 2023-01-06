@@ -7,7 +7,7 @@ Segmentation:
 - calculate accuracy rate for the australian dataset after segmentation (Margot) *DONE*
 
 *TODO*
-- add mcOS version of create_crops.py (Margot)
+- add MacOS version of create_crops.py (Margot)
 - add option to create directory for each classes - cropping outputs (Leonardo)
 
 
@@ -16,6 +16,9 @@ OCR-pytesseract:
 - Outputs could be an option (1 just one txt file, 2 one text file per picture, 3 both, 4 one json per picture (5 one big json), 6 pandas dataframe, 7 one xml per file) (Leonardo)
 - Check OCR accuracy (Margot)
 - Post OCR code on Gitlab (Margot)
+
+Pipeline:
+- Test the whole pipeline: segmentation + cropping + OCR + classification (Joel)
 
 *DONE*
 - run more test on pre-processing of images *DONE*
