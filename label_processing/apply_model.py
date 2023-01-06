@@ -1,6 +1,6 @@
 """
 Module containing all functions concerning the application of the segmenation
-models and to use the predicted coordinates for cropping the labels.  
+models and the use of the predicted coordinates for cropping the labels.  
 """
 
 import glob
@@ -26,10 +26,10 @@ class Predict_Labels():
         Init Method for the Predict labels Class
 
         Args:
-            path_to_model (str): string that contains the path to the model
-            classes (list): list that contains the classes that should be used
+            path_to_model (str): string that contains the path to the model.
+            classes (list): list that contains the classes that should be used.
             jpg_dir (str): string with path to the directory containing the
-                           original jpgs
+                           original jpgs.
             threshold (float, optional): threshold value for scores.
                                          Defaults to 0.8.
         """
@@ -45,7 +45,7 @@ class Predict_Labels():
         of PyTorch.
             
         Returns:
-            model: trained object detection model
+            model: trained object detection model.
         """
         print("Calling trained object detection model")
         model_type = Model.DEFAULT
@@ -63,10 +63,10 @@ class Predict_Labels():
 
         Args:
             model(detecto.core.Model): access to object detection model and pretrained PyTorch model
-                                       (fasterrcnn_resnet50_fpn)
+                                       (fasterrcnn_resnet50_fpn).
                                        
         Returns:
-            DataFrame: pandas Dataframe with the results
+            DataFrame: pandas Dataframe with the results.
         """
         all_predictions = []
         print("Predicting coordinates")
@@ -92,10 +92,10 @@ class Predict_Labels():
         Creates a clean dataframe only with boxes´ coordinates exceeding a given threshold score.
 
         Args:
-            dataframe(pandas.DataFrame): Pandas Dataframe with predicted coordinates and labels' scores
+            DataFrame(pandas.DataFrame): Pandas Dataframe with predicted coordinates and labels' scores.
             
         Returns:
-            DataFrame: Pandas Dataframe with the trimmed results
+            DataFrame: Pandas Dataframe with the trimmed results.
         """
         print("Filter coordinates")
         dataframe = dataframe
@@ -120,7 +120,7 @@ def load_dataframe(filepath_csv):
 
     Args:
         filepath_csv(str): string containing the path to the csv with the
-                           results from applying the model
+                           results from applying the model.
                            
     Returns:
         Dataframe: The csv as a Pandas Dataframe
@@ -135,7 +135,7 @@ def load_jpgs(filepath):
 
     Returns:
         dict: dictionary with filenames as keys and cv2.imread() outputs
-              as values
+              as values.
     """
     with open(filepath) as f:
         jpg = cv2.imread(filepath)
@@ -147,9 +147,9 @@ def crop_picture(img_raw,path,filename,**coordinates):
     Crops the picture using the given coordinates.
 
     Args:
-        img_raw (numpy matrix): input jpg converted to numpy matrix by cv2
-        path (str): path where the picture should be saved
-        filename (str): name of the picture
+        img_raw (numpy matrix): input jpg converted to numpy matrix by cv2.
+        path (str): path where the picture should be saved.
+        filename (str): name of the picture.
     """
     xmin = coordinates['xmin']
     ymin = coordinates['ymin']
@@ -165,10 +165,10 @@ def make_file_name(label_id, pic_class, occurence):
     Creates a fitting filename.
 
     Args:
-        label_id (str): string containing the label id
-        pic_class (str): class of the label
+        label_id (str): string containing the label id.
+        pic_class (str): class of the label.
         occurence (int): counts how many times the label class already
-                         occured in the picture
+                         occured in the picture.
     """
     label_id = re.sub(r"_+label", "", label_id) 
     filename = f"{label_id}_label_{pic_class}_{occurence}.jpg"
@@ -180,9 +180,9 @@ def create_crops(jpg_dir, dataframe, out_dir = os.getcwd()):
     pictures inside a directory.
 
     Args:
-        file (str): path to csv file
-        directory (str): path to directory with jpgs
-        out_dir (str): path to the target directory to save the cropped jpgs
+        file (str): path to csv file.
+        directory (str): path to directory with jpgs.
+        out_dir (str): path to the target directory to save the cropped jpgs.
     """
     dir_path = jpg_dir
     if dir_path[-1] == "/" :
