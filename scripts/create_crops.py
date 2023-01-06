@@ -10,8 +10,8 @@ Outputs: the labels in the pictures are segmented and cropped out of the picture
 import apply_model
 import argparse
 import os
-#import warnings
-#warnings.simplefilter("ignore", UserWarning)
+import urllib3
+urllib3.disable_warnings()
 #import pandas as pd
 #from pandas.core.common import SettingWithCopyWarning
 #warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
@@ -82,10 +82,10 @@ def get_classtype(class_int):
     Returns the chosen classes.
 
     Args:
-        class_int (int): integer for class selection
+        class_int (int): integer for class selection.
 
     Returns:
-        list: list with the selected classes
+        list: list with the selected classes.
     """
     if class_int == 1:
         return ["box"]
