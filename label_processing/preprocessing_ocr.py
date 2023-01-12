@@ -26,7 +26,7 @@ def Preprocessing(path, pre_path):
         path (str): path to the directory where the cropped images are saved.
         pre_path (str): path to the target directory to save the preprocessed images.
     """
-    print("\nStart Image Preprocessing")
+    print("\nStart Image Preprocessing!\n")
     for filepath in glob.glob(os.path.join(f"{path}/*.jpg")):
         print(f"Performing preprocessing on {os.path.basename(filepath)}!")
         filename = os.path.basename(filepath)
@@ -45,7 +45,7 @@ def Preprocessing(path, pre_path):
         filepath = pre_path + filename
         cv2.imwrite(filepath, pre)
     print(f"\nThe images have been successfully saved in {pre_path}")
-    print("Preprocessing successful!")
+    print("Preprocessing successful!\n")
 
 
 #---------------------OCR---------------------#
