@@ -8,6 +8,8 @@ from PIL import Image
 import pytesseract as py
 import os
 import glob
+import cv2
+
 
 # Path to Pytesseract exe file
 py.pytesseract.tesseract_cmd = r"/opt/homebrew/Cellar/tesseract/5.2.0/bin/tesseract"
@@ -38,4 +40,4 @@ def OCR (new_dir, path, out_dir_OCR = os.getcwd()):
         file1.write(result+"\n"+"\n")
         file1.close()
     print("\nOCR successful")
-    print("\nDONE!")
+    print("DONE!")
