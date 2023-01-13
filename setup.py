@@ -6,7 +6,7 @@ with open ("README.md", "r") as fh:
 
 setup(  
     name='label_processing',
-    version='0.0.1',
+    version='0.0.2',
     description='Package for label processing',
     py_modules=["segmentation_cropping", "ocr_pytesseract"],
     package_dir={'': 'label_processing'},
@@ -16,7 +16,8 @@ setup(
         "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
         "operatzing System :: OS Independent",
     ],
-    scripts=["scripts/OCR2data.py"],
+    scripts=["scripts/crop.py",
+             "scripts/perform_ocr.py"],
     long_description=long_description,
     long_description_content_type="text/markdown",
     platforms=['any'],
@@ -29,7 +30,5 @@ setup(
         "detecto",
         "pytesseract",
         "pillow"
-    ]
-    
-    
+    ],
 )

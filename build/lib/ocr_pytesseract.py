@@ -16,7 +16,7 @@ import cv2
 
 
 
-def Preprocessing(path, pre_path):
+def preprocessing(path, pre_path):
     """
     Preprocesses the cropped images to standardize their quality before applying the OCR on them.
     Saves the preprocessed image into a new _pre folder in the main images directory.
@@ -50,16 +50,16 @@ def Preprocessing(path, pre_path):
 #---------------------OCR---------------------#
 
 
-def OCR (new_dir, path, out_dir_OCR = os.getcwd()):
+def perform_ocr(crop_dir, path, filename):
     """
     Perfoms Optical Character Recognition with the pytesseract python librairy on jpg images.
     
     Args:
-        new_dir (str): path to the directory where the cropped jpgs' main folder is saved.
+        crop_dir (str): path to the directory where the cropped jpgs' main folder is saved.
         path (str): path to the directory where the cropped jpgs are saved.
         out_dir_OCR (str): path to the target directory to save the OCR outputs.
     """
-    print(f"\nPerforming OCR on {os.path.basename(new_dir)}!")
+    print(f"\nPerforming OCR on {os.path.basename(crop_dir)}!")
     config=r'--psm 11 --oem 3'
     languages = 'eng+deu+fra+ita+spa+por'
     for images in glob.glob(os.path.join(f"{path}/*.jpg")):
@@ -67,7 +67,7 @@ def OCR (new_dir, path, out_dir_OCR = os.getcwd()):
         print(f"Performing OCR on {os.path.basename(images)}!")
         files = Image.open(images)
         result = py.image_to_string(files, languages, config)
-        file1 = open(out_dir_OCR, "a+")
+        file1 = open(filename, "a+")
         file1.write(images_filename+"\n")
         file1.write(result+"\n"+"\n")
         file1.close()

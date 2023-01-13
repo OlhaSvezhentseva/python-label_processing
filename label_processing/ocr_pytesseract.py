@@ -16,7 +16,7 @@ import cv2
 
 
 
-def preprocessing(path, pre_path):
+def preprocessing(crop_dir, pre_path):
     """
     Preprocesses the cropped images to standardize their quality before applying the OCR on them.
     Saves the preprocessed image into a new _pre folder in the main images directory.
@@ -26,7 +26,7 @@ def preprocessing(path, pre_path):
         pre_path (str): path to the target directory to save the preprocessed images.
     """
     print("\nStart Image Preprocessing!\n")
-    for filepath in glob.glob(os.path.join(f"{path}/*.jpg")):
+    for filepath in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
         print(f"Performing preprocessing on {os.path.basename(filepath)}!")
         filename = os.path.basename(filepath)
         img = cv2.imread(filepath)
@@ -41,7 +41,7 @@ def preprocessing(path, pre_path):
         #perfrom bitwise not to flip image to black text on white background
         pre = cv2.bitwise_not(thresh)
         #saving the preprocessing images
-        filepath = pre_path + filename
+        filepath = f"{pre_path}/{filename}"
         cv2.imwrite(filepath, pre)
     print(f"\nThe images have been successfully saved in {pre_path}")
     print("Preprocessing successful!\n")
@@ -50,24 +50,25 @@ def preprocessing(path, pre_path):
 #---------------------OCR---------------------#
 
 
-def perform_ocr(new_dir, path, out_dir_OCR = os.getcwd()):
+def perform_ocr(crop_dir, path, filename):
     """
     Perfoms Optical Character Recognition with the pytesseract python librairy on jpg images.
     
     Args:
-        new_dir (str): path to the directory where the cropped jpgs' main folder is saved.
+        crop_dir (str): path to the directory where the cropped jpgs' main folder is saved.
         path (str): path to the directory where the cropped jpgs are saved.
         out_dir_OCR (str): path to the target directory to save the OCR outputs.
     """
-    print(f"\nPerforming OCR on {os.path.basename(new_dir)}!")
+    print(f"\nPerforming OCR on {os.path.basename(crop_dir)}!")
     config=r'--psm 11 --oem 3'
     languages = 'eng+deu+fra+ita+spa+por'
-    for images in glob.glob(os.path.join(f"{path}/*.jpg")):
+    filepath = f"{path}/{filename}"
+    for images in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
         images_filename = os.path.basename(images)
         print(f"Performing OCR on {os.path.basename(images)}!")
         files = Image.open(images)
         result = py.image_to_string(files, languages, config)
-        file1 = open(out_dir_OCR, "a+")
+        file1 = open(filepath, "a")
         file1.write(images_filename+"\n")
         file1.write(result+"\n"+"\n")
         file1.close()

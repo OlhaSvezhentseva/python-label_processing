@@ -18,21 +18,19 @@ Outputs: - the labels in the pictures are segmented and cropped out of the pictu
 
 #Import module from this package
 import segmentation_cropping
-import ocr_pytesseract
 #import third party libraries
 import argparse
-from pathlib import Path
 import os
-import urllib3
-urllib3.disable_warnings()
 import warnings
 warnings.filterwarnings('ignore')
+
 
 CLS_AMOUNT = 3
 
 def parsing_args():
     '''generate the command line arguments using argparse'''
-    usage = 'OCR2data.py [-h] -c 3 -j /path/to/jpgs -m /path/to/model -o /path/to/jpgs_outputs -o_OCR /path/to/OCR_output_file/outputOCR.txt o_OCR_pre /path/to/OCR_output_preprocessed_file/outputOCRpre.txt'
+    #create_crops.py [-h] -f <file> -d <dir>
+    usage = 'crop.py [-h] [-c N] -o /path/to/jpgs_outputs -j </path/to/jpgs> -m </path/to/model> '
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
@@ -45,6 +43,15 @@ def parsing_args():
             )
 
     parser.add_argument(
+            '-np', '--no_preprocessing',
+            metavar='',
+            action=argparse.BooleanOptionalAction,
+            help=('optional argument: select whether OCR should also be performed' 
+            'with preprocessed pictures ')
+            )
+    
+    
+    parser.add_argument(
             '-c', '--classes',
             metavar='',
             choices = range(1,4),
@@ -56,6 +63,14 @@ def parsing_args():
                  '2 : classes (location, nuri, uce, taxonomy, antweb, casent_number, dna, other, collection).'
                  '3 : handwritten/typed.'
                  'Default is only box')
+            )
+    parser.add_argument(
+            '-o', '--out_dir',
+            metavar='',
+            type=str,
+            default = os.getcwd(),
+            help=('Directory in which the resulting crops and the csv will be stored.'
+                  'Default is the user current working directory.')
             )
     
     parser.add_argument(
@@ -74,32 +89,6 @@ def parsing_args():
             help='Path to the model to be used.'
             )
     
-    parser.add_argument(
-            '-o', '--out_dir',
-            metavar='',
-            type=str,
-            default = os.getcwd(),
-            help=('Directory in which the resulting crops and the csv will be stored.'
-                  'Default is the user current working directory.')
-            )
-    
-    parser.add_argument(
-            '-o_OCR', '--out_dir_OCR',
-            metavar='',
-            type=str,
-            default = os.getcwd(),
-            help=('Directory in which the OCR outputs will be saved.'
-                  'Default is the user current working directory.'))
-    
-    parser.add_argument(
-            '-o_OCR_pre', '--out_dir_OCR_pre',
-            metavar='',
-            type=str,
-            default = os.getcwd(),
-            help=('Directory in which the OCR outputs of the preprocessed images will be saved.'
-                  'Default is the user current working directory.')
-                  
-    )
 
     
     args = parser.parse_args()
@@ -107,7 +96,7 @@ def parsing_args():
     return args
 
 
-def get_classtype(class_int):
+def get_classtype(class_int: int) -> list:
     """
     Returns the chosen classes.
 
@@ -147,22 +136,4 @@ if __name__ == '__main__':
     # 4. Cropping
     segmentation_cropping.create_crops(jpeg_dir, df, out_dir = out_dir)
     
-    # 5. OCR - without image preprocessing
-    dir_path = jpeg_dir
-    if dir_path[-1] == "/" :
-        new_dir = f"{os.path.basename(os.path.dirname(dir_path))}_cropped"
-    else:
-        new_dir = f"{os.path.basename(dir_path)}_cropped"
-    path = (f"{out_dir}/{new_dir}/")
-    ocr_pytesseract.perform_ocr(new_dir, path, out_dir_OCR = args.out_dir_OCR)
-    
-    # 6. OCR - with image preprocessing
-    if dir_path[-1] == "/" :
-        new_dir_pre = f"{os.path.basename(os.path.dirname(dir_path))}_pre"
-    else:
-        new_dir_pre = f"{os.path.basename(dir_path)}_pre"
-    pre_path = (f"{out_dir}/{new_dir_pre}/")
-    Path(pre_path).mkdir(parents=True, exist_ok=True)
-    ocr_pytesseract.preprocessing(path, pre_path)
-    ocr_pytesseract.perform_ocr(pre_path, out_dir_OCR_pre = args.out_dir_OCR_pre)
 

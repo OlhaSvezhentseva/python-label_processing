@@ -7,4 +7,5 @@ label_processing/label_processing.egg-info/SOURCES.txt
 label_processing/label_processing.egg-info/dependency_links.txt
 label_processing/label_processing.egg-info/requires.txt
 label_processing/label_processing.egg-info/top_level.txt
-scripts/OCR2data.py
+scripts/crop.py
+scripts/perform_ocr.py
