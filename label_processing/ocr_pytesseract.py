@@ -16,7 +16,7 @@ import cv2
 
 
 
-def Preprocessing(path, pre_path):
+def preprocessing(path, pre_path):
     """
     Preprocesses the cropped images to standardize their quality before applying the OCR on them.
     Saves the preprocessed image into a new _pre folder in the main images directory.
@@ -50,7 +50,7 @@ def Preprocessing(path, pre_path):
 #---------------------OCR---------------------#
 
 
-def OCR (new_dir, path, out_dir_OCR = os.getcwd()):
+def perform_ocr(new_dir, path, out_dir_OCR = os.getcwd()):
     """
     Perfoms Optical Character Recognition with the pytesseract python librairy on jpg images.
     

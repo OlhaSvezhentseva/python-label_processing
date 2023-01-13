@@ -131,6 +131,7 @@ if __name__ == '__main__':
     model_path = args.model
     jpeg_dir = args.jpg_dir
     classes = get_classtype(args.classes)
+    out_dir = args.out_dir
     
     predictions = segmentation_cropping.Predict_Labels(model_path, classes, jpeg_dir)
     
@@ -141,20 +142,19 @@ if __name__ == '__main__':
     df = predictions.class_prediction(model)
     
     # 3. Filter model predictions and save csv
-    df = predictions.clean_predictions(df, out_dir = args.out_dir)
+    df = predictions.clean_predictions(df, out_dir = out_dir)
     
     # 4. Cropping
-    segmentation_cropping.create_crops(jpeg_dir, df, out_dir = args.out_dir)
+    segmentation_cropping.create_crops(jpeg_dir, df, out_dir = out_dir)
     
     # 5. OCR - without image preprocessing
     dir_path = jpeg_dir
-    out_dir = args.out_dir
     if dir_path[-1] == "/" :
         new_dir = f"{os.path.basename(os.path.dirname(dir_path))}_cropped"
     else:
         new_dir = f"{os.path.basename(dir_path)}_cropped"
     path = (f"{out_dir}/{new_dir}/")
-    ocr_pytesseract.OCR(new_dir, path, out_dir_OCR = args.out_dir_OCR)
+    ocr_pytesseract.perform_ocr(new_dir, path, out_dir_OCR = args.out_dir_OCR)
     
     # 6. OCR - with image preprocessing
     if dir_path[-1] == "/" :
@@ -163,6 +163,6 @@ if __name__ == '__main__':
         new_dir_pre = f"{os.path.basename(dir_path)}_pre"
     pre_path = (f"{out_dir}/{new_dir_pre}/")
     Path(pre_path).mkdir(parents=True, exist_ok=True)
-    preprocessing_ocr.Preprocessing(path, pre_path)
-    preprocessing_ocr.OCR(pre_path, out_dir_OCR_pre = args.out_dir_OCR_pre)
+    ocr_pytesseract.preprocessing(path, pre_path)
+    ocr_pytesseract.perform_ocr(pre_path, out_dir_OCR_pre = args.out_dir_OCR_pre)
 
