@@ -44,7 +44,7 @@ def parsing_args():
                  "2 : classes (location, nuri, uce, taxonomy, antweb, casent_number, dna, other, collection)."
                  "3 : handwritten/typed."
                  "Default is only box"
-            )
+            ))
     
     parser.add_argument(
             '-j', '--jpg_dir',
