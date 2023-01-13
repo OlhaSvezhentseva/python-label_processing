@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 '''
 Execute the segmentation_cropping.py, preprocessing_ocr.py and ocr_pytesseract.py scripts.
 Takes as inputs: the path to the jpgs (jpg_dir),
