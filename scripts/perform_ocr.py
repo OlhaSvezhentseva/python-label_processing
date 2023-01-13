@@ -10,7 +10,7 @@ FILENAME_PRE = "ocr_preprocessed.txt"
 
 def parsing_args():
     '''generate the command line arguments using argparse'''
-    usage = 'OCR2data.py [-h] -o_OCR </path/to/OCR_output_file/outputOCR.txt> <o_OCR_pre> /path/to/OCR_output_preprocessed_file/outputOCRpre.txt>'
+    usage = 'perform_ocr.py [-h] -o_OCR </path/to/OCR_output_file/outputOCR.txt> <o_OCR_pre> </path/to/OCR_output_preprocessed_file/outputOCRpre.txt>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage

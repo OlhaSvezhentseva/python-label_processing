@@ -30,7 +30,7 @@ CLS_AMOUNT = 3
 def parsing_args():
     '''generate the command line arguments using argparse'''
     #create_crops.py [-h] -f <file> -d <dir>
-    usage = 'crop.py [-h] [-c N] -o /path/to/jpgs_outputs -j </path/to/jpgs> -m </path/to/model> '
+    usage = 'crop_seg.py [-h] [-c N] -o /path/to/jpgs_outputs -j </path/to/jpgs> -m </path/to/model> '
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
@@ -41,15 +41,6 @@ def parsing_args():
             action='help',
             help='Open this help text.'
             )
-
-    parser.add_argument(
-            '-np', '--no_preprocessing',
-            metavar='',
-            action=argparse.BooleanOptionalAction,
-            help=('optional argument: select whether OCR should also be performed' 
-            'with preprocessed pictures ')
-            )
-    
     
     parser.add_argument(
             '-c', '--classes',
