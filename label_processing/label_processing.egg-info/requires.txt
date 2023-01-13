@@ -4,3 +4,5 @@ torch
 detecto
 opencv-python
 detecto
+pytesseract
+pillow

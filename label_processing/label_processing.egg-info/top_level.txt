@@ -1,1 +1,3 @@
-apply_model
+ocr_pytesseract
+preprocessing_ocr
+segmentation_cropping

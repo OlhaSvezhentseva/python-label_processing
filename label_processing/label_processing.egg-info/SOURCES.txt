@@ -1,10 +1,9 @@
 README.md
 setup.py
-label_processing/apply_model.py
+label_processing/segmentation_cropping.py
 label_processing/label_processing.egg-info/PKG-INFO
 label_processing/label_processing.egg-info/SOURCES.txt
 label_processing/label_processing.egg-info/dependency_links.txt
 label_processing/label_processing.egg-info/requires.txt
 label_processing/label_processing.egg-info/top_level.txt
-scripts/create_crops.py
-scripts/ocr_tess.py
+scripts/OCR2data.py
