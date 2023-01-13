@@ -8,7 +8,7 @@ setup(
     name='label_processing',
     version='0.0.1',
     description='Package for label processing',
-    py_modules=["segmentation_cropping", "ocr_pytesseract", "preprocessing_ocr"],
+    py_modules=["segmentation_cropping", "ocr_pytesseract"],
     package_dir={'': 'label_processing'},
     classifiers=[
         "Programming Language :: Python :: 3",
