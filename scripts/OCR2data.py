@@ -16,11 +16,10 @@ Outputs: - the labels in the pictures are segmented and cropped out of the pictu
          - the OCR outputs after performing on the preprocessed cropped images.
 '''
 
-#Import Librairies
+#Import module from this package
 import segmentation_cropping
 import ocr_pytesseract
-import preprocessing_ocr
-
+#import third party libraries
 import argparse
 from pathlib import Path
 import os

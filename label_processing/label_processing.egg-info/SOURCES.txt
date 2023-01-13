@@ -1,5 +1,6 @@
 README.md
 setup.py
+label_processing/ocr_pytesseract.py
 label_processing/segmentation_cropping.py
 label_processing/label_processing.egg-info/PKG-INFO
 label_processing/label_processing.egg-info/SOURCES.txt
