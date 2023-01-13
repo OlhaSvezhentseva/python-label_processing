@@ -1,0 +1,10 @@
+Metadata-Version: 2.1
+Name: label-processing
+Version: 0.0.1
+Summary: Package for label processing
+Platform: any
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)
+Classifier: operatzing System :: OS Independent
+Description-Content-Type: text/markdown
