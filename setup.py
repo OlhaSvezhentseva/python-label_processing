@@ -16,7 +16,7 @@ setup(
         "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
         "operatzing System :: OS Independent",
     ],
-    scripts=["scripts/crop.py",
+    scripts=["scripts/crop_seg.py",
              "scripts/perform_ocr.py"],
     long_description=long_description,
     long_description_content_type="text/markdown",

@@ -1,4 +1,3 @@
-
 """
 Module containing all functions concerning the application of the segmenation
 models and the use of the predicted coordinates for cropping the labels.  
@@ -27,7 +26,7 @@ class Predict_Labels():
 
     def __init__(self, path_to_model, classes, jpg_dir, threshold = 0.8):
         """
-        Init Method for the Predict labels Class
+        Init Method for the Predict labels Class.
 
         Args:
             path_to_model (str): string that contains the path to the model.
@@ -181,7 +180,7 @@ def make_file_name(label_id, pic_class, occurence):
 
 def create_dirs(dataframe, path):
     """
-    Creates for every class a seperate directory
+    Creates for every class a seperate directory.
 
     Args:
         dataframe (pandas.Dataframe): dataframe containig the classes as a column
