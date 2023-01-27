@@ -24,9 +24,6 @@ import os
 import warnings
 warnings.filterwarnings('ignore')
 
-
-CLS_AMOUNT = 3
-
 #NOTE removed the classes argument -> redid the explanation of model argument
 def parsing_args():
     '''generate the command line arguments using argparse'''
@@ -91,7 +88,7 @@ def get_modelnum(model_int: int) -> str:
          path (str): path to the selected model.
     """
     script_dir = os.path.dirname(__file__)
-    rel_path1 = "../models/model_labels_box.pth"
+    rel_path1 = "../models/model_labels_box.pth" #releative path to models from file
     model_file1 = os.path.join(script_dir, rel_path1)
     rel_path2 = "../models/model_labels_class.pth"
     model_file2 = os.path.join(script_dir, rel_path2)
@@ -127,7 +124,7 @@ if __name__ == '__main__':
     args = parsing_args()
     model_path = get_modelnum(args.model)
     jpeg_dir = args.jpg_dir
-    classes = get_classtype(args.model)
+    classes = get_classtype(args.model) #NOTE put here args.model instead of args.class
     out_dir = args.out_dir
     
     predictions = segmentation_cropping.Predict_Labels(model_path, classes, jpeg_dir)

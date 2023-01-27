@@ -55,21 +55,29 @@ Scripts
 -------
 For usage information, run any of these scripts with the option --help.
 
-   `<script> -h`
+*crop_seg.py*
+   Uses a segmentation-model to perform segmentation of the labels and 
+   creates for every label-jpg crops for every label identified in a picture. 
 
-*OCR2data.py*
-   Execute the label_preprocessing.segmentation_cropping and label_preprocessing.ocr_pytesseract modules.
+   **Takes as inputs:**
+      - the path to the directory of the input jpgs (jpg_dir)
+      - the model used for the segmentation (model)
+      - the path to the directory in which the resulting crops, the csv and ocr outputs will be stored (out_dir)
 
-**Takes as inputs:**
-   - the path to the inputs (jpg_dir)
-   - the model used for the segmentation (model)
-   - the classes used for the model (classes)
-   - the path to the directory in which the resulting crops, the csv and ocr outputs will be stored (out_dir)
+   **Outputs:**
+      - the labels in the pictures are segmented and cropped out of the picture, becoming their own file named after their jpg of origin and class.
+      - the segmentation outputs are also saved as a csv (filename, class, prediction score, coordinates).
 
-**Outputs:**
-   - the labels in the pictures are segmented and cropped out of the picture, becoming their own file named after their jpg of origin and class.
-   - the segmentation outputs are also saved as a dataframe (filename, class, prediction score, coordinates).
-   - the ocr outputs after performing on the cropped images.
+*perform_ocr.py*
+   Performs the ocr on the segmented labels and returns it as a text file. 
+   Before the ocr, preprocessing is done on the pictures to enhance the results
+   **Takes as inputs:**
+      - the path to the directory of the input jpgs (jpg_dir)
+
+   **Outputs:**
+      - directory containing the preprocessed images
+      - ocr results as a txt file
+
 
 
 Input preparation

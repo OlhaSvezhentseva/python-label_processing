@@ -1,7 +1,8 @@
 - Create 2 flowcharts (one for creating a seg model and one for the package) - Margot
 - Upload workflows on DiSSCo: https://github.com/DiSSCo - Margot
-- Create README for version 1.1 - Leonardo
+- Create README for version 0.0.2 - Leonardo *DONE*
 - Test google vision - ask Théo for his credentials
-- Test cv2 for OCR
+- Test cv2 for OCR -> dont save 
+- add the version 1.0 ocr
 - Create own OCR:
 https://calamari-ocr.readthedocs.io/en/latest/

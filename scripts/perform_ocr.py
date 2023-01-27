@@ -2,6 +2,7 @@
 import ocr_pytesseract
 import argparse
 import os
+import shutil
 
 from pathlib import Path
 
@@ -31,6 +32,14 @@ def parsing_args():
             )
     
     parser.add_argument(
+            '-k', '--keep',
+            metavar='',
+            action=argparse.BooleanOptionalAction,
+            help=('optional argument: select whether the preprocessed images'
+                  'should be saved ')
+            )
+    
+    parser.add_argument(
             '-d', '--crop_dir',
             metavar='',
             type=str,
@@ -55,9 +64,9 @@ def check_dir(dir) -> None:
     Raises:
         FileNotFoundError: raised if no jpg files are found in directory
     """
-    if not os.path.exists(os.path.join(dir, "*.jpg")):
-        raise FileNotFoundError(("The directory given does not contain"
-                                 "any jpg-files. You might have chosen the wrong"
+    if not any(file_name.endswith('.jpg') for file_name in os.listdir(dir)):
+        raise FileNotFoundError(("The directory given does not contain "
+                                 "any jpg-files. You might have chosen the wrong "
                                  "directory?")) 
         
 
@@ -70,7 +79,7 @@ if __name__ == "__main__":
         new_dir = f"{os.path.basename(os.path.dirname(crop_dir))}_ocr"
     else:
         new_dir = f"{os.path.basename(crop_dir)}_ocr"
-    path = os.path.join(crop_dir, "/../", new_dir) #parent directory of the cropped pictures
+    path = os.path.join(crop_dir, "..", new_dir) #parent directory of the cropped pictures
     os.mkdir(path)
     ocr_pytesseract.perform_ocr(crop_dir, path, filename = FILENAME )
     
@@ -84,3 +93,4 @@ if __name__ == "__main__":
         Path(pre_path).mkdir(parents=True, exist_ok=True)
         ocr_pytesseract.preprocessing(crop_dir, pre_path)
         ocr_pytesseract.perform_ocr(pre_path,new_dir, filename = FILENAME_PRE)
+        shutil.rmtree(pre_path)
