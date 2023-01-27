@@ -100,11 +100,11 @@ def get_modelnum(model_int): #new
          path (str): path to the selected model.
     """
     script_dir = os.path.dirname(__file__)
-    rel_path1 = "models/model_labels_box.pth"
+    rel_path1 = "../models/model_labels_box.pth"
     model_file1 = os.path.join(script_dir, rel_path1)
-    rel_path2 = "models/model_labels_class.pth"
+    rel_path2 = "../models/model_labels_class.pth"
     model_file2 = os.path.join(script_dir, rel_path2)
-    rel_path3 = "models/model_labels_h_t.pth"
+    rel_path3 = "../models/model_labels_h_t.pth"
     model_file3 = os.path.join(script_dir, rel_path3)
     if model_int == 1:
         return model_file1
