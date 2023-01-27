@@ -1,3 +1,15 @@
+Metadata-Version: 2.1
+Name: label-processing
+Version: 0.0.2
+Summary: Package for label processing
+License: UNKNOWN
+Platform: any
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)
+Classifier: operatzing System :: OS Independent
+Description-Content-Type: text/markdown
+
 label_preprocessing
 ===================================================================
 *A Python package for the Berlin Natural History Museum*
@@ -79,4 +91,6 @@ In terms of data acquisition, the following standards are recommended to optimiz
 - if the labels in the different pictures are similar (same colours and/or same nature/content), they should always be placed the same way at the same spot from one picture to another.
 ex: label with location always bottom right, collection number top left, taxonomy top right etc...
 - a black background like in LEP_PHIL is prefered, but a white background is also acceptable.
+
+
 

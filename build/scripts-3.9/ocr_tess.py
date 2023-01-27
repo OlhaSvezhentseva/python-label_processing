@@ -1,17 +1,16 @@
-from PIL import Image
-import pytesseract
-import os
+#!python
 import cv2
 import re
+import pytesseract
 from pytesseract import Output
+import image_processing
 import numpy as np
+import os
 import glob 
 import sys
 import json
 
-
-pytesseract.pytesseract.tesseract_cmd = r"/opt/homebrew/Cellar/tesseract/5.2.0/bin/tesseract" 
-
+PROCESS = False
 
 # get grayscale image
 def get_grayscale(image):
@@ -62,32 +61,35 @@ def deskew(image):
 def match_template(image, template):
     return cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED) 
 
-def improved_image_to_string(img, languages, config):
+def improved_image_to_string(img, config):
     gray = get_grayscale(img)
     thresh = thresholding(gray)
     opening_var = opening(gray)
     canny_var = canny(gray)
-    return pytesseract.image_to_string(thresh, languages, config)
+    return pytesseract.image_to_string(thresh, config = config)
 
-# apply OCR
-def OCR(path, output, config, languages):
-    print("Start OCR")
-    for filepath in glob.glob(os.path.join(f"{path}/*.jpg")):
-        filename = os.path.basename(filepath)
-        print(f"Performing OCR on {os.path.basename(filepath)}!")
+def main():
+    dir_path = sys.argv[1]
+    #set custum config
+    custom_config = r'--oem 3 --psm 6'
+    data_list = []
+    for filepath in glob.glob(os.path.join(f"{dir_path}/*.jpg")):
+        print(f"Performing ocr on {os.path.basename(filepath)}!")
         img = cv2.imread(filepath)
-        file1 = open(output, "a+")
-        file1.write(filename+"\n") 
-        non_processed = pytesseract.image_to_string(img, languages, config)
-        #processed = improved_image_to_string(img, languages, config)
-        file1.write(non_processed+"\n")
-        file1.close()
-    print("Successful")
+        non_processed = pytesseract.image_to_string(img, config=custom_config)
+        processed = improved_image_to_string(img, custom_config)
+        data_dict = {}
+        data_dict["ID"] = os.path.basename(filepath)
+        data_dict["text"] = non_processed
+        if PROCESS == True:
+            data_dict["processed_image"] = processed
+        data_list.append(data_dict)
+    with open("results_test.json", "w") as f:
+        json.dump(data_list, f)
+    print("succesful")
+    
+    
 
-path = "/Users/Margot/Desktop/tests_OCR/pictures_typed copie" #path to cropped pictures
-output = "/Users/Margot/Desktop/ocrOutput18.txt" #output as one single txt file
-config=r'--psm 3 --oem 3' #psm4, 3 and 12 is good - 5 assumes that the text is vertical
-languages = 'eng+deu+fra+ita+spa+por'
-
-OCR(path, output, config, languages)
-
+if __name__ == "__main__":
+    main()
+        

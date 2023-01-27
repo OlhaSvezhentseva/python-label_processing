@@ -3,6 +3,7 @@ Module containing all functions concerning the application of the segmenation
 models and the use of the predicted coordinates for cropping the labels.  
 """
 
+# Import Librairies
 import glob
 import cv2
 import os
@@ -19,11 +20,13 @@ from detecto.core import Model
 #from torchvision import transforms
 
 
+#---------------------Image Segmentation---------------------#
+
 class Predict_Labels():
 
     def __init__(self, path_to_model, classes, jpg_dir, threshold = 0.8):
         """
-        Init Method for the Predict labels Class
+        Init Method for the Predict labels Class.
 
         Args:
             path_to_model (str): string that contains the path to the model.
@@ -47,7 +50,7 @@ class Predict_Labels():
         Returns:
             model: trained object detection model.
         """
-        print("Calling trained object detection model")
+        print("\nCalling trained object detection model")
         model_type = Model.DEFAULT
         model = Model(self.classes, model_name=model_type)
         model.get_internal_model().load_state_dict(torch.load(
@@ -69,7 +72,7 @@ class Predict_Labels():
             DataFrame: pandas Dataframe with the results.
         """
         all_predictions = []
-        print("Predicting coordinates")
+        print("\nPredicting coordinates")
         for file in glob.glob(f"{self.jpg_dir}/*.jpg"):
             image = utils.read_image(file)
             predictions = model.predict(image)
@@ -97,21 +100,23 @@ class Predict_Labels():
         Returns:
             DataFrame: Pandas Dataframe with the trimmed results.
         """
-        print("Filter coordinates")
+        print("\nFilter coordinates")
         dataframe = dataframe
-        colnames = ['score','xmin', 'ymin', 'xmax', 'ymax']
+        colnames = ['score', 'xmin', 'ymin', 'xmax', 'ymax']
         for header in colnames:
-            dataframe[header] = dataframe[header].astype('str').str.\
-                extractall('(\d+.\d+)').unstack().fillna('').sum(axis=1).astype(float)
-        dataframe = dataframe.loc[ dataframe['score'] >= self.threshold ]
-        dataframe[['xmin', 'ymin','xmax','ymax']] = dataframe[['xmin', 'ymin','xmax','ymax']].fillna('0') #new
+            dataframe[header] = dataframe[header].astype('str').str.extractall('(\d+.\d+)').unstack().fillna('').sum(axis=1).astype(float)
+        dataframe = dataframe.loc[dataframe['score'] >= self.threshold]
+        dataframe[['xmin', 'ymin','xmax','ymax']] = dataframe[['xmin', 'ymin','xmax','ymax']].fillna('0')
         if out_dir is None:
-            out_dir = os.path.dirname(os.path.realpath(self.jpg_dir))     
+            out_dir = os.path.dirname(os.path.realpath(self.jpg_dir))
         filename = f"{Path(self.jpg_dir).stem}_predictions.csv"
         csv_path = f"{out_dir}/{filename}"
         dataframe.to_csv(csv_path)
-        print(f"The csv_file {filename} has been successfully saved in {out_dir}")
+        print(f"\nThe csv_file {filename} has been successfully saved in {out_dir}")
         return dataframe
+
+
+#---------------------Image Cropping---------------------#
 
 
 def load_dataframe(filepath_csv):
@@ -134,15 +139,14 @@ def load_jpgs(filepath):
     Loads the jpg file using the opencv module.
 
     Returns:
-        dict: dictionary with filenames as keys and cv2.imread() outputs
-              as values.
+        Mat: cv2 image object
     """
     with open(filepath) as f:
         jpg = cv2.imread(filepath)
     return jpg
     
     
-def crop_picture(img_raw,path,filename,**coordinates):
+def crop_picture(img_raw,path,filename,pic_class,**coordinates):
     """
     Crops the picture using the given coordinates.
 
@@ -155,7 +159,7 @@ def crop_picture(img_raw,path,filename,**coordinates):
     ymin = coordinates['ymin']
     xmax = coordinates['xmax']
     ymax = coordinates['ymax']
-    filepath= path + filename
+    filepath=f"{path}/{pic_class}/{filename}" #creates for every pic_class 
     crop = img_raw[ymin:ymax, xmin:xmax]
     cv2.imwrite(filepath, crop)
 
@@ -174,14 +178,27 @@ def make_file_name(label_id, pic_class, occurence):
     filename = f"{label_id}_label_{pic_class}_{occurence}.jpg"
     return filename
 
+def create_dirs(dataframe, path):
+    """
+    Creates for every class a seperate directory.
+
+    Args:
+        dataframe (pandas.Dataframe): dataframe containig the classes as a column
+        path (str): path of chosen directory
+    """
+    uniques = dataframe["class"].unique()
+    for uni_class in uniques:
+        Path(f"{path}/{uni_class}").mkdir(parents=True, exist_ok=True)
+    
+
 def create_crops(jpg_dir, dataframe, out_dir = os.getcwd()):
     """
     Creates crops by using the csv from applying the model and the original
     pictures inside a directory.
 
     Args:
-        file (str): path to csv file.
-        directory (str): path to directory with jpgs.
+        jpg_dir (str): path to directory with jpgs.
+        dataframe (str): path to csv file.
         out_dir (str): path to the target directory to save the cropped jpgs.
     """
     dir_path = jpg_dir
@@ -191,7 +208,7 @@ def create_crops(jpg_dir, dataframe, out_dir = os.getcwd()):
         new_dir = f"{os.path.basename(dir_path)}_cropped"
     path = (f"{out_dir}/{new_dir}/")
     Path(path).mkdir(parents=True, exist_ok=True)
-    
+    create_dirs(dataframe, path) #creates dirs for every class
     for filepath in glob.glob(os.path.join(dir_path, '*.jpg')):
         filename = os.path.basename(filepath)
         match = dataframe[dataframe.filename == filename]
@@ -204,6 +221,6 @@ def create_crops(jpg_dir, dataframe, out_dir = os.getcwd()):
             filename = make_file_name(label_id, pic_class, occ)
             coordinates = {'xmin':int(row.xmin),'ymin':int(row.ymin),
                            'xmax':int(row.xmax),'ymax':int(row.ymax)}
-            crop_picture(image_raw,path,filename,**coordinates)
+            crop_picture(image_raw,path,filename,pic_class,**coordinates)
             classes.append(pic_class)
-    print(f"The images have been successfully saved in {out_dir}/{new_dir}")
+    print(f"\nThe images have been successfully saved in {out_dir}/{new_dir}")

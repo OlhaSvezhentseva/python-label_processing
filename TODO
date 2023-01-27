@@ -16,7 +16,7 @@ OCR-pytesseract:
 - Outputs could be an option (1 just one txt file, 2 one text file per picture, 3 both, 4 one json per picture (5 one big json), 6 pandas dataframe, 7 one xml per file) (Leonardo)
 - Check OCR accuracy (Margot/Magdalena)
 - Write README (Margot)
-_ Do flowchart (Margot)
+- Do flowchart (Margot)
 
 Pipeline:
 - Test the whole pipeline: segmentation + cropping + OCR + classification
@@ -26,7 +26,7 @@ Pipeline:
 - run more test on pre-processing of images *DONE*
 - Do tutorial: https://medium.com/saarthi-ai/how-to-build-your-own-ocr-a5bb91b622ba - create own text detection model with YOLO and Darknet - create training dataset with 100 pictures (Margot) *DONE*
 
-*Ressources*
+*Resources*
 - find a way to make all the crops straight (better results)!!!!! Priority -> https://pyimagesearch.com/2022/01/31/correcting-text-orientation-with-tesseract-and-python/
   We should check that out
 - test to create own OCR model https://keras-ocr.readthedocs.io/en/latest/examples/fine_tuning_recognizer.html 

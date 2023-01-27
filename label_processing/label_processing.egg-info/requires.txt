@@ -1,0 +1,8 @@
+numpy
+pandas
+torch
+detecto
+opencv-python
+detecto
+pytesseract
+pillow

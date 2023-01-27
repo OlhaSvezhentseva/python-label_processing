@@ -6,9 +6,9 @@ with open ("README.md", "r") as fh:
 
 setup(  
     name='label_processing',
-    version='0.0.1',
+    version='0.0.2',
     description='Package for label processing',
-    py_modules=["apply_model"],
+    py_modules=["segmentation_cropping", "ocr_pytesseract"],
     package_dir={'': 'label_processing'},
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -16,8 +16,9 @@ setup(
         "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
         "operatzing System :: OS Independent",
     ],
-    scripts=["scripts/create_crops.py",
-             "scripts/ocr_tess.py"],
+    scripts=["scripts/crop_seg.py",
+             "scripts/perform_ocr.py"],
+    #include_package_data=True, #include the static data specified in the MANIFEST.in
     long_description=long_description,
     long_description_content_type="text/markdown",
     platforms=['any'],
@@ -27,7 +28,8 @@ setup(
         "torch",
         "detecto",
         "opencv-python",
-        "detecto"
+        "detecto",
+        "pytesseract",
+        "pillow"
     ],
-    
 )
