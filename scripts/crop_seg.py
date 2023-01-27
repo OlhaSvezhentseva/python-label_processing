@@ -27,6 +27,7 @@ warnings.filterwarnings('ignore')
 
 CLS_AMOUNT = 3
 
+#NOTE removed the classes argument -> redid the explanation of model argument
 def parsing_args():
     '''generate the command line arguments using argparse'''
     #create_crops.py [-h] -f <file> -d <dir>

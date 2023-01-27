@@ -44,6 +44,7 @@ def parsing_args():
 
     return args
 
+#NOTE added this so you dont use empty directories
 def check_dir(dir) -> None:
     """
     Checks if the directory given as an argument contains jpg files
