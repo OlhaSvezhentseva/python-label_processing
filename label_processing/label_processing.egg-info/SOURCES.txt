@@ -1,4 +1,4 @@
-README.md
+README.rst
 setup.py
 label_processing/ocr_pytesseract.py
 label_processing/segmentation_cropping.py

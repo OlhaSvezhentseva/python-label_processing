@@ -41,26 +41,12 @@ def parsing_args():
             action='help',
             help='Open this help text.'
             )
-    
-    parser.add_argument(
-            '-c', '--classes',
-            metavar='',
-            choices = range(1,4),
-            type=int,
-            default = 1,
-            action='store',
-            help=('Optional argument: select which classes should be used according to the model selected.'
-                 '1 : only box.'
-                 '2 : classes (location, nuri, uce, taxonomy, antweb, casent_number, dna, other, collection).'
-                 '3 : handwritten/typed.'
-                 'Default is only box')
-            )
     parser.add_argument(
             '-o', '--out_dir',
             metavar='',
             type=str,
             default = os.getcwd(),
-            help=('Directory in which the resulting crops and the csv will be stored.'
+            help=('Directory in which the resulting crops and the csv will be stored.\n'
                   'Default is the user current working directory.')
             )
     
@@ -72,7 +58,7 @@ def parsing_args():
             help='Directory where the jpgs are stored.'
             )
     
-    parser.add_argument( #new
+    parser.add_argument( 
             '-m', '--model',
             metavar='',
             choices = range(1,4),
@@ -80,7 +66,11 @@ def parsing_args():
             default = 1,
             action='store',
             required = True,
-            help='Path to the model to be used.'
+            help=('Optional argument: select which segmenmtation-model should be used.'
+                 '1 : only box.'
+                 '2 : classes (location, nuri, uce, taxonomy, antweb, casent_number, dna, other, collection).'
+                 '3 : handwritten/typed.'
+                 'Default is only box')
             )
     
 
@@ -89,7 +79,7 @@ def parsing_args():
 
     return args
 
-def get_modelnum(model_int): #new
+def get_modelnum(model_int: int) -> str:
     """
     Returns the chosen model.
 
@@ -113,7 +103,7 @@ def get_modelnum(model_int): #new
     else:
         return model_file3
 
-def get_classtype(class_int: int) -> list:
+def get_classtype(model_int: int) -> list:
     """
     Returns the chosen classes.
 
@@ -123,9 +113,9 @@ def get_classtype(class_int: int) -> list:
     Returns:
         list: list with the selected classes.
     """
-    if class_int == 1:
+    if model_int == 1:
         return ["box"]
-    elif class_int == 2:
+    elif model_int == 2:
         return ["location", "nuri", "uce", "taxonomy", "antweb",
                 "casent_number", "dna", "other", "collection"]
     else:
@@ -134,9 +124,9 @@ def get_classtype(class_int: int) -> list:
 # does not execute main if the script is imported as a module
 if __name__ == '__main__': 
     args = parsing_args()
-    model_path = get_modelnum(args.model) #new
+    model_path = get_modelnum(args.model)
     jpeg_dir = args.jpg_dir
-    classes = get_classtype(args.classes)
+    classes = get_classtype(args.model)
     out_dir = args.out_dir
     
     predictions = segmentation_cropping.Predict_Labels(model_path, classes, jpeg_dir)

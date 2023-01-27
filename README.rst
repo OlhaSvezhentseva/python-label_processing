@@ -1,15 +1,3 @@
-Metadata-Version: 2.1
-Name: label-processing
-Version: 0.0.2
-Summary: Package for label processing
-License: UNKNOWN
-Platform: any
-Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.9
-Classifier: License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)
-Classifier: operatzing System :: OS Independent
-Description-Content-Type: text/markdown
-
 label_preprocessing 0.0.2
 ===================================================================
 
@@ -93,5 +81,3 @@ Input preparation
 .. _AntWeb: https://www.antweb.org/
 .. _Bees&Bytes: https://www.zooniverse.org/projects/mfnberlin/bees-and-bytes  
 .. _Atlas of Living Australia: https://www.ala.org.au/
-
-
