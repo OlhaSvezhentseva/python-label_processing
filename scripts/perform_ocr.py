@@ -10,7 +10,7 @@ FILENAME_PRE = "ocr_preprocessed.txt"
 
 def parsing_args():
     '''generate the command line arguments using argparse'''
-    usage = 'perform_ocr.py [-h] -o_OCR </path/to/OCR_output_file/outputOCR.txt> <o_OCR_pre> </path/to/OCR_output_preprocessed_file/outputOCRpre.txt>'
+    usage = 'perform_ocr.py [-h] [-np] -d <crop-dir>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
@@ -34,9 +34,9 @@ def parsing_args():
             '-d', '--crop_dir',
             metavar='',
             type=str,
-            default = os.getcwd(),
-            help=('Directory in which the resulting crops and the csv will be stored.'
-                  'Default is the user current working directory.')
+            required = True,
+            help=('Directory which contains the cropped jpgs on which the'
+                  'ocr is supposed to be applied')
             )
 
     
