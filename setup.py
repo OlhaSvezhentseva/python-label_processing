@@ -6,7 +6,7 @@ with open ("README.rst", "r") as fh:
 
 setup(  
     name='label_processing',
-    version='0.0.2',
+    version='1.1',
     description='Package for label processing',
     py_modules=["segmentation_cropping", "ocr_pytesseract"],
     package_dir={'': 'label_processing'},
