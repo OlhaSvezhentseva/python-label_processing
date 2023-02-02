@@ -5,6 +5,7 @@ TO DO:
 - Check OCR outputs - Magdalena
 - Test google vision - ask Théo for his credentials - Leonardo
 - Test cv2 for OCR - Leonardo?
+- Test the whole Pipeline with Joel´s package 
 - Create own OCR:
 https://calamari-ocr.readthedocs.io/en/latest/ - Olha?
 
