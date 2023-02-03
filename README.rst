@@ -47,7 +47,7 @@ For usage information, run any of these scripts with the option --help.
    Uses a segmentation-model to perform segmentation of the labels and 
    creates for every label-jpg crops for every label identified in a picture. 
 
-   **Takes as inputs:**
+   **Inputs:**
       - the path to the directory of the input jpgs (jpg_dir)
       - the model used for the segmentation (model)
       - the path to the directory in which the resulting crops, the csv and ocr outputs will be stored (out_dir)
@@ -59,12 +59,14 @@ For usage information, run any of these scripts with the option --help.
 * perform_ocr.py
    Performs the ocr on the segmented labels and returns it as a text file. 
    Before the ocr, preprocessing is done on the pictures to enhance the results
-   **Takes as inputs:**
-      - the path to the directory of the input jpgs (jpg_dir)
+
+   **Inputs:**
+      - the path to the directory of the input jpgs (crop_dir)
+      - optional argument: select whether OCR should also be performed without preprocessed pictures or not (no_preprocessing)
 
    **Outputs:**
-      - directory containing the preprocessed images
       - ocr results as a txt file
+      - optional: 
 
 
 
