@@ -43,7 +43,7 @@ Scripts
 -------
 For usage information, run any of these scripts with the option --help.
 
-*crop_seg.py*
+* crop_seg.py
    Uses a segmentation-model to perform segmentation of the labels and 
    creates for every label-jpg crops for every label identified in a picture. 
 
@@ -56,7 +56,7 @@ For usage information, run any of these scripts with the option --help.
       - the labels in the pictures are segmented and cropped out of the picture, becoming their own file named after their jpg of origin and class.
       - the segmentation outputs are also saved as a csv (filename, class, prediction score, coordinates).
 
-*perform_ocr.py*
+* perform_ocr.py
    Performs the ocr on the segmented labels and returns it as a text file. 
    Before the ocr, preprocessing is done on the pictures to enhance the results
    **Takes as inputs:**
