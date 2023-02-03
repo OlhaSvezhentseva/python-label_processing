@@ -1,8 +1,7 @@
 Metadata-Version: 2.1
 Name: label-processing
-Version: 0.0.2
+Version: 1.1
 Summary: Package for label processing
-License: UNKNOWN
 Platform: any
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.9
@@ -101,5 +100,3 @@ Input preparation
 .. _AntWeb: https://www.antweb.org/
 .. _Bees&Bytes: https://www.zooniverse.org/projects/mfnberlin/bees-and-bytes  
 .. _Atlas of Living Australia: https://www.ala.org.au/
-
-

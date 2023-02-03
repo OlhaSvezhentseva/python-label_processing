@@ -9,14 +9,18 @@ import pytesseract as py
 import os
 import glob
 import cv2
+import json
 
+#Configuarations
+CONFIG = r'--psm 11 --oem 3' #configuration for ocr
+LANGUAGES = 'eng+deu+fra+ita+spa+por' #specifying languages used for ocr
 
 # Path to Pytesseract exe file
 #py.pytesseract.tesseract_cmd = r"/opt/homebrew/Cellar/tesseract/5.2.0/bin/tesseract"
 
 
 
-def preprocessing(crop_dir, pre_path):
+def preprocessing(crop_dir: str, pre_path: str) -> None:
     """
     Preprocesses the cropped images to standardize their quality before applying the OCR on them.
     Saves the preprocessed image into a new _pre folder in the main images directory.
@@ -49,8 +53,7 @@ def preprocessing(crop_dir, pre_path):
 
 #---------------------OCR---------------------#
 
-
-def perform_ocr(crop_dir, path, filename):
+def perform_ocr(crop_dir: str, path: str, filename:str) -> None:
     """
     Perfoms Optical Character Recognition with the pytesseract python librairy on jpg images.
     
@@ -60,18 +63,22 @@ def perform_ocr(crop_dir, path, filename):
         out_dir_OCR (str): path to the target directory to save the OCR outputs.
     """
     print(f"\nPerforming OCR on {os.path.basename(crop_dir)}!")
-    config=r'--psm 11 --oem 3'
-    languages = 'eng+deu+fra+ita+spa+por'
-    filepath = f"{path}/{filename}"
-    for images in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
-        images_filename = os.path.basename(images)
-        print(f"Performing OCR on {os.path.basename(images)}!")
-        files = Image.open(images)
-        result = py.image_to_string(files, languages, config)
-        file1 = open(filepath, "a")
-        file1.write(images_filename+"\n")
-        file1.write(result+"\n"+"\n")
-        file1.close()
+    filepath: str = f"{path}/{filename}"
+    
+    
+    ocr_results: list = []
+    
+    for image in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
+        image_filename = os.path.basename(image)
+        print(f"Performing OCR on {os.path.basename(image)}!")
+        files = Image.open(image)
+        result = py.image_to_string(files, LANGUAGES, CONFIG)
+        ocr_results.append({"ID": image_filename, "text": result})
+
     print("\nOCR successful")
+    
+    with open(filepath, "w") as f:
+        json.dump(ocr_results, f)
+
     print("DONE!")
 

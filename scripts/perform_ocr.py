@@ -6,8 +6,8 @@ import shutil
 
 from pathlib import Path
 
-FILENAME = "ocr_not_preprocessed.txt"
-FILENAME_PRE = "ocr_preprocessed.txt"
+FILENAME = "ocr_not_preprocessed.json"
+FILENAME_PRE = "ocr_preprocessed.json"
 
 def parsing_args():
     '''generate the command line arguments using argparse'''
@@ -79,7 +79,7 @@ if __name__ == "__main__":
         new_dir = f"{os.path.basename(os.path.dirname(crop_dir))}_ocr"
     else:
         new_dir = f"{os.path.basename(crop_dir)}_ocr"
-    path = os.path.join(crop_dir, "..", new_dir) #parent directory of the cropped pictures
+    path = os.path.join(crop_dir, "../..", new_dir) #parent directory of the cropped pictures
     os.mkdir(path)
     ocr_pytesseract.perform_ocr(crop_dir, path, filename = FILENAME )
     
@@ -89,7 +89,7 @@ if __name__ == "__main__":
             new_dir_pre = f"{os.path.basename(os.path.dirname(crop_dir))}_pre"
         else:
             new_dir_pre = f"{os.path.basename(crop_dir)}_pre"    
-        pre_path = (f"{crop_dir}/../../{new_dir}/{new_dir_pre}")
+        pre_path = os.path.join(crop_dir, "..", new_dir_pre)
         Path(pre_path).mkdir(parents=True, exist_ok=True)
         ocr_pytesseract.preprocessing(crop_dir, pre_path)
         ocr_pytesseract.perform_ocr(pre_path,new_dir, filename = FILENAME_PRE)
