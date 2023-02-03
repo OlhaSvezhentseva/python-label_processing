@@ -30,13 +30,13 @@ Installation
 
 Modules
 -------
-*  segmentation_cropping
-   Module containing all functions concerning the application of the segmentation
-   models, the classification of the cropped labels and the use of the predicted coordinates for cropping the labels.  
+* segmentation_cropping
+  Module containing all functions concerning the application of the segmentation
+  models, the classification of the cropped labels and the use of the predicted coordinates for cropping the labels.  
 
 
-*  ocr_pytesseract
-   Module containing the Pytesseract OCR parameters to be performed on the _cropped jpg outputs.
+* ocr_pytesseract
+  Module containing the Pytesseract OCR parameters to be performed on the _cropped jpg outputs.
 
 
 Scripts
