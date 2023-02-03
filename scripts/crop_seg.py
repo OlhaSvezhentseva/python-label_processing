@@ -28,7 +28,7 @@ warnings.filterwarnings('ignore')
 def parsing_args():
     '''generate the command line arguments using argparse'''
     #create_crops.py [-h] -f <file> -d <dir>
-    usage = 'crop_seg.py [-h] [-c N] -m <model/number> -c <class/number> -j </path/to/jpgs> -o </path/to/jpgs_outputs> ' #new
+    usage = 'crop_seg.py [-h] [-c N] -m <model/number> -j </path/to/jpgs> -o </path/to/jpgs_outputs> ' #new
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage

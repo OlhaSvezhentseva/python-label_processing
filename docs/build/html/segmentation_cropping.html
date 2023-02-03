@@ -1,0 +1,282 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>segmentation_cropping module &#8212; label_processing 03.02.2022 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="ocr_pytesseract module" href="ocr_pytesseract.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ocr_pytesseract.html" title="ocr_pytesseract module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">label_processing 03.02.2022 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">label_processing</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">segmentation_cropping module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-segmentation_cropping">
+<span id="segmentation-cropping-module"></span><h1>segmentation_cropping module<a class="headerlink" href="#module-segmentation_cropping" title="Permalink to this heading">¶</a></h1>
+<p>Module containing all functions concerning the application of the segmenation
+models and the use of the predicted coordinates for cropping the labels.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="segmentation_cropping.Predict_Labels">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">segmentation_cropping.</span></span><span class="sig-name descname"><span class="pre">Predict_Labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jpg_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/segmentation_cropping.html#Predict_Labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#segmentation_cropping.Predict_Labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="segmentation_cropping.Predict_Labels.class_prediction">
+<span class="sig-name descname"><span class="pre">class_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/segmentation_cropping.html#Predict_Labels.class_prediction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#segmentation_cropping.Predict_Labels.class_prediction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the trained model created by Detecto and tries to predict the labelling of all
+files in a directory. It then returns a Pandas Dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model</strong> (<em>detecto.core.Model</em>) – access to object detection model and pretrained PyTorch model
+(fasterrcnn_resnet50_fpn).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas Dataframe with the results.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="segmentation_cropping.Predict_Labels.clean_predictions">
+<span class="sig-name descname"><span class="pre">clean_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/segmentation_cropping.html#Predict_Labels.clean_predictions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#segmentation_cropping.Predict_Labels.clean_predictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a clean dataframe only with boxes´ coordinates exceeding a given threshold score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>DataFrame</strong> (<em>pandas.DataFrame</em>) – Pandas Dataframe with predicted coordinates and labels’ scores.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Pandas Dataframe with the trimmed results.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="segmentation_cropping.Predict_Labels.get_model">
+<span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/segmentation_cropping.html#Predict_Labels.get_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#segmentation_cropping.Predict_Labels.get_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call trained object detection model, for example <em>model_labels_class.pth</em>.
+The model was trained with the Detecto python package which is built on top
+of PyTorch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>trained object detection model.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="segmentation_cropping.create_crops">
+<span class="sig-prename descclassname"><span class="pre">segmentation_cropping.</span></span><span class="sig-name descname"><span class="pre">create_crops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jpg_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/python-label_processing/docs'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/segmentation_cropping.html#create_crops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#segmentation_cropping.create_crops" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates crops by using the csv from applying the model and the original
+pictures inside a directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>jpg_dir</strong> (<em>str</em>) – path to directory with jpgs.</p></li>
+<li><p><strong>dataframe</strong> (<em>str</em>) – path to csv file.</p></li>
+<li><p><strong>out_dir</strong> (<em>str</em>) – path to the target directory to save the cropped jpgs.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="segmentation_cropping.create_dirs">
+<span class="sig-prename descclassname"><span class="pre">segmentation_cropping.</span></span><span class="sig-name descname"><span class="pre">create_dirs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/segmentation_cropping.html#create_dirs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#segmentation_cropping.create_dirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates for every class a seperate directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataframe</strong> (<em>pandas.Dataframe</em>) – dataframe containig the classes as a column</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – path of chosen directory</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="segmentation_cropping.crop_picture">
+<span class="sig-prename descclassname"><span class="pre">segmentation_cropping.</span></span><span class="sig-name descname"><span class="pre">crop_picture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pic_class</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">coordinates</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/segmentation_cropping.html#crop_picture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#segmentation_cropping.crop_picture" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crops the picture using the given coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img_raw</strong> (<em>numpy matrix</em>) – input jpg converted to numpy matrix by cv2.</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – path where the picture should be saved.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – name of the picture.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="segmentation_cropping.load_dataframe">
+<span class="sig-prename descclassname"><span class="pre">segmentation_cropping.</span></span><span class="sig-name descname"><span class="pre">load_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath_csv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/segmentation_cropping.html#load_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#segmentation_cropping.load_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the csv file using Pandas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath_csv</strong> (<em>str</em>) – string containing the path to the csv with the
+results from applying the model.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The csv as a Pandas Dataframe</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="segmentation_cropping.load_jpgs">
+<span class="sig-prename descclassname"><span class="pre">segmentation_cropping.</span></span><span class="sig-name descname"><span class="pre">load_jpgs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/segmentation_cropping.html#load_jpgs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#segmentation_cropping.load_jpgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the jpg file using the opencv module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>cv2 image object</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Mat</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="segmentation_cropping.make_file_name">
+<span class="sig-prename descclassname"><span class="pre">segmentation_cropping.</span></span><span class="sig-name descname"><span class="pre">make_file_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pic_class</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">occurence</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/segmentation_cropping.html#make_file_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#segmentation_cropping.make_file_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a fitting filename.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label_id</strong> (<em>str</em>) – string containing the label id.</p></li>
+<li><p><strong>pic_class</strong> (<em>str</em>) – class of the label.</p></li>
+<li><p><strong>occurence</strong> (<em>int</em>) – counts how many times the label class already
+occured in the picture.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">segmentation_cropping module</a><ul>
+<li><a class="reference internal" href="#segmentation_cropping.Predict_Labels"><code class="docutils literal notranslate"><span class="pre">Predict_Labels</span></code></a><ul>
+<li><a class="reference internal" href="#segmentation_cropping.Predict_Labels.class_prediction"><code class="docutils literal notranslate"><span class="pre">Predict_Labels.class_prediction()</span></code></a></li>
+<li><a class="reference internal" href="#segmentation_cropping.Predict_Labels.clean_predictions"><code class="docutils literal notranslate"><span class="pre">Predict_Labels.clean_predictions()</span></code></a></li>
+<li><a class="reference internal" href="#segmentation_cropping.Predict_Labels.get_model"><code class="docutils literal notranslate"><span class="pre">Predict_Labels.get_model()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#segmentation_cropping.create_crops"><code class="docutils literal notranslate"><span class="pre">create_crops()</span></code></a></li>
+<li><a class="reference internal" href="#segmentation_cropping.create_dirs"><code class="docutils literal notranslate"><span class="pre">create_dirs()</span></code></a></li>
+<li><a class="reference internal" href="#segmentation_cropping.crop_picture"><code class="docutils literal notranslate"><span class="pre">crop_picture()</span></code></a></li>
+<li><a class="reference internal" href="#segmentation_cropping.load_dataframe"><code class="docutils literal notranslate"><span class="pre">load_dataframe()</span></code></a></li>
+<li><a class="reference internal" href="#segmentation_cropping.load_jpgs"><code class="docutils literal notranslate"><span class="pre">load_jpgs()</span></code></a></li>
+<li><a class="reference internal" href="#segmentation_cropping.make_file_name"><code class="docutils literal notranslate"><span class="pre">make_file_name()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="ocr_pytesseract.html"
+                          title="previous chapter">ocr_pytesseract module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/segmentation_cropping.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ocr_pytesseract.html" title="ocr_pytesseract module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">label_processing 03.02.2022 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >label_processing</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">segmentation_cropping module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, Margot Belot, Leonardo Preuss, Magdalena Claessen.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    </div>
+  </body>
+</html>
