@@ -63,7 +63,6 @@ def parsing_args():
             type=int,
             default = 1,
             action='store',
-            required = True,
             help=('Optional argument: select which segmenmtation-model should be used.'
                  '1 : only box.'
                  '2 : classes (location, nuri, uce, taxonomy, antweb, casent_number, dna, other, collection).'
