@@ -1,0 +1,163 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>ocr_pytesseract module &#8212; label_processing 03.02.2022 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="segmentation_cropping module" href="segmentation_cropping.html" />
+    <link rel="prev" title="label_processing" href="modules.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="segmentation_cropping.html" title="segmentation_cropping module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="label_processing"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">label_processing 03.02.2022 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">label_processing</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ocr_pytesseract module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-ocr_pytesseract">
+<span id="ocr-pytesseract-module"></span><h1>ocr_pytesseract module<a class="headerlink" href="#module-ocr_pytesseract" title="Permalink to this heading">¶</a></h1>
+<p>Module containing the Pytesseract OCR parameters to be performed on the _cropped jpg outputs from
+the segmentation_cropping.py module.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ocr_pytesseract.perform_ocr">
+<span class="sig-prename descclassname"><span class="pre">ocr_pytesseract.</span></span><span class="sig-name descname"><span class="pre">perform_ocr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crop_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/ocr_pytesseract.html#perform_ocr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocr_pytesseract.perform_ocr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perfoms Optical Character Recognition with the pytesseract python librairy on jpg images.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>crop_dir</strong> (<em>str</em>) – path to the directory where the cropped jpgs’ main folder is saved.</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – path to the directory where the cropped jpgs are saved.</p></li>
+<li><p><strong>out_dir_OCR</strong> (<em>str</em>) – path to the target directory to save the OCR outputs.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocr_pytesseract.preprocessing">
+<span class="sig-prename descclassname"><span class="pre">ocr_pytesseract.</span></span><span class="sig-name descname"><span class="pre">preprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crop_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/ocr_pytesseract.html#preprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocr_pytesseract.preprocessing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocesses the cropped images to standardize their quality before applying the OCR on them.
+Saves the preprocessed image into a new _pre folder in the main images directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – path to the directory where the cropped images are saved.</p></li>
+<li><p><strong>pre_path</strong> (<em>str</em>) – path to the target directory to save the preprocessed images.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">ocr_pytesseract module</a><ul>
+<li><a class="reference internal" href="#ocr_pytesseract.perform_ocr"><code class="docutils literal notranslate"><span class="pre">perform_ocr()</span></code></a></li>
+<li><a class="reference internal" href="#ocr_pytesseract.preprocessing"><code class="docutils literal notranslate"><span class="pre">preprocessing()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="modules.html"
+                          title="previous chapter">label_processing</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="segmentation_cropping.html"
+                          title="next chapter">segmentation_cropping module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ocr_pytesseract.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="segmentation_cropping.html" title="segmentation_cropping module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="label_processing"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">label_processing 03.02.2022 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >label_processing</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ocr_pytesseract module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, Margot Belot, Leonardo Preuss, Magdalena Claessen.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    </div>
+  </body>
+</html>
