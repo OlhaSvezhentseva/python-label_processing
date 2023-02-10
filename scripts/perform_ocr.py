@@ -92,6 +92,6 @@ if __name__ == "__main__":
         pre_path = os.path.join(crop_dir, "..", new_dir_pre)
         Path(pre_path).mkdir(parents=True, exist_ok=True)
         ocr_pytesseract.preprocessing(crop_dir, pre_path)
-        ocr_pytesseract.perform_ocr(pre_path,new_dir, filename = FILENAME_PRE)
+        ocr_pytesseract.perform_ocr(pre_path,path, filename = FILENAME_PRE)
         if not args.keep:
             shutil.rmtree(pre_path) #delete Folder which contains the preprocessed 
