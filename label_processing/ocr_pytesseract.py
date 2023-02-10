@@ -73,6 +73,8 @@ def perform_ocr(crop_dir: str, path: str, filename:str) -> None:
         print(f"Performing OCR on {os.path.basename(image)}!")
         files = Image.open(image)
         result = py.image_to_string(files, LANGUAGES, CONFIG)
+        #remove linebreaks
+        result = result.replace('\n', '')
         ocr_results.append({"ID": image_filename, "text": result})
 
     print("\nOCR successful")

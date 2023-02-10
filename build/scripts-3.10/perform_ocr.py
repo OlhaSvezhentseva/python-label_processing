@@ -2,15 +2,16 @@
 import ocr_pytesseract
 import argparse
 import os
+import shutil
 
 from pathlib import Path
 
-FILENAME = "ocr_not_preprocessed.txt"
-FILENAME_PRE = "ocr_preprocessed.txt"
+FILENAME = "ocr_not_preprocessed.json"
+FILENAME_PRE = "ocr_preprocessed.json"
 
 def parsing_args():
     '''generate the command line arguments using argparse'''
-    usage = 'perform_ocr.py [-h] -o_OCR </path/to/OCR_output_file/outputOCR.txt> <o_OCR_pre> </path/to/OCR_output_preprocessed_file/outputOCRpre.txt>'
+    usage = 'perform_ocr.py [-h] [-np] -d <crop-dir>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
@@ -31,12 +32,20 @@ def parsing_args():
             )
     
     parser.add_argument(
+            '-k', '--keep',
+            metavar='',
+            action=argparse.BooleanOptionalAction,
+            help=('optional argument: select whether the preprocessed images'
+                  'should be saved ')
+            )
+    
+    parser.add_argument(
             '-d', '--crop_dir',
             metavar='',
             type=str,
-            default = os.getcwd(),
-            help=('Directory in which the resulting crops and the csv will be stored.'
-                  'Default is the user current working directory.')
+            required = True,
+            help=('Directory which contains the cropped jpgs on which the'
+                  'ocr is supposed to be applied')
             )
 
     
@@ -44,17 +53,33 @@ def parsing_args():
 
     return args
 
+#NOTE added this so you dont use empty directories
+def check_dir(dir) -> None:
+    """
+    Checks if the directory given as an argument contains jpg files
 
+    Args:
+        dir (str): path to directory
+
+    Raises:
+        FileNotFoundError: raised if no jpg files are found in directory
+    """
+    if not any(file_name.endswith('.jpg') for file_name in os.listdir(dir)):
+        raise FileNotFoundError(("The directory given does not contain "
+                                 "any jpg-files. You might have chosen the wrong "
+                                 "directory?")) 
+        
 
 if __name__ == "__main__":
     args = parsing_args()
     # OCR - without image preprocessing
     crop_dir = args.crop_dir
+    check_dir(crop_dir)
     if crop_dir[-1] == "/" :
         new_dir = f"{os.path.basename(os.path.dirname(crop_dir))}_ocr"
     else:
         new_dir = f"{os.path.basename(crop_dir)}_ocr"
-    path = (f"{crop_dir}/../../{new_dir}/") #parent directory of the cropped pictures
+    path = os.path.join(crop_dir, "../..", new_dir) #parent directory of the cropped pictures
     os.mkdir(path)
     ocr_pytesseract.perform_ocr(crop_dir, path, filename = FILENAME )
     
@@ -64,7 +89,9 @@ if __name__ == "__main__":
             new_dir_pre = f"{os.path.basename(os.path.dirname(crop_dir))}_pre"
         else:
             new_dir_pre = f"{os.path.basename(crop_dir)}_pre"    
-        pre_path = (f"{crop_dir}/../../{new_dir}/{new_dir_pre}")
+        pre_path = os.path.join(crop_dir, "..", new_dir_pre)
         Path(pre_path).mkdir(parents=True, exist_ok=True)
         ocr_pytesseract.preprocessing(crop_dir, pre_path)
-        ocr_pytesseract.perform_ocr(pre_path,new_dir, filename = FILENAME_PRE)
+        ocr_pytesseract.perform_ocr(pre_path,path, filename = FILENAME_PRE)
+        if not args.keep:
+            shutil.rmtree(pre_path) #delete Folder which contains the preprocessed 
