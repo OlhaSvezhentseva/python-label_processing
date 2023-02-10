@@ -1,3 +1,7 @@
+"""
+Module containing the Pytesseract OCR parameters to be performed on the _cropped jpg outputs.
+"""
+
 #!/usr/bin/env python3
 import ocr_pytesseract
 import argparse
@@ -27,7 +31,7 @@ def parsing_args():
             '-np', '--no_preprocessing',
             metavar='',
             action=argparse.BooleanOptionalAction,
-            help=('optional argument: select whether OCR should also be performed' 
+            help=('Optional argument: select whether OCR should also be performed' 
             'with preprocessed pictures ')
             )
     
@@ -45,10 +49,9 @@ def parsing_args():
 
     return args
 
-#NOTE added this so you dont use empty directories
 def check_dir(dir) -> None:
     """
-    Checks if the directory given as an argument contains jpg files
+    Checks if the directory given as an argument contains jpg files.
 
     Args:
         dir (str): path to directory
@@ -64,7 +67,7 @@ def check_dir(dir) -> None:
 
 if __name__ == "__main__":
     args = parsing_args()
-    #Find path to tesseract path
+    #Find path to tesseract
     ocr_pytesseract.find_tesseract()
     # OCR - without image preprocessing
     crop_dir = args.crop_dir
