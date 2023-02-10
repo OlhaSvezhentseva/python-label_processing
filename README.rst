@@ -9,7 +9,7 @@ Introduction
 ------------
 This package contains three segmentation models and functions to handle
 segmenting and performing an OCR on entomology specimen labels. Its installation also includes 
-scripts designed for classifying the labels during segmentation and preprocessing the images before applying the OCR.
+scripts designed for classifying the labels during segmentation and preprocessing the images before applying the Pytesseract OCR.
 
 
 Installation
@@ -57,17 +57,15 @@ For usage information, run any of these scripts with the option --help.
       - the segmentation outputs are also saved as a csv (filename, class, prediction score, coordinates).
 
 * perform_ocr.py
-   Performs the ocr on the segmented labels and returns it as a text file. 
-   Before the ocr, preprocessing is done on the pictures to enhance the results
+   Performs the ocr on the segmented labels and returns it as a json file. 
+   Before the ocr, preprocessing is done on the pictures to enhance the results.
 
    **Inputs:**
       - the path to the directory of the input jpgs (crop_dir)
-      - optional argument: select whether OCR should also be performed without preprocessed pictures or not (no_preprocessing)
+      - optional argument: select whether OCR should also be performed without preprocessed pictures (no_preprocessing)
 
    **Outputs:**
-      - ocr results as a txt file
-      - optional: 
-
+      - ocr results as a json file
 
 
 Input preparation
