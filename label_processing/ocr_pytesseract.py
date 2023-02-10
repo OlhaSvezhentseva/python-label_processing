@@ -13,6 +13,7 @@ import shutil
 import re
 import pytesseract as py
 import numpy as np
+
 #Configuarations
 CONFIG = r'--psm 11 --oem 3' #configuration for ocr
 LANGUAGES = 'eng+deu+fra+ita+spa+por' #specifying languages used for ocr
@@ -20,12 +21,12 @@ LANGUAGES = 'eng+deu+fra+ita+spa+por' #specifying languages used for ocr
 # Path to Pytesseract exe file
 def find_tesseract() -> None:
     """
-    searches for the tesseract executable and raises an error if it is not found
+    Searches for the tesseract executable and raises an error if it is not found.
     """
     tesseract_path = shutil.which("tesseract")
     if not tesseract_path:
         raise FileNotFoundError(("Could not find tesseract on your machine!"
-                                 "Please read the README for install instructions!"))
+                                 "Please read the README for instructions!"))
     else:
         py.pytesseract.tesseract_cmd = tesseract_path
 
@@ -39,7 +40,7 @@ class Preprocessing():
     @staticmethod
     def read_image(path: str) -> Preprocessing:
         """
-        returns instance of Preprocessing of a picture
+        Returns instance of Preprocessing of a picture.
 
         Args:
             path (str): path to a jpg file
@@ -125,8 +126,8 @@ class Preprocessing():
 
 def process_string(result_raw: str) -> str:
     """
-    processes the ocr_otput by replacing \n with spaces and encoding it to
-    ascii and decoing it again to utf-8
+    Processes the ocr_output by replacing \n with spaces and encoding it to
+    ascii and decoding it again to utf-8.
 
     Args:
         result_raw (str): raw string from pytesseract output
@@ -148,7 +149,7 @@ def perform_ocr(crop_dir: str, path: str, filename: str,
     Args:
         crop_dir (str): path to the directory where the cropped jpgs' main folder is saved.
         path (str): path to the directory where the cropped jpgs are saved.
-        out_dir_OCR (str): path to the target directory to save the OCR outputs.
+        filename (str): json file's filename
     """
     print(f"\nPerforming OCR on {os.path.basename(crop_dir)}!")
     filepath: str = f"{path}/{filename}"
