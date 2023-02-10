@@ -1,19 +1,13 @@
 #!/usr/bin/env python3
 '''
-Execute the segmentation_cropping.py, preprocessing_ocr.py and ocr_pytesseract.py scripts.
+Execute the segmentation_cropping.py and ocr_pytesseract.py modules.
 Takes as inputs: the path to the jpgs (jpg_dir),
-                 the path to the model (model),
-                 the classes used for the model (classes),
+                 the number of the model (model),
                  the path to the directory in which the resulting crops and the csv will be stored (out_dir),
-                 the path to the directory in which the OCR outputs will be stored (out_dir_OCR) and
-                 the path to the directory in which the OCR outputs of the preprocessed images will be stored (out_dir_OCR_pre)
 
 Outputs: - the labels in the pictures are segmented and cropped out of the picture,
            becoming their own file named after their jpg of origin and class.
          - the segmentation outputs are also saved as a dataframe (filename, class, prediction score, coordinates).
-         - the OCR outputs after performing on the cropped images.
-         - the preprocessed images in their own _pre folder in the main input images directory.
-         - the OCR outputs after performing on the preprocessed cropped images.
 '''
 
 #Import module from this package
@@ -24,11 +18,9 @@ import os
 import warnings
 warnings.filterwarnings('ignore')
 
-#NOTE removed the classes argument -> redid the explanation of model argument
 def parsing_args():
     '''generate the command line arguments using argparse'''
-    #create_crops.py [-h] -f <file> -d <dir>
-    usage = 'crop_seg.py [-h] [-c N] -m <model/number> -j </path/to/jpgs> -o </path/to/jpgs_outputs> ' #new
+    usage = 'crop_seg.py [-h] [-c N] -m <model/number> -j </path/to/jpgs> -o </path/to/jpgs_outputs> '
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
@@ -63,14 +55,12 @@ def parsing_args():
             type=int,
             default = 1,
             action='store',
-            help=('Optional argument: select which segmenmtation-model should be used.'
-                 '1 : only box.'
-                 '2 : classes (location, nuri, uce, taxonomy, antweb, casent_number, dna, other, collection).'
-                 '3 : handwritten/typed.'
+            help=('Optional argument: select which segmenmtation-model should be used.\n'
+                 '1 : only box.\n'
+                 '2 : classes (location, nuri, uce, taxonomy, antweb, casent_number, dna, other, collection).\n'
+                 '3 : handwritten/typed.\n'
                  'Default is only box')
             )
-    
-
     
     args = parser.parse_args()
 
@@ -87,7 +77,7 @@ def get_modelnum(model_int: int) -> str:
          path (str): path to the selected model.
     """
     script_dir = os.path.dirname(__file__)
-    rel_path1 = "../models/model_labels_box.pth" #releative path to models from file
+    rel_path1 = "../models/model_labels_box.pth"
     model_file1 = os.path.join(script_dir, rel_path1)
     rel_path2 = "../models/model_labels_class.pth"
     model_file2 = os.path.join(script_dir, rel_path2)
@@ -123,7 +113,7 @@ if __name__ == '__main__':
     args = parsing_args()
     model_path = get_modelnum(args.model)
     jpeg_dir = args.jpg_dir
-    classes = get_classtype(args.model) #NOTE put here args.model instead of args.class
+    classes = get_classtype(args.model)
     out_dir = args.out_dir
     
     predictions = segmentation_cropping.Predict_Labels(model_path, classes, jpeg_dir)
