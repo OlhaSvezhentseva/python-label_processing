@@ -159,7 +159,7 @@ def crop_picture(img_raw,path,filename,pic_class,**coordinates):
     ymin = coordinates['ymin']
     xmax = coordinates['xmax']
     ymax = coordinates['ymax']
-    filepath=f"{path}/{pic_class}/{filename}" #creates for every pic_class 
+    filepath=f"{path}/{pic_class}/{filename}"
     crop = img_raw[ymin:ymax, xmin:xmax]
     cv2.imwrite(filepath, crop)
 
