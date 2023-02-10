@@ -30,6 +30,7 @@ setup(
         "opencv-python",
         "detecto",
         "pytesseract",
+        "tesseract",
         "pillow"
     ],
 )

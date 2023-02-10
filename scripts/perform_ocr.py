@@ -32,14 +32,6 @@ def parsing_args():
             )
     
     parser.add_argument(
-            '-k', '--keep',
-            metavar='',
-            action=argparse.BooleanOptionalAction,
-            help=('optional argument: select whether the preprocessed images'
-                  'should be saved ')
-            )
-    
-    parser.add_argument(
             '-d', '--crop_dir',
             metavar='',
             type=str,
@@ -87,13 +79,5 @@ if __name__ == "__main__":
     
     # OCR - with image preprocessing
     if not args.no_preprocessing: #gets surpressed when specified in command line
-        if crop_dir[-1] == "/" :
-            new_dir_pre = f"{os.path.basename(os.path.dirname(crop_dir))}_pre"
-        else:
-            new_dir_pre = f"{os.path.basename(crop_dir)}_pre"    
-        pre_path = os.path.join(crop_dir, "..", new_dir_pre)
-        Path(pre_path).mkdir(parents=True, exist_ok=True)
-        ocr_pytesseract.preprocessing(crop_dir, pre_path)
-        ocr_pytesseract.perform_ocr(pre_path,path, filename = FILENAME_PRE)
-        if not args.keep:
-            shutil.rmtree(pre_path) #delete Folder which contains the preprocessed 
+        ocr_pytesseract.perform_ocr(crop_dir, path, filename = FILENAME_PRE,
+                                    preprocessing = True)
