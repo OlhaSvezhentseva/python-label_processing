@@ -72,6 +72,8 @@ def check_dir(dir) -> None:
 
 if __name__ == "__main__":
     args = parsing_args()
+    #Find path to tesseract path
+    ocr_pytesseract.find_tesseract()
     # OCR - without image preprocessing
     crop_dir = args.crop_dir
     check_dir(crop_dir)

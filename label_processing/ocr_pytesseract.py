@@ -10,13 +10,23 @@ import os
 import glob
 import cv2
 import json
+import shutil
 
 #Configuarations
 CONFIG = r'--psm 11 --oem 3' #configuration for ocr
 LANGUAGES = 'eng+deu+fra+ita+spa+por' #specifying languages used for ocr
 
 # Path to Pytesseract exe file
-#py.pytesseract.tesseract_cmd = r"/opt/homebrew/Cellar/tesseract/5.2.0/bin/tesseract"
+def find_tesseract() -> None:
+    """
+    searches for the tesseract executable and raises an error if it is not found
+    """
+    tesseract_path = shutil.which("tesseract")
+    if not tesseract_path:
+        raise FileNotFoundError(("Could not find tesseract on your machine!"
+                                 "Please read the README for install instructions!"))
+    else:
+        py.pytesseract.tesseract_cmd = tesseract_path
 
 
 
@@ -88,5 +98,3 @@ def perform_ocr(crop_dir: str, path: str, filename:str) -> None:
         json.dump(ocr_results, f)
 
     print("DONE!")
-
-q
