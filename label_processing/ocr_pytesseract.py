@@ -53,6 +53,10 @@ def preprocessing(crop_dir: str, pre_path: str) -> None:
 
 #---------------------OCR---------------------#
 
+
+def process_string(result_raw: str) -> str:
+    return result_raw.replace('\n', ' ').replace('\u', ' ')
+
 def perform_ocr(crop_dir: str, path: str, filename:str) -> None:
     """
     Perfoms Optical Character Recognition with the pytesseract python librairy on jpg images.
@@ -74,8 +78,9 @@ def perform_ocr(crop_dir: str, path: str, filename:str) -> None:
         files = Image.open(image)
         result = py.image_to_string(files, LANGUAGES, CONFIG)
         #remove linebreaks
-        result = result.replace('\n', '')
-        ocr_results.append({"ID": image_filename, "text": result})
+        result_processed = process_string(result)
+        
+        ocr_results.append({"ID": image_filename, "text": result_processed})
 
     print("\nOCR successful")
     
@@ -84,3 +89,4 @@ def perform_ocr(crop_dir: str, path: str, filename:str) -> None:
 
     print("DONE!")
 
+q
