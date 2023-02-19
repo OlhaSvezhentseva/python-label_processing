@@ -5,4 +5,5 @@ detecto
 opencv-python
 detecto
 pytesseract
+tesseract
 pillow

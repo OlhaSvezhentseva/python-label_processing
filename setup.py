@@ -17,7 +17,8 @@ setup(
         "operatzing System :: OS Independent",
     ],
     scripts=["scripts/crop_seg.py",
-             "scripts/perform_ocr.py"],
+             "scripts/perform_ocr.py",
+             "scripts/vision.py"],
     #include_package_data=True, #include the static data specified in the MANIFEST.in
     long_description=long_description,
     long_description_content_type="text/markdown",
