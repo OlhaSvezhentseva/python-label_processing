@@ -50,7 +50,7 @@ def parsing_args():
 
 class VisionApi():
     """
-    class concerning the vision api performed on a directory
+    Class concerning the Google Vision API performed on a directory.
     """
 
     def __init__(self, path: str, image: bytes, credentials: str,
@@ -64,7 +64,7 @@ class VisionApi():
     @staticmethod            
     def export(credentials) -> None:
         """
-        exports credentials json
+        Exports credentials json.
         """
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials
 
