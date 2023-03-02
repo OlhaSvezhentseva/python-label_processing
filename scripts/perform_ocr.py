@@ -6,7 +6,6 @@ Module containing the Pytesseract OCR parameters to be performed on the _cropped
 import ocr_pytesseract
 import argparse
 import os
-import shutil
 
 from pathlib import Path
 
