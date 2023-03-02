@@ -1,8 +1,11 @@
-#!python
+"""
+Module containing the Pytesseract OCR parameters to be performed on the _cropped jpg outputs.
+"""
+
+#!/usr/bin/env python3
 import ocr_pytesseract
 import argparse
 import os
-import shutil
 
 from pathlib import Path
 
@@ -27,16 +30,8 @@ def parsing_args():
             '-np', '--no_preprocessing',
             metavar='',
             action=argparse.BooleanOptionalAction,
-            help=('optional argument: select whether OCR should also be performed' 
+            help=('Optional argument: select whether OCR should also be performed' 
             'with preprocessed pictures ')
-            )
-    
-    parser.add_argument(
-            '-k', '--keep',
-            metavar='',
-            action=argparse.BooleanOptionalAction,
-            help=('optional argument: select whether the preprocessed images'
-                  'should be saved ')
             )
     
     parser.add_argument(
@@ -53,10 +48,9 @@ def parsing_args():
 
     return args
 
-#NOTE added this so you dont use empty directories
 def check_dir(dir) -> None:
     """
-    Checks if the directory given as an argument contains jpg files
+    Checks if the directory given as an argument contains jpg files.
 
     Args:
         dir (str): path to directory
@@ -72,6 +66,8 @@ def check_dir(dir) -> None:
 
 if __name__ == "__main__":
     args = parsing_args()
+    #Find path to tesseract
+    ocr_pytesseract.find_tesseract()
     # OCR - without image preprocessing
     crop_dir = args.crop_dir
     check_dir(crop_dir)
@@ -85,13 +81,5 @@ if __name__ == "__main__":
     
     # OCR - with image preprocessing
     if not args.no_preprocessing: #gets surpressed when specified in command line
-        if crop_dir[-1] == "/" :
-            new_dir_pre = f"{os.path.basename(os.path.dirname(crop_dir))}_pre"
-        else:
-            new_dir_pre = f"{os.path.basename(crop_dir)}_pre"    
-        pre_path = os.path.join(crop_dir, "..", new_dir_pre)
-        Path(pre_path).mkdir(parents=True, exist_ok=True)
-        ocr_pytesseract.preprocessing(crop_dir, pre_path)
-        ocr_pytesseract.perform_ocr(pre_path,path, filename = FILENAME_PRE)
-        if not args.keep:
-            shutil.rmtree(pre_path) #delete Folder which contains the preprocessed 
+        ocr_pytesseract.perform_ocr(crop_dir, path, filename = FILENAME_PRE,
+                                    preprocessing = True)

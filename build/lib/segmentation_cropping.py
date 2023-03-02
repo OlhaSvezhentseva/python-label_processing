@@ -159,7 +159,7 @@ def crop_picture(img_raw,path,filename,pic_class,**coordinates):
     ymin = coordinates['ymin']
     xmax = coordinates['xmax']
     ymax = coordinates['ymax']
-    filepath=f"{path}/{pic_class}/{filename}" #creates for every pic_class 
+    filepath=f"{path}/{pic_class}/{filename}"
     crop = img_raw[ymin:ymax, xmin:xmax]
     cv2.imwrite(filepath, crop)
 
@@ -223,4 +223,4 @@ def create_crops(jpg_dir, dataframe, out_dir = os.getcwd()):
                            'xmax':int(row.xmax),'ymax':int(row.ymax)}
             crop_picture(image_raw,path,filename,pic_class,**coordinates)
             classes.append(pic_class)
-    print(f"\nThe images have been successfully saved in {out_dir}/{new_dir}")
+    print(f"\nThe images have been successfully saved in {os.path.join(out_dir, new_dir)}")
