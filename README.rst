@@ -35,8 +35,10 @@ Modules
    models, the classification of the cropped labels and the use of the predicted coordinates for cropping the labels.  
 
 
-* ocr_pytesseract
-   Module containing the Pytesseract OCR parameters to be performed on the _cropped jpg outputs.
+* text_recognition
+   Module containing necessary classes and functions for performing the ocr.
+   For now performing ocr with either the open source pytesseract or the paid
+   google cloud vision API is possible 
 
 
 Scripts
@@ -56,7 +58,7 @@ For usage information, run any of these scripts with the option --help.
       - the labels in the pictures are segmented and cropped out of the picture, becoming their own file named after their jpg of origin and class.
       - the segmentation outputs are also saved as a csv (filename, class, prediction score, coordinates).
 
-* perform_ocr.py
+* tesseract_ocr.py
    Performs the ocr on the segmented labels and returns it as a json file. 
    Before the ocr, preprocessing is done on the pictures to enhance the results.
 
@@ -67,6 +69,16 @@ For usage information, run any of these scripts with the option --help.
    **Outputs:**
       - ocr results as a json file
 
+* vision.py
+   Performs the ocr on the segmented labels by calling the google vision API
+    and returns it as a json file. 
+   
+   **Inputs:**
+      - the path to the google credentials json file  
+      - the path to the directory of the input jpgs (crop_dir)
+
+   **Outputs:**
+      - ocr results as a json file
 
 Input preparation
 -----------------
@@ -89,3 +101,9 @@ Input preparation
 .. _AntWeb: https://www.antweb.org/
 .. _Bees&Bytes: https://www.zooniverse.org/projects/mfnberlin/bees-and-bytes  
 .. _Atlas of Living Australia: https://www.ala.org.au/
+
+Google credentials
+-----------------
+
+
+
