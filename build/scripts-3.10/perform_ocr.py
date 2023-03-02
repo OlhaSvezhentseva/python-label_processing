@@ -3,7 +3,8 @@ Module containing the Pytesseract OCR parameters to be performed on the _cropped
 """
 
 #!/usr/bin/env python3
-import ocr_pytesseract
+from __future__ import annotations
+import text_recognition
 import argparse
 import os
 
@@ -12,7 +13,7 @@ from pathlib import Path
 FILENAME = "ocr_not_preprocessed.json"
 FILENAME_PRE = "ocr_preprocessed.json"
 
-def parsing_args():
+def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
     usage = 'perform_ocr.py [-h] [-np] -d <crop-dir>'
     parser =  argparse.ArgumentParser(description=__doc__,
@@ -48,38 +49,24 @@ def parsing_args():
 
     return args
 
-def check_dir(dir) -> None:
-    """
-    Checks if the directory given as an argument contains jpg files.
-
-    Args:
-        dir (str): path to directory
-
-    Raises:
-        FileNotFoundError: raised if no jpg files are found in directory
-    """
-    if not any(file_name.endswith('.jpg') for file_name in os.listdir(dir)):
-        raise FileNotFoundError(("The directory given does not contain "
-                                 "any jpg-files. You might have chosen the wrong "
-                                 "directory?")) 
-        
 
 if __name__ == "__main__":
     args = parsing_args()
     #Find path to tesseract
-    ocr_pytesseract.find_tesseract()
+    text_recognition.find_tesseract()
     # OCR - without image preprocessing
     crop_dir = args.crop_dir
-    check_dir(crop_dir)
+    text_recognition.check_dir(crop_dir)
     if crop_dir[-1] == "/" :
         new_dir = f"{os.path.basename(os.path.dirname(crop_dir))}_ocr"
     else:
         new_dir = f"{os.path.basename(crop_dir)}_ocr"
     path = os.path.join(crop_dir, "../..", new_dir) #parent directory of the cropped pictures
     os.mkdir(path)
-    ocr_pytesseract.perform_ocr(crop_dir, path, filename = FILENAME )
+    text_recognition.perform_tesseract_ocr(crop_dir, path, filename = FILENAME )
     
     # OCR - with image preprocessing
     if not args.no_preprocessing: #gets surpressed when specified in command line
-        ocr_pytesseract.perform_ocr(crop_dir, path, filename = FILENAME_PRE,
+        text_recognition.perform_tesseract_ocr(crop_dir, path,
+                                    filename = FILENAME_PRE,
                                     preprocessing = True)
