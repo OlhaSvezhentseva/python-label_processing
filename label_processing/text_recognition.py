@@ -1,5 +1,5 @@
 """
-Module containing the Pytesseract OCR parameters to be performed on the _cropped jpg outputs from
+Module containing the Pytesseract OCR parameters and image preprocessing to be performed on the _cropped jpg outputs from
 the segmentation_cropping.py module.
 """
 
@@ -17,7 +17,7 @@ import numpy as np
 from google.cloud import vision
 
 #Configuarations
-CONFIG = r'--psm 11 --oem 3' #configuration for ocr
+CONFIG = r'--psm 6 --oem 3' #configuration for ocr
 LANGUAGES = 'eng+deu+fra+ita+spa+por' #specifying languages used for ocr
 
 # Path to Pytesseract exe file
@@ -37,7 +37,7 @@ def find_tesseract() -> None:
 #also have the image as a return 
 class Preprocessing():
     """
-    A class for preprossecing an image
+    A class for image preprocessing.
     """
     def __init__(self, image, languages = LANGUAGES, config = CONFIG):
         self.image = image
@@ -47,19 +47,23 @@ class Preprocessing():
     @staticmethod
     def read_image(path: str) -> Preprocessing:
         """
-        Returns instance of Preprocessing of a picture.
+        Returns instance of preprocessing of a picture.
 
         Args:
             path (str): path to a jpg file
 
         Returns:
-            Preprocessing: instance of Preprossing
+            Preprocessing: instance of preprocessing
         """
         return Preprocessing(cv2.imread(path))
         
     #gray scale
     def get_grayscale(self):
-        self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
+        self.image = cv2.cvtColor(self.image, cv2.COLOR_RGB2GRAY)
+
+    #blur
+    def blur(self):
+        self.image = cv2.GaussianBlur(self.image, (5,5), 0)
 
     #noise removal
     def remove_noise(self):
@@ -124,8 +128,8 @@ class Preprocessing():
         """
         self.get_grayscale()
         self.thresholding()
-        #self.opening()
-        #self.canny()
+        self.blur()
+        self.remove_noise()
         return py.image_to_string(self.image, self.languages, self.config)
 
 
@@ -202,8 +206,8 @@ class VisionApi():
     @staticmethod            
     def export(credentials: str) -> None:
         """
-        exports the credentials json, by adding it as an enviroment variable
-        in your shell
+        Exports the credentials json, by adding it as an environment variable
+        in your shell.
 
         Args:
             credentials (str): path to the credentials json file
@@ -213,14 +217,14 @@ class VisionApi():
     @staticmethod
     def read_image(path: str, credentials: str, encoding: str = 'utf8') -> VisionApi:
         """
-        reads an image with io and returns it as an instance of the VisionApi
-        class
+        Reads an image with io and returns it as an instance of the VisionApi
+        class.
 
         Args:
             path (str): path to image
             credentials (str): path to the credentials json file
             encoding (str, optional): choose in which encoding th result will 
-            be saved (ascii or utf-8). Defaults to 'utf8'.
+            be saved (ascii or utf-8). defaults to 'utf8'
 
         Returns:
             VisionApi: Instance of the VisionApi class
@@ -231,7 +235,7 @@ class VisionApi():
     
     def process_string(self, result_raw: str) -> str:
         """
-        processes the google vision ocr output and replaces newlines by spaces
+        Processes the google vision ocr output and replaces newlines by spaces
         and if specified turns sting from unicode into ascii encoding.
 
         Args:
@@ -250,8 +254,8 @@ class VisionApi():
         
     def vision_ocr(self) -> dict[str, str]:
         """
-        performs the actual API call, does error handling and returns the 
-        transcription already processed
+        Performs the actual API call, does error handling and returns the 
+        transcription already processed.
 
         Raises:
             Exception: raises exception if API does not respond
