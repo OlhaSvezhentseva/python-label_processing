@@ -13,7 +13,7 @@ RESULTS_JSON = "ocr_google_vision.json" #TODO make this customizable
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
-    usage = 'googgle_vision.py [-h] [-np] -d <crop-dir>'
+    usage = 'vision.py [-h] [-np] -d <crop-dir> -c <credentials>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
@@ -30,7 +30,7 @@ def parsing_args() -> argparse.ArgumentParser:
             metavar='',
             type=str,
             required = True,
-            help=('Path tom the google credentials')
+            help=('Path tom the google credentials json files')
             )
     
     parser.add_argument(
