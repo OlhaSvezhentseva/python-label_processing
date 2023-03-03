@@ -30,7 +30,7 @@ def parsing_args() -> argparse.ArgumentParser:
             metavar='',
             type=str,
             required = True,
-            help=('Path tom the google credentials json files')
+            help=('Path tom the google credentials json file')
             )
     
     parser.add_argument(
