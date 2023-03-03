@@ -90,11 +90,11 @@ Input preparation
 
 **In terms of data acquisition, the following standards are recommended to optimize the outputs:**
 
-- the pictures quality should be standardized and uniform as much as possible, preferably using macro photography, the .jpg format and    300 DPI resolution.
-- if there are multiple labels in one picture, they should be clearly separated from one another without overlapping. The text in the label should be aligned horizontally.
-- if possible, the specimen shouldn't be present in the picture with the labels.
-- if the labels in the different pictures are similar (same colours and/or same nature/content), they should always be placed the same way at the same spot from one picture to another. *ex: label with location always bottom right, collection number top left, taxonomy top right etc...*
-- a black background like in LEP_PHIL is prefered, but a white background is also acceptable.
+- The pictures quality should be standardized and uniform as much as possible, preferably using macro photography, the .jpg format and    300 DPI resolution.
+- If there are multiple labels in one picture, they should be clearly separated from one another without overlapping. The text in the label should be aligned horizontally.
+- If possible, the specimen shouldn't be present in the picture with the labels.
+- If the labels in the different pictures are similar (same colours and/or same nature/content), they should always be placed the same way at the same spot from one picture to another. *ex: label with location always bottom right, collection number top left, taxonomy top right etc...*
+- A black background like in LEP_PHIL is prefered, but a white background is also acceptable.
 
 
 .. _AntWeb: https://www.antweb.org/
