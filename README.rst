@@ -102,8 +102,10 @@ Input preparation
 .. _Bees&Bytes: https://www.zooniverse.org/projects/mfnberlin/bees-and-bytes  
 .. _Atlas of Living Australia: https://www.ala.org.au/
 
-Google credentials
------------------
 
-
-
+Setting up google cloud vision API and getting credentials
+----------------------------------------------------------
+- in order to use the google API you need to create a google account and set it up for vision
+- how to setup your google cloud vsion is explained here: https://cloud.google.com/vision/docs/setup
+- you then need to retrieve your credentials json (everything is explained in the provided link)
+- the credentials json file should then be provided as an input in the vision.py script
