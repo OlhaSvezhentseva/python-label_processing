@@ -70,11 +70,10 @@ For usage information, run any of these scripts with the option --help.
       - ocr results as a json file
 
 * vision.py
-   Performs the ocr on the segmented labels by calling the google vision API
-    and returns it as a json file. 
+   Performs the ocr on the segmented labels by calling the google vision API and returns it as a json file. 
    
    **Inputs:**
-      - the path to the google credentials json file  
+      - the path to the google credentials json file (credentials) 
       - the path to the directory of the input jpgs (crop_dir)
 
    **Outputs:**
@@ -105,7 +104,9 @@ Input preparation
 
 Setting up google cloud vision API and getting credentials
 ----------------------------------------------------------
-- in order to use the google API you need to create a google account and set it up for vision
-- how to setup your google cloud vsion is explained here: https://cloud.google.com/vision/docs/setup
-- you then need to retrieve your credentials json (everything is explained in the provided link)
-- the credentials json file should then be provided as an input in the vision.py script
+- In order to use the google API you need to create a google account and set it up for vision.
+- How to setup your google cloud vsion is explained `here`_.
+- You then need to retrieve your credentials json (everything is explained in the provided link).
+- The credentials json file should then be provided as an input in the `vision.py` script.
+
+.. _here: https://cloud.google.com/vision/docs/setup
