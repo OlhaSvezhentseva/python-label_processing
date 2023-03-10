@@ -33,6 +33,7 @@ setup(
         "pytesseract",
         "tesseract",
         "pillow",
-        "google-cloud"
+        "google-cloud",
+        "deskew"
     ],
 )
