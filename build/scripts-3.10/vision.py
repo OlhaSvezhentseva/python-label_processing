@@ -1,20 +1,19 @@
 #!python
 # -*- coding: utf-8 -*-
 from __future__ import annotations
-from google.cloud import vision
-import io
-import glob
-import json
-import os
 import argparse
+import text_recognition
+import json
+import glob
+import os
 
 #CREDENTIALS = '/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/total-contact-297417-48ed6585325e.json'
-RESULTS_JSON = "ocr_google_vision.json"
 #DIR = '/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/results_ocr/test'
+RESULTS_JSON = "ocr_google_vision.json" #TODO make this customizable
 
-def parsing_args():
+def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
-    usage = 'googgle_vision.py [-h] [-np] -d <crop-dir>'
+    usage = 'vision.py [-h] [-np] -d <crop-dir> -c <credentials>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
@@ -31,7 +30,7 @@ def parsing_args():
             metavar='',
             type=str,
             required = True,
-            help=('Path tom the google credentials')
+            help=('Path tom the google credentials json file')
             )
     
     parser.add_argument(
@@ -48,68 +47,21 @@ def parsing_args():
 
     return args
 
-class VisionApi():
-    """
-    Class concerning the Google Vision API performed on a directory.
-    """
-
-    def __init__(self, path: str, image: bytes, credentials: str,
-                 encoding: str) -> None:
-        VisionApi.export(credentials) #check credententials
-        self.image = image
-        self.path = path
-        self.encoding = encoding
-
-        
-    @staticmethod            
-    def export(credentials) -> None:
-        """
-        Exports credentials json.
-        """
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials
-
-    @staticmethod
-    def read_image(path, credentials, encoding = 'utf8') -> VisionApi:
-        with io.open(path, 'rb') as image_file:
-            image = image_file.read()
-        return VisionApi(path, image, credentials, encoding)
-    
-    def process_string(self, result_raw: str, encode = 'utf-8') -> str:
-        processed = result_raw.replace('\n', ' ')
-        if self.encoding == "ascii":
-            #turning it to ascii
-            processed = processed.encode("ascii", "ignore")
-            return processed.decode()
-        else:
-            return processed
-        
-        
-        
-    
-    def vision_ocr(self) -> dict[str, str]:
-        client = vision.ImageAnnotatorClient()
-        vision_image = vision.Image(content=self.image)
-        response = client.text_detection(image=vision_image)
-        single_transcripts = response.text_annotations #get the ocr results
-        #list of transcripts
-        transcripts = [str(transcript.description) for transcript in single_transcripts]
-        #create string of transcripts
-        transcript = self.process_string(transcripts[0])
-        #get filename
-        filename = os.path.basename(self.path)
-        if response.error.message:
-            raise Exception(
-                f'{response.error.message}\nFor more info on error messages, check: '
-                'https://cloud.google.com/apis/design/errors')
-        return {'ID' : filename, 'text': transcript}
-
-def perform_vision_ocr(crop_dir: str, credentials: str,
+def main(crop_dir: str, credentials: str,
                        encoding: str = 'utf8') -> None:
+    """
+    Performs the ocr on a dir containing jpgs
+
+    Args:
+        crop_dir (str): _description_
+        credentials (str): _description_
+        encoding (str, optional): _description_. Defaults to 'utf8'.
+    """
     
     results_json = []
-    #TODO check if empty
+    text_recognition.check_dir(crop_dir) #check if jpegs exist
     for file in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
-        image = VisionApi.read_image(file, credentials)
+        image = text_recognition.VisionApi.read_image(file, credentials)
         ocr_result: dict = image.vision_ocr()
         results_json.append(ocr_result)
     
@@ -122,9 +74,7 @@ def perform_vision_ocr(crop_dir: str, credentials: str,
     else:
         with open(filepath, "w", encoding = 'ascii') as f:
             json.dump(results_json, f)
-            
-    
 
 if __name__ == '__main__':
     args = parsing_args()
-    perform_vision_ocr(args.dir, args.credentials)
+    main(args.dir, args.credentials)

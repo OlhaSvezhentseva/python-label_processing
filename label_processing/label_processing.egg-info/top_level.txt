@@ -1,2 +1,2 @@
-ocr_pytesseract
 segmentation_cropping
+text_recognition

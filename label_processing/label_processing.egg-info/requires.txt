@@ -7,3 +7,4 @@ detecto
 pytesseract
 tesseract
 pillow
+google-cloud
