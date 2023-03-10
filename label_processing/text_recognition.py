@@ -74,32 +74,32 @@ class Image():
                      languages = self.languages, config = self.config)
 
     #blur
-    def blur(self):
+    def blur(self) -> Image:
         image = cv2.GaussianBlur(self.image, (5,5), 0)
         return Image(image, self.path,
                      languages = self.languages, config = self.config)
 
     #noise removal
-    def remove_noise(self):
+    def remove_noise(self) -> Image:
         image = cv2.medianBlur(self.image,5)
         return Image(image, self.path,
                      languages = self.languages, config = self.config)
     
     #thresholdingpython json tool utf 8
-    def thresholding(self):
+    def thresholding(self) -> Image:
         image = cv2.threshold(self.image, 0, 255,
                              cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
         return Image(image, self.path,
                      languages = self.languages, config = self.config)
     
     #dilation
-    def dilate(self):
+    def dilate(self) -> Image:
         kernel = np.ones((5,5),np.uint8)
         image =  cv2.dilate(self.image, kernel, iterations = 1)
         return Image(image, self.path,
                      languages = self.languages, config = self.config)
     #erosion
-    def erode(self):
+    def erode(self) -> Image:
         kernel = np.ones((5,5),np.uint8)
         image = cv2.erode(self.image, kernel, iterations = 1)
         return Image(image, self.path,
@@ -111,13 +111,15 @@ class Image():
         ) -> np.ndarray:
         old_width, old_height = image.shape[:2]
         angle_radian = math.radians(angle)
-        width = abs(np.sin(angle_radian) * old_height) + abs(np.cos(angle_radian) * old_width)
-        height = abs(np.sin(angle_radian) * old_width) + abs(np.cos(angle_radian) * old_height)
+        width = (abs(np.sin(angle_radian) * old_height) 
+            + abs(np.cos(angle_radian) * old_width))
+        height = (abs(np.sin(angle_radian) * old_width) 
+            + abs(np.cos(angle_radian) * old_height))
 
         image_center = tuple(np.array(image.shape[1::-1]) / 2)
         rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
         rot_mat[1, 2] += (width - old_width) / 2
-        rot_mat[0, 2] += (height - old_height) / 2
+        rot_mat[0, 2] += (height - old_height) / 2#NOTE only for debugging
         return cv2.warpAffine(image, rot_mat, (int(round(height)),
                                                int(round(width))),
                               borderValue=background)
@@ -172,7 +174,7 @@ def process_string(result_raw: str) -> str:
         str: processed string
     """
     processed = result_raw.replace('\n', ' ')
-    #processed = processed.encode("ascii", "ignore")
+    #processed = processed.encode("ascii", "ignore") 
     #processed = processed.decode()
     #processed = re.sub('\s\s+', ' ', processed)
     return processed
@@ -191,7 +193,6 @@ def perform_tesseract_ocr(crop_dir: str, path: str, filename: str,
     filepath: str = os.path.join(path,filename)
     ocr_results: list = []
 
-    #NOTE only for debugging
     dir_name = "preprocessing"
     Path(dir_name).mkdir(parents=True, exist_ok=True)
     
