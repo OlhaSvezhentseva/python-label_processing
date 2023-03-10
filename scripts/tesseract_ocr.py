@@ -6,11 +6,13 @@ Module containing the Pytesseract OCR parameters to be performed on the _cropped
 import text_recognition
 import argparse
 import os
+import json
 
 from pathlib import Path
 
 FILENAME = "ocr_not_preprocessed.json"
 FILENAME_PRE = "ocr_preprocessed.json"
+FILENAME_PRE_NURI = "ocr_preprocessed_nuri.json"
 
 def parsing_args():
     '''generate the command line arguments using argparse'''
@@ -63,9 +65,18 @@ if __name__ == "__main__":
         new_dir = f"{os.path.basename(crop_dir)}_ocr"
     path = os.path.join(crop_dir, "..", new_dir) #parent directory of the cropped pictures
     Path(path).mkdir(parents=True, exist_ok=True)
-    text_recognition.perform_tesseract_ocr(crop_dir, path, filename = FILENAME)
+    result_data = text_recognition.perform_tesseract_ocr(crop_dir,
+                                                         path, filename = FILENAME)
     
     # OCR - with image preprocessing
     if not args.no_preprocessing: #gets surpressed when specified in command line
-        text_recognition.perform_tesseract_ocr(crop_dir, path, filename = FILENAME_PRE,
-                                    preprocessing = True)
+        result_data = text_recognition.perform_tesseract_ocr(crop_dir,
+                                               path, filename = FILENAME_PRE,
+                                               preprocessing = True)
+    
+    result_data = text_recognition.get_nuri(result_data)
+    filepath = os.path.join(path, FILENAME_PRE_NURI)
+    with open(filepath, "w", encoding = 'utf8') as f:
+            print("utf8")
+            json.dump(result_data, f, ensure_ascii=False)
+        

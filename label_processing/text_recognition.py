@@ -119,7 +119,7 @@ class Image():
         image_center = tuple(np.array(image.shape[1::-1]) / 2)
         rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
         rot_mat[1, 2] += (width - old_width) / 2
-        rot_mat[0, 2] += (height - old_height) / 2#NOTE only for debugging
+        rot_mat[0, 2] += (height - old_height) / 2
         return cv2.warpAffine(image, rot_mat, (int(round(height)),
                                                int(round(width))),
                               borderValue=background)
@@ -164,7 +164,7 @@ def improved_image_to_string(image: Image) -> Tuple[str, Image]:
 
 def process_string(result_raw: str) -> str:
     """
-    Processes the ocr_output by replacing \n with spacprint("Enutf8")es and encoding it to
+    Processes the ocr_output by replacing \n with spaces and encoding it to
     ascii and decoding it again to utf-8.
 
     Args:
@@ -213,12 +213,10 @@ def perform_tesseract_ocr(crop_dir: str, path: str, filename: str,
         ocr_results.append({"ID": image_filename, "text": result_processed})
 
     print("\nOCR successful")
-    
     verbose_print(f"Saving ocr results in {filepath}")
     with open(filepath, "w", encoding = 'utf8') as f:
             json.dump(ocr_results, f, ensure_ascii=False)
-
-    print("DONE!")
+    return ocr_results
 
 #---------------------Vision-OCR---------------------#
 
@@ -234,7 +232,6 @@ class VisionApi():
         self.path = path
         self.encoding = encoding
 
-        
     @staticmethod            
     def export(credentials: str) -> None:
         """
@@ -307,7 +304,7 @@ class VisionApi():
         filename = os.path.basename(self.path)
         if response.error.message:
             raise Exception(
-                f'{response.error.message}\nFor more info on error messages, '
+                f'{response.error.message}\nFor more icheck_IDnfo on error messages, '
                 'check:  https://cloud.google.com/apis/design/errors')
         return {'ID' : filename, 'text': transcript}
     
@@ -326,3 +323,25 @@ def check_dir(dir) -> None:
         raise FileNotFoundError(("The directory given does not contain "
                                  "any jpg-files. You might have chosen the wrong "
                                  "directory?")) 
+        
+
+def check_text(transcript: str) -> bool:
+    pattern = re.compile(r"/u/|http|u/|coll|mfn|/|/u|URI") #search for NURI patterns in "text"
+    match = pattern.search(transcript)
+    return True if match else False
+
+def get_nuri(data: list[dict[str, str]]) -> list[dict[str, str]]:
+    new_data=data.copy()
+    reg = re.compile(r"_u_[A-Za-z0-9]+") #search for NURI number in "ID"
+    for item, new_item in zip(data, new_data):
+        findString = item["text"]
+        findNURI = item["ID"]
+        if check_text(findString): #checks if label is a NURI - True/False
+            try:
+                NURI = reg.search(findNURI).group()
+                replaceString = "http://coll.mfn-berlin.de/u/"+ NURI[3:]
+                new_item["text"] = replaceString #replace "text" with NURI patterns with 
+                                                    #formatted "ID"
+            except AttributeError:
+                    pass
+    return new_data
