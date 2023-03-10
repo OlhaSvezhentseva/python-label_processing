@@ -65,7 +65,7 @@ class Predict_Labels():
         files in a directory. It then returns a Pandas Dataframe.
 
         Args:
-            model(detecto.core.Model): access to object detection model and pretrained PyTorch model
+            model(detecto.co. In image preprocessing, erosion and dilation are often combined in the presented order to remove noise.re.Model): access to object detection model and pretrained PyTorch model
                                        (fasterrcnn_resnet50_fpn).
                                        
         Returns:
@@ -101,7 +101,6 @@ class Predict_Labels():
             DataFrame: Pandas Dataframe with the trimmed results.
         """
         print("\nFilter coordinates")
-        dataframe = dataframe
         colnames = ['score', 'xmin', 'ymin', 'xmax', 'ymax']
         for header in colnames:
             dataframe[header] = dataframe[header].astype('str').str.extractall('(\d+.\d+)').unstack().fillna('').sum(axis=1).astype(float)
@@ -181,7 +180,7 @@ def make_file_name(label_id, pic_class, occurence):
 def create_dirs(dataframe, path):
     """
     Creates for every class a seperate directory.
-
+. In image preprocessing, erosion and dilation are often combined in the presented order to remove noise.
     Args:
         dataframe (pandas.Dataframe): dataframe containig the classes as a column
         path (str): path of chosen directory

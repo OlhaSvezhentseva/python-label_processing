@@ -10,15 +10,23 @@ import glob
 import cv2
 import json
 import shutil
+import math
 import re
 import io
 import pytesseract as py
 import numpy as np
+from pathlib import Path
+from typing import Callable, Union, Tuple, Optional
 from google.cloud import vision
+from deskew import determine_skew
 
 #Configuarations
 CONFIG = r'--psm 6 --oem 3' #configuration for ocr
 LANGUAGES = 'eng+deu+fra+ita+spa+por' #specifying languages used for ocr
+VERBOSE = True
+
+#new function verbose print
+verbose_print: Callable = print if VERBOSE else lambda *a, **k: None
 
 # Path to Pytesseract exe file
 def find_tesseract() -> None:
@@ -35,17 +43,19 @@ def find_tesseract() -> None:
 
 #TODO maybe iput it as a dictionary with keywargs all the important parameters
 #also have the image as a return 
-class Preprocessing():
+class Image():
     """
     A class for image preprocessing.
     """
-    def __init__(self, image, languages = LANGUAGES, config = CONFIG):
+    def __init__(self, image, path, languages = LANGUAGES, config = CONFIG):
         self.image = image
+        self.path = path
+        self.filename = os.path.basename(self.path)
         self.languages = languages
         self.config = config
     
     @staticmethod
-    def read_image(path: str) -> Preprocessing:
+    def read_image(path: str) -> Image:
         """
         Returns instance of preprocessing of a picture.
 
@@ -55,90 +65,104 @@ class Preprocessing():
         Returns:
             Preprocessing: instance of preprocessing
         """
-        return Preprocessing(cv2.imread(path))
+        return Image(cv2.imread(path), path)
         
     #gray scale
-    def get_grayscale(self):
-        self.image = cv2.cvtColor(self.image, cv2.COLOR_RGB2GRAY)
+    def get_grayscale(self) -> Image:
+        image = cv2.cvtColor(self.image, cv2.COLOR_RGB2GRAY)
+        return Image(image, self.path,
+                     languages = self.languages, config = self.config)
 
     #blur
     def blur(self):
-        self.image = cv2.GaussianBlur(self.image, (5,5), 0)
+        image = cv2.GaussianBlur(self.image, (5,5), 0)
+        return Image(image, self.path,
+                     languages = self.languages, config = self.config)
 
     #noise removal
     def remove_noise(self):
-        self.image = cv2.medianBlur(self.image,5)
+        image = cv2.medianBlur(self.image,5)
+        return Image(image, self.path,
+                     languages = self.languages, config = self.config)
     
-    #thresholding
+    #thresholdingpython json tool utf 8
     def thresholding(self):
-        self.image = cv2.threshold(self.image, 0, 255,
+        image = cv2.threshold(self.image, 0, 255,
                              cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-
+        return Image(image, self.path,
+                     languages = self.languages, config = self.config)
+    
     #dilation
     def dilate(self):
         kernel = np.ones((5,5),np.uint8)
-        self.image =  cv2.dilate(self.image, kernel, iterations = 1)
-        
+        image =  cv2.dilate(self.image, kernel, iterations = 1)
+        return Image(image, self.path,
+                     languages = self.languages, config = self.config)
     #erosion
     def erode(self):
         kernel = np.ones((5,5),np.uint8)
-        self.image = cv2.erode(self.image, kernel, iterations = 1)
+        image = cv2.erode(self.image, kernel, iterations = 1)
+        return Image(image, self.path,
+                     languages = self.languages, config = self.config)
+    
+    @staticmethod
+    def _rotate(
+        image: np.ndarray, angle: float, background: Union[int, Tuple[int, int, int]]
+        ) -> np.ndarray:
+        old_width, old_height = image.shape[:2]
+        angle_radian = math.radians(angle)
+        width = abs(np.sin(angle_radian) * old_height) + abs(np.cos(angle_radian) * old_width)
+        height = abs(np.sin(angle_radian) * old_width) + abs(np.cos(angle_radian) * old_height)
 
-    #opening - erosion followed by dilation
-    def opening(self):
-        kernel = np.ones((5,5),np.uint8)
-        self.image = cv2.morphologyEx(self.image, cv2.MORPH_OPEN, kernel)
+        image_center = tuple(np.array(image.shape[1::-1]) / 2)
+        rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
+        rot_mat[1, 2] += (width - old_width) / 2
+        rot_mat[0, 2] += (height - old_height) / 2
+        return cv2.warpAffine(image, rot_mat, (int(round(height)),
+                                               int(round(width))),
+                              borderValue=background)
 
-    #canny edge detection
-    def canny(self):
-        self.image = cv2.Canny(self.image, 100, 200)
-
-    #skew correction
-    def deskew(self):
-        coords = np.column_stack(np.where(self.image > 0))
-        angle = cv2.minAreaRect(coords)[-1]
-        if angle < -45:
-            angle = -(90 + angle)
-        else:
-            angle = -angle
-        (h, w) = self.image.shape[:2]
-        center = (w // 2, h // 2)
-        M = cv2.getRotationMatrix2D(center, angle, 1.0)
-        rotated = cv2.warpAffine(self.image, M, (w, h), flags=cv2.INTER_CUBIC,
-                                 borderMode=cv2.BORDER_REPLICATE)
-        self.image = rotated
-
-    #template matching
-    def match_template(self, template):
-        self.image =  cv2.matchTemplate(self.image, template,
-                                        cv2.TM_CCOEFF_NORMED)
-
-    def improved_image_to_string(self) -> str:
-        """
-        Apply OCR and preprocessing parameters on jpg images.
+    def get_skew_angle(self) -> Optional[np.float64]: #returns either float or None 
+        grayscale = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
+        verbose_print(f"Calculating skew angle for {self.filename}")
+        angle = determine_skew(grayscale)
+        return angle
         
-        Args:
-            img (str): path to jpgs
-            languages (str): OCR available languages
-            config (str): any additional custom configuration flags
-            that are not available via the pytesseract function.
-            
-        Returns:
-            str: output as string from Tesseract OCR processing.
-        """
-        self.get_grayscale()
-        self.thresholding()
-        self.blur()
-        self.remove_noise()
-        return py.image_to_string(self.image, self.languages, self.config)
-
+    def deskew(self, angle: Optional[np.float64]) -> Image:
+        verbose_print(f"Rotating {self.filename}")
+        rotated = self._rotate(self.image, angle, (0, 0, 0))
+        return Image(rotated, self. path,
+                     languages = self.languages, config = self.config)
 
 #---------------------Tesseract-OCR---------------------#
+
+def improved_image_to_string(image: Image) -> Tuple[str, Image]:
+    """
+    Apply OCR and Image parameters on jpg images.
+    
+    Args:
+        img (str): path to jpgs
+        languages (str): OCR available languages
+        config (str): any additional custom configuration flags
+        that are not available via the pytesseract function.
+        
+    Returns:
+        str: output as string from Tesseract OCR processing.
+    """
+    #skew angle has to be calculated before preprocessing
+    angle = image.get_skew_angle()
+    image = image.get_grayscale()
+    image = image.thresholding()
+    image = image.blur()
+    image = image.remove_noise()
+    image = image.deskew(angle)
+    transcript = py.image_to_string(image.image, image.languages, image.config)
+    return transcript, image
 
 
 def process_string(result_raw: str) -> str:
     """
-    Processes the ocr_output by replacing \n with spaces and encoding it to
+    Processes the ocr_output by replacing \n with spacprint("Enutf8")es and encoding it to
     ascii and decoding it again to utf-8.
 
     Args:
@@ -148,9 +172,9 @@ def process_string(result_raw: str) -> str:
         str: processed string
     """
     processed = result_raw.replace('\n', ' ')
-    processed = processed.encode("ascii", "ignore")
-    processed = processed.decode()
-    processed = re.sub('\s\s+', ' ', processed)
+    #processed = processed.encode("ascii", "ignore")
+    #processed = processed.decode()
+    #processed = re.sub('\s\s+', ' ', processed)
     return processed
 
 def perform_tesseract_ocr(crop_dir: str, path: str, filename: str,
@@ -164,16 +188,22 @@ def perform_tesseract_ocr(crop_dir: str, path: str, filename: str,
         filename (str): json file's filename
     """
     print(f"\nPerforming OCR on {os.path.basename(crop_dir)}!")
-    filepath: str = f"{path}/{filename}"
-    
+    filepath: str = os.path.join(path,filename)
     ocr_results: list = []
+
+    #NOTE only for debugging
+    dir_name = "preprocessing"
+    Path(dir_name).mkdir(parents=True, exist_ok=True)
+    
     
     for file in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
         image_filename = os.path.basename(file)
-        print(f"Performing OCR on {os.path.basename(file)}!")
+        verbose_print(f"Performing OCR on {os.path.basename(file)}!")
         if preprocessing:
-            image = Preprocessing.read_image(file)
-            result = image.improved_image_to_string()
+            image = Image.read_image(file)
+            result, image = improved_image_to_string(image)
+            filename = os.path.join(dir_name, image.filename)
+            cv2.imwrite(filename,image.image)
         else:
             image = cv2.imread(file)
             result = py.image_to_string(image, LANGUAGES, CONFIG)
@@ -183,8 +213,9 @@ def perform_tesseract_ocr(crop_dir: str, path: str, filename: str,
 
     print("\nOCR successful")
     
-    with open(filepath, "w") as f:
-        json.dump(ocr_results, f)
+    verbose_print(f"Saving ocr results in {filepath}")
+    with open(filepath, "w", encoding = 'utf8') as f:
+            json.dump(ocr_results, f, ensure_ascii=False)
 
     print("DONE!")
 

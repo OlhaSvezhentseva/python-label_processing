@@ -54,18 +54,18 @@ if __name__ == "__main__":
     args = parsing_args()
     #Find path to tesseract
     text_recognition.find_tesseract()
-    # OCR - without image preprocessing
+    # OCR - without image preprocessingfrom pathlib import Path
     crop_dir = args.crop_dir
     text_recognition.check_dir(crop_dir)
     if crop_dir[-1] == "/" :
         new_dir = f"{os.path.basename(os.path.dirname(crop_dir))}_ocr"
     else:
         new_dir = f"{os.path.basename(crop_dir)}_ocr"
-    path = os.path.join(crop_dir, "../..", new_dir) #parent directory of the cropped pictures
-    os.mkdir(path)
-    text_recognition.perform_ocr(crop_dir, path, filename = FILENAME )
+    path = os.path.join(crop_dir, "..", new_dir) #parent directory of the cropped pictures
+    Path(path).mkdir(parents=True, exist_ok=True)
+    text_recognition.perform_tesseract_ocr(crop_dir, path, filename = FILENAME)
     
     # OCR - with image preprocessing
     if not args.no_preprocessing: #gets surpressed when specified in command line
-        text_recognition.perform_ocr(crop_dir, path, filename = FILENAME_PRE,
+        text_recognition.perform_tesseract_ocr(crop_dir, path, filename = FILENAME_PRE,
                                     preprocessing = True)

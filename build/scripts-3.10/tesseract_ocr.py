@@ -61,9 +61,9 @@ if __name__ == "__main__":
         new_dir = f"{os.path.basename(os.path.dirname(crop_dir))}_ocr"
     else:
         new_dir = f"{os.path.basename(crop_dir)}_ocr"
-    path = os.path.join(crop_dir, "../..", new_dir) #parent directory of the cropped pictures
+    path = os.path.join(crop_dir, "..", new_dir) #parent directory of the cropped pictures
     os.mkdir(path)
-    text_recognition.perform_ocr(crop_dir, path, filename = FILENAME )
+    text_recognition.perform_tesseract_ocr(crop_dir, path, filename = FILENAME )
     
     # OCR - with image preprocessing
     if not args.no_preprocessing: #gets surpressed when specified in command line
