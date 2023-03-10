@@ -32,6 +32,7 @@ setup(
         "detecto",
         "pytesseract",
         "tesseract",
-        "pillow"
+        "pillow",
+        "google-cloud"
     ],
 )
