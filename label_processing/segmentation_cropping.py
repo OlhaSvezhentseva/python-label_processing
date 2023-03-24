@@ -61,12 +61,12 @@ class Predict_Labels():
 
     def class_prediction(self, model):
         """
-        Uses the trained model created by Detecto and tries to predict the labelling of all
-        files in a directory. It then returns a Pandas Dataframe.
+        Uses the trained model created by Detecto and tries to predict the 
+        labelling of all files in a directory. It then returns a Pandas Dataframe.
 
         Args:
-            model(detecto.co. In image preprocessing, erosion and dilation are often combined in the presented order to remove noise.re.Model): access to object detection model and pretrained PyTorch model
-                                       (fasterrcnn_resnet50_fpn).
+            model(detecto.core.Model): access to object detection model and 
+            pretrained PyTorch model (fasterrcnn_resnet50_fpn).
                                        
         Returns:
             DataFrame: pandas Dataframe with the results.
@@ -92,10 +92,12 @@ class Predict_Labels():
 
     def clean_predictions(self, dataframe, out_dir = None):
         """
-        Creates a clean dataframe only with boxes´ coordinates exceeding a given threshold score.
+        Creates a clean dataframe only with boxes´ coordinates exceeding a 
+        given threshold score.
 
         Args:
-            DataFrame(pandas.DataFrame): Pandas Dataframe with predicted coordinates and labels' scores.
+            DataFrame(pandas.DataFrame): Pandas Dataframe with predicted 
+            coordinates and labels' scores.
             
         Returns:
             DataFrame: Pandas Dataframe with the trimmed results.
@@ -103,9 +105,11 @@ class Predict_Labels():
         print("\nFilter coordinates")
         colnames = ['score', 'xmin', 'ymin', 'xmax', 'ymax']
         for header in colnames:
-            dataframe[header] = dataframe[header].astype('str').str.extractall('(\d+.\d+)').unstack().fillna('').sum(axis=1).astype(float)
+            dataframe[header] = dataframe[header].astype('str').str.\
+                extractall('(\d+.\d+)').unstack().fillna('').sum(axis=1).astype(float)
         dataframe = dataframe.loc[dataframe['score'] >= self.threshold]
-        dataframe[['xmin', 'ymin','xmax','ymax']] = dataframe[['xmin', 'ymin','xmax','ymax']].fillna('0')
+        dataframe[['xmin', 'ymin','xmax','ymax']] = \
+            dataframe[['xmin', 'ymin','xmax','ymax']].fillna('0')
         if out_dir is None:
             out_dir = os.path.dirname(os.path.realpath(self.jpg_dir))
         filename = f"{Path(self.jpg_dir).stem}_predictions.csv"
@@ -180,7 +184,8 @@ def make_file_name(label_id, pic_class, occurence):
 def create_dirs(dataframe, path):
     """
     Creates for every class a seperate directory.
-. In image preprocessing, erosion and dilation are often combined in the presented order to remove noise.
+    In image preprocessing, erosion and dilation are often
+    combined in the presented order to remove noise.
     Args:
         dataframe (pandas.Dataframe): dataframe containig the classes as a column
         path (str): path of chosen directory
@@ -222,4 +227,5 @@ def create_crops(jpg_dir, dataframe, out_dir = os.getcwd()):
                            'xmax':int(row.xmax),'ymax':int(row.ymax)}
             crop_picture(image_raw,path,filename,pic_class,**coordinates)
             classes.append(pic_class)
-    print(f"\nThe images have been successfully saved in {os.path.join(out_dir, new_dir)}")
+    print(f"\nThe images have been successfully saved in \
+        {os.path.join(out_dir, new_dir)}")

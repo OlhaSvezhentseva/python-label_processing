@@ -2,6 +2,7 @@ README.rst
 setup.py
 label_processing/segmentation_cropping.py
 label_processing/text_recognition.py
+label_processing/utils.py
 label_processing/label_processing.egg-info/PKG-INFO
 label_processing/label_processing.egg-info/SOURCES.txt
 label_processing/label_processing.egg-info/dependency_links.txt
@@ -9,4 +10,4 @@ label_processing/label_processing.egg-info/requires.txt
 label_processing/label_processing.egg-info/top_level.txt
 scripts/crop_seg.py
 scripts/tesseract_ocr.py
-scripts/vision.py
+scripts/vision_api.py

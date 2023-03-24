@@ -4,19 +4,19 @@ Module containing the Pytesseract OCR parameters to be performed on the _cropped
 
 #!/usr/bin/env python3
 import text_recognition
+import utils
 import argparse
 import os
 import json
 
 from pathlib import Path
 
-FILENAME = "ocr_not_preprocessed.json"
-FILENAME_PRE = "ocr_preprocessed.json"
-FILENAME_PRE_NURI = "ocr_preprocessed_nuri.json"
+FILENAME = "ocr_preprocessed.json"
+FILENAME_NURI = "ocr_preprocessed_nuri.json"
 
 def parsing_args():
     '''generate the command line arguments using argparse'''
-    usage = 'perform_ocr.py [-h] [-np] -d <crop-dir>'
+    usage = 'perform_ocr.py [-h] -d <crop-dir>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
@@ -27,13 +27,13 @@ def parsing_args():
             action='help',
             help='Open this help text.'
             )
-
+    
     parser.add_argument(
-            '-np', '--no_preprocessing',
+            '-v', '--verbose',
             metavar='',
             action=argparse.BooleanOptionalAction,
-            help=('Optional argument: select whether OCR should also be performed' 
-            'with preprocessed pictures ')
+            default = False,
+            help=('Select whether verbose or quiet mode')
             )
     
     parser.add_argument(
@@ -50,33 +50,25 @@ def parsing_args():
 
     return args
 
-        
-
 if __name__ == "__main__":
     args = parsing_args()
+    text_recognition.VERBOSE = args.verbose
     #Find path to tesseract
     text_recognition.find_tesseract()
     # OCR - without image preprocessingfrom pathlib import Path
     crop_dir = args.crop_dir
-    text_recognition.check_dir(crop_dir)
-    if crop_dir[-1] == "/" :
-        new_dir = f"{os.path.basename(os.path.dirname(crop_dir))}_ocr"
-    else:
-        new_dir = f"{os.path.basename(crop_dir)}_ocr"
-    path = os.path.join(crop_dir, "..", new_dir) #parent directory of the cropped pictures
-    Path(path).mkdir(parents=True, exist_ok=True)
+    utils.check_dir(crop_dir)
+    new_dir = utils.generate_filename(crop_dir, "ocr")
+    #parent directory of the cropped pictures
+    parent_dir = os.path.join(crop_dir, os.pardir) 
+    new_dir_path = os.path.join(parent_dir, new_dir)
+    Path(new_dir_path).mkdir(parents=True, exist_ok=True)
     result_data = text_recognition.perform_tesseract_ocr(crop_dir,
-                                                         path, filename = FILENAME)
-    
-    # OCR - with image preprocessing
-    if not args.no_preprocessing: #gets surpressed when specified in command line
-        result_data = text_recognition.perform_tesseract_ocr(crop_dir,
-                                               path, filename = FILENAME_PRE,
-                                               preprocessing = True)
-    
-    result_data = text_recognition.get_nuri(result_data)
-    filepath = os.path.join(path, FILENAME_PRE_NURI)
-    with open(filepath, "w", encoding = 'utf8') as f:
-            print("utf8")
-            json.dump(result_data, f, ensure_ascii=False)
+                                                         parent_dir,
+                                                         filename = FILENAME,
+                                                         dir_name = new_dir_path)
+    utils.save_json(result_data, FILENAME, parent_dir)
+    #Get the json with regex nuri
+    result_data = utils.get_nuri(result_data)
+    utils.save_json(result_data, FILENAME_NURI, parent_dir)
         

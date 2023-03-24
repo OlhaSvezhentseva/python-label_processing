@@ -8,3 +8,4 @@ pytesseract
 tesseract
 pillow
 google-cloud
+deskew
