@@ -13,9 +13,11 @@ import math
 import pytesseract as py
 import numpy as np
 from pathlib import Path
-from typing import Callable, Union, Tuple, Optional
+from typing import Callable, Union, Tuple, Optional, Literal, get_args
 from deskew import determine_skew
 
+#Possibilities for threshold
+_THRESHS = Literal["adaptive", "otsu"] 
 #Configuarations
 CONFIG = r'--psm 6 --oem 3' #configuration for ocr
 LANGUAGES = 'eng+deu+fra+ita+spa+por' #specifying languages used for ocr
@@ -43,7 +45,17 @@ class Image():
     """
     A class for image preprocessing.
     """
-    def __init__(self, image, path, languages = LANGUAGES, config = CONFIG):
+    def __init__(self, image, path, languages = LANGUAGES, config = CONFIG,
+                 threshold_mode: _THRESHS = "otsu"):
+        """
+
+        Args:
+            image (_type_): _description_
+            path (_type_): _description_
+            languages (_type_, optional): _description_. Defaults to LANGUAGES.
+            config (_type_, optional): _description_. Defaults to CONFIG.
+            threshold_mode (_THRESHS, optional): _description_. Defaults to "otsu".
+        """
         self.image = image
         self.path = path
         self.filename = os.path.basename(self.path)
@@ -64,38 +76,58 @@ class Image():
         """
         return Image(cv2.imread(path), path)
         
-    #gray scale
+    
     def get_grayscale(self) -> Image:
         image = cv2.cvtColor(self.image, cv2.COLOR_RGB2GRAY)
         return Image(image, self.path,
                      languages = self.languages, config = self.config)
 
-    #blur
+    
     def blur(self) -> Image:
         image = cv2.GaussianBlur(self.image, (5,5), 0)
         return Image(image, self.path,
                      languages = self.languages, config = self.config)
 
-    #noise removal
+    
     def remove_noise(self) -> Image:
         image = cv2.medianBlur(self.image,5)
         return Image(image, self.path,
                      languages = self.languages, config = self.config)
     
-    #thresholdingpython json tool utf 8
-    def thresholding(self) -> Image:
-        image = cv2.threshold(self.image, 0, 255,
-                             cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    
+    @staticmethod
+    def _check_thresh_params(thresh_mode: _THRESHS) -> None:
+        """
+        checks if the thresholding parameter is valid -> asserts if right param
+
+        Args:
+            thresh_mode (_THRESH): Thresholding mode -> defined by typin.Literal
+        """
+        #test if the treshold parameter is valid
+        options = get_args(_THRESHS)
+        assert thresh_mode in options, f"'{thresh_mode}' has to be in \
+            {options}"
+            
+    
+    def thresholding(self, thresh_mode: _THRESHS = "otsu") -> Image:
+        self._check_thresh_params(thresh_mode)
+        
+        if thresh_mode == "otsu":
+            image = cv2.threshold(self.image, 0, 255,
+                                cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+        elif(thresh_mode == "adaptive"):
+            image = cv2.adaptiveThreshold(self.image ,255,
+                cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)            
         return Image(image, self.path,
                      languages = self.languages, config = self.config)
     
-    #dilation
+
     def dilate(self) -> Image:
         kernel = np.ones((5,5),np.uint8)
         image =  cv2.dilate(self.image, kernel, iterations = 1)
         return Image(image, self.path,
                      languages = self.languages, config = self.config)
-    #erosion
+    
     def erode(self) -> Image:
         kernel = np.ones((5,5),np.uint8)
         image = cv2.erode(self.image, kernel, iterations = 1)

@@ -16,7 +16,7 @@ FILENAME_NURI = "ocr_preprocessed_nuri.json"
 
 def parsing_args():
     '''generate the command line arguments using argparse'''
-    usage = 'perform_ocr.py [-h] -d <crop-dir>'
+    usage = 'perform_ocr.py [-h] [-v] -d <crop-dir>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
