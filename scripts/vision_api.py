@@ -69,6 +69,10 @@ def main(crop_dir: str, credentials: str,
     parent_dir = os.path.join(crop_dir, os.pardir) #get the parent_directory
     #select wheteher it should be saved as utf-8 or ascii
     utils.save_json(results_json, RESULTS_JSON, parent_dir)
+    #Get the json with regex nuri
+    result_data = utils.get_nuri(results_json)
+    utils.save_json(result_data, RESULTS_JSON, parent_dir)
+
 
 if __name__ == '__main__':
     args = parsing_args()
