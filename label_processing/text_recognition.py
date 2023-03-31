@@ -6,14 +6,12 @@ the segmentation_cropping.py module.
 # Import Librairies
 from __future__ import annotations
 import os
-import glob
 import cv2
 import shutil
 import math
 import pytesseract as py
 import numpy as np
-from pathlib import Path
-from typing import Callable, Union, Tuple, Optional, Literal, get_args
+from typing import  Union, Tuple, Optional, Literal, get_args
 from deskew import determine_skew
 
 #Possibilities for threshold
@@ -21,12 +19,7 @@ _THRESHS = Literal["adaptive", "otsu"]
 #Configuarations
 CONFIG = r'--psm 6 --oem 3' #configuration for ocr
 LANGUAGES = 'eng+deu+fra+ita+spa+por' #specifying languages used for ocr
-VERBOSE = False
 
-#new function verbose print
-verbose_print: Callable = print if VERBOSE else lambda *a, **k: None
-
-# Path to Pytesseract exe file
 def find_tesseract() -> None:
     """
     Searches for the tesseract executable and raises an error if it is not found.
@@ -45,22 +38,16 @@ class Image():
     """
     A class for image preprocessing.
     """
-    def __init__(self, image, path, languages = LANGUAGES, config = CONFIG,
-                 threshold_mode: _THRESHS = "otsu"):
+    def __init__(self, image: np.ndarray, path: str):
         """
 
         Args:
             image (_type_): _description_
             path (_type_): _description_
-            languages (_type_, optional): _description_. Defaults to LANGUAGES.
-            config (_type_, optional): _description_. Defaults to CONFIG.
-            threshold_mode (_THRESHS, optional): _description_. Defaults to "otsu".
         """
         self.image = image
         self.path = path
         self.filename = os.path.basename(self.path)
-        self.languages = languages
-        self.config = config
         #preprocessing parameters
     
     @staticmethod
@@ -79,20 +66,17 @@ class Image():
     
     def get_grayscale(self) -> Image:
         image = cv2.cvtColor(self.image, cv2.COLOR_RGB2GRAY)
-        return Image(image, self.path,
-                     languages = self.languages, config = self.config)
+        return Image(image, self.path)
 
     
     def blur(self) -> Image:
         image = cv2.GaussianBlur(self.image, (5,5), 0)
-        return Image(image, self.path,
-                     languages = self.languages, config = self.config)
+        return Image(image, self.path)
 
     
     def remove_noise(self) -> Image:
         image = cv2.medianBlur(self.image,5)
-        return Image(image, self.path,
-                     languages = self.languages, config = self.config)
+        return Image(image, self.path)
     
     
     @staticmethod
@@ -118,21 +102,18 @@ class Image():
         elif(thresh_mode == "adaptive"):
             image = cv2.adaptiveThreshold(self.image ,255,
                 cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)            
-        return Image(image, self.path,
-                     languages = self.languages, config = self.config)
+        return Image(image, self.path)
     
 
     def dilate(self) -> Image:
         kernel = np.ones((5,5),np.uint8)
         image =  cv2.dilate(self.image, kernel, iterations = 1)
-        return Image(image, self.path,
-                     languages = self.languages, config = self.config)
+        return Image(image, self.path)
     
     def erode(self) -> Image:
         kernel = np.ones((5,5),np.uint8)
         image = cv2.erode(self.image, kernel, iterations = 1)
-        return Image(image, self.path,
-                     languages = self.languages, config = self.config)
+        return Image(image, self.path)
     
     @staticmethod
     def _rotate(
@@ -155,90 +136,88 @@ class Image():
 
     def get_skew_angle(self) -> Optional[np.float64]: #returns either float or None 
         grayscale = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
-        verbose_print(f"Calculating skew angle for {self.filename}")
+        #print(f"Calculating skew angle for {self.filename}")
         angle = determine_skew(grayscale)
         return angle
         
     def deskew(self, angle: Optional[np.float64]) -> Image:
-        verbose_print(f"Rotating {self.filename}")
+        #print(f"Rotating {self.filename}")
         rotated = self._rotate(self.image, angle, (0, 0, 0))
-        return Image(rotated, self. path,
-                     languages = self.languages, config = self.config)
+        return Image(rotated, self. path)
 
+    def preprocessing(self) -> Image:
+        """
+        Performs preprocessing -> grayscaling, binarization,
+        blurring, noise removal, deskewing
 
-#TODO create a tesseract class
-def improved_image_to_string(image: Image) -> Tuple[str, Image]:
-    """
-    Apply OCR and Image parameters on jpg images.
-    
-    Args:
-        img (str): path to jpgs
-        languages (str): OCR available languages
-        config (str): any additional custom configuration flags
-        that are not available via the pytesseract function.
+        Returns:
+            Image: Image object
+        """
+        #skewangle has to be calculated before processing
+        angle = self.get_skew_angle()
+        image = self.get_grayscale()
+        image = image.thresholding()
+        image = image.blur()
+        image = image.remove_noise()
+        image = image.deskew(angle)
+        return Image(image.image, self.path)
         
-    Returns:
-        str: output as string from Tesseract OCR processing.
-    """
-    #skew angle has to be calculated before preprocessing
-    angle = image.get_skew_angle()
-    image = image.get_grayscale()
-    image = image.thresholding()
-    image = image.blur()
-    image = image.remove_noise()
-    image = image.deskew(angle)
-    transcript = py.image_to_string(image.image, image.languages, image.config)
-    return transcript, image
-
-
-def process_string(result_raw: str) -> str:
-    """
-    Processes the ocr_output by replacing \n with spaces and encoding it to
-    ascii and decoding it again to utf-8.
-
-    Args:
-        result_raw (str): raw string from pytesseract output
-
-    Returns:
-        str: processed string
-    """
-    processed = result_raw.replace('\n', ' ')
-    return processed
-
-def perform_tesseract_ocr(crop_dir: str, path: str, filename: str,
-                          dir_name: str) -> None:
-    """
-    Perfoms Optical Character Recognition with the pytesseract python librairy on jpg images.
+    def save_image(self, dir_path: str) -> None:
+        filename_processed = os.path.join(dir_path, self.filename)
+        cv2.imwrite(filename_processed, self.image)
     
-    Args:
-        crop_dir (str): path to the directory where the cropped jpgs' main folder is saved.
-        path (str): path to the directory where the cropped jpgs are saved.
-        filename (str): json file's filename
-    """
-    verbose_print(f"\nPerforming OCR on {os.path.basename(crop_dir)}!")
-    filepath: str = os.path.join(path,filename)
-    ocr_results: list = []
-    
-    Path(dir_name).mkdir(parents=True, exist_ok=True)
-    
-    for file in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
-        image_filename = os.path.basename(file)
-        verbose_print(f"Performing OCR on {os.path.basename(file)}!")
-        image = Image.read_image(file)
-        result, image = improved_image_to_string(image)
-        #save the preprocessed image
-        filename_processed = os.path.join(dir_name, image.filename)
-        cv2.imwrite(filename_processed,image.image)
-        #remove linebreaks
-        result_processed = process_string(result)
-        ocr_results.append({"ID": image_filename, "text": result_processed})
 
-    verbose_print("\nOCR successful")
-    verbose_print(f"Saving ocr results in {filepath}")
-    return ocr_results
-
-
-
+class Tesseract():
     
+    def __init__(self, languages = LANGUAGES, config = CONFIG,
+                 image: Optional[Image] = None):
+        self.config = config
+        self.languages = languages
+        self.image = image if image else None
+        
+    @property
+    def image(self) -> Image:
+        return self._image
     
+    @image.setter
+    def image(self, img: Image) -> None:
+        self._image = img
+    
+    @staticmethod
+    def _process_string(result_raw: str) -> str:
+        """
+        Processes the ocr_output by replacing \n with spaces and encoding it to
+        ascii and decoding it again to utf-8.
+
+        Args:
+            result_raw (str): raw string from pytesseract output
+
+        Returns:
+            str: processed string
+        """
+        processed = result_raw.replace('\n', ' ')
+        return processed
+    
+    def image_to_string(self) -> dict[str, str]:
+        """
+        Apply OCR and Image parameters on jpg images.
+        
+        Args:
+            img (str): path to jpgs
+            languages (str): OCR available languages
+            config (str): any additional custom configuration flags
+            that are not available via the pytesseract function.
+            
+        Returns:
+            str: output as string from Tesseract OCR processing.
+        """
+        transcript = py.image_to_string(self.image.image, self.languages,
+                                        self.config)
+        transcript = self._process_string(transcript)
+        return {"ID": self.image.filename, "text": transcript}
+
+
+
+        
+        
 

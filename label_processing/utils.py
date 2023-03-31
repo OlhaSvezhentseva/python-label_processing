@@ -58,9 +58,19 @@ def generate_filename(original_path: str, appendix: str,
     return new_filename
 
 def save_json(data: list[dict[str,str]], filename: str, path: str) -> None:
+    """
+    Saves a json file with human readable format
+
+    Args:
+        data (list[dict[str,str]]): output of the ocr
+        filename (str): how the json should be called
+        path (str): path were the json should be saved
+    """
     filepath = os.path.join(path, filename)
     with open(filepath, "w", encoding = 'utf8') as f:
-            json.dump(data, f, ensure_ascii=False)
+            json.dump(data, f, ensure_ascii=False, indent=4,
+                      separators=(',', ': '))
+        
         
 
 def check_text(transcript: str) -> bool:
