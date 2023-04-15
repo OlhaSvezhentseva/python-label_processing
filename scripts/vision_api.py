@@ -62,7 +62,7 @@ def main(crop_dir: str, credentials: str,
     results_json = []
     utils.check_dir(crop_dir) #check if jpegs exist
     for file in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
-        image = text_recognition.VisionApi.read_image(file, credentials)
+        image = text_recognition.vision.read_image(file, credentials)
         ocr_result: dict = image.vision_ocr()
         results_json.append(ocr_result)
     
