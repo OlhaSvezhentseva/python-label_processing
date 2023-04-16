@@ -1,13 +1,6 @@
 #!/usr/bin/env python3
 '''
 Execute the segmentation_cropping.py module.
-Takes as inputs: the path to the jpgs (jpg_dir),
-                 the number of the model (model),
-                 the path to the directory in which the resulting crops and the csv will be stored (out_dir)
-
-Outputs: - the labels in the pictures are segmented and cropped out of the picture,
-           becoming their own file named after their jpg of origin and assigned class.
-         - the segmentation outputs are also saved as a dataframe (filename, class, prediction score, coordinates).
 '''
 
 #Import module from this package
