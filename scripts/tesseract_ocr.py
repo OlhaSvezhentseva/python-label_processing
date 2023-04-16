@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+
 """
 Module containing the Pytesseract OCR parameters to be performed on the _cropped jpg outputs.
 """
+
 import utils
 import argparse
 import os
