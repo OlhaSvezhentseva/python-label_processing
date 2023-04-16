@@ -1,3 +1,7 @@
+'''
+Check the redundancy of a given transcription (Ground Truth or OCR generated).
+'''
+
 # Import librairies
 import pandas as pd
 import re
