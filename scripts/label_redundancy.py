@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Module calculating labels' redundancy
+Module calculating labels' redundancy of a given text transcription (Ground Truth or OCR generated).
 """
+
 #Import module from this package
 import redundancy
 #import third party libraries
