@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+'''
+Performs the Google Vision OCR on the segmented labels by calling the API and returns it as a json file. 
+'''
+
 from __future__ import annotations
 import argparse
 import text_recognition
