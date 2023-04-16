@@ -53,7 +53,7 @@ def parsing_args():
 
 def ocr_on_dir(crop_dir: str, new_dir: str,
                verbose_print: Callable) -> list[dict[str,str]]:
-    #initialise tessereact wrapper
+    #initialise tesseract wrapper
     tesseract = Tesseract()
     
     ocr_results: list = []
