@@ -130,20 +130,18 @@ Input preparation
 Setting up google cloud vision API and getting credentials
 ----------------------------------------------------------
 - In order to use the google API you need to create a Google account and set it up for Vision.
-- How to setup your Google Cloud Vision is explained `here`_.
+- How to setup your Google Cloud Vision is explained `on the website`_.
 - You then need to retrieve your credentials json (everything is explained in the provided link).
 - The credentials json file should then be provided as an input in the `vision.py` script.
-
-.. _here: https://cloud.google.com/vision/docs/setup
 
 
 Installing Pytesseract for MacOS
 --------------------------------
-Informations about Pytesseract can be found `here`_ or `here`_.
+Informations about Pytesseract can be found `here`_ or `this website`_.
 To install Pytesseract with Homebrew, first install `it`_ and follow the `steps`_.
 
-
+.. _on the website: https://cloud.google.com/vision/docs/setup
 .. _here: https://pypi.org/project/pytesseract/
-.. _here: https://tesseract-ocr.github.io/tessdoc/Installation.html
+.. _this website: https://tesseract-ocr.github.io/tessdoc/Installation.html
 .. _it: https://brew.sh/
 .. _steps: https://formulae.brew.sh/formula/tesseract
