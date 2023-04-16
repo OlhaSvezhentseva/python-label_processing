@@ -32,8 +32,6 @@ def find_tesseract() -> None:
         py.pytesseract.tesseract_cmd = tesseract_path
 
 
-#TODO maybe iput it as a dictionary with keywargs all the important parameters
-#also have the image as a return 
 class Image():
     """
     A class for image preprocessing.
