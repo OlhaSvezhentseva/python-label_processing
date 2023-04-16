@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 '''
 Execute the segmentation_cropping.py module.
 '''
