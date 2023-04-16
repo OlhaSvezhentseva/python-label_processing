@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 """
 Module calculating labels' redundancy of a given text transcription (Ground Truth or OCR generated).
 """
