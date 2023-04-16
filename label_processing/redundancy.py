@@ -24,7 +24,8 @@ def redundancy(df):
     return df
 
 def per_redundancy(df):
-    df_clean = df.copy()
+    df = pd.read_csv(df, sep= ";")
+    df_clean = df
     df = redundancy(df)
     sum_text = df_clean["text"].value_counts().sum()
     sum_dup = df["text"].duplicated().sum() #find sum of duplicates
