@@ -5,10 +5,12 @@
 Performs the Google Vision OCR on the segmented labels by calling the API and returns it as a json file. 
 '''
 
-from __future__ import annotations
-import argparse
+#Import module from the package
 import text_recognition
 import utils
+# Import third party librairy
+from __future__ import annotations
+import argparse
 import json
 import glob
 import os
@@ -65,14 +67,14 @@ def main(crop_dir: str, credentials: str,
     """
     
     results_json = []
-    utils.check_dir(crop_dir) #check if jpegs exist
+    utils.check_dir(crop_dir) #Check if jpegs exist
     for file in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
         image = text_recognition.vision.read_image(file, credentials)
         ocr_result: dict = image.vision_ocr()
         results_json.append(ocr_result)
     
-    parent_dir = os.path.join(crop_dir, os.pardir) #get the parent_directory
-    #select wheteher it should be saved as utf-8 or ascii
+    parent_dir = os.path.join(crop_dir, os.pardir) #Get the parent_directory
+    #Select wheteher it should be saved as utf-8 or ascii
     utils.save_json(results_json, RESULTS_JSON, parent_dir)
     #Get the json with regex nuri
     result_data = utils.get_nuri(results_json)
