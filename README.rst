@@ -1,4 +1,4 @@
-label_preprocessing 0.0.2
+label_Processing 0.0.2
 ===================================================================
 
 *A Python package for the Berlin Natural History Museum*
@@ -61,38 +61,48 @@ Scripts
 For usage information, run any of these scripts with the option --help.
 
 * crop_seg.py
-   Uses a segmentation-model to perform segmentation of the labels and 
-   creates for every label-jpg crops for every label identified in a picture. 
+   Uses a segmentation-model to perform segmentation on jpg images, crop and classify them.
 
    **Inputs:**
       - the path to the directory of the input jpgs (jpg_dir)
       - the model used for the segmentation (model)
-      - the path to the directory in which the resulting crops, the csv and ocr outputs will be stored (out_dir)
+      - the path to the directory in which the resulting crops and the csv will be stored (out_dir)
 
    **Outputs:**
-      - the labels in the pictures are segmented and cropped out of the picture, becoming their own file named after their jpg of origin and class.
-      - the segmentation outputs are also saved as a csv (filename, class, prediction score, coordinates).
+      - the labels in the pictures are segmented and cropped out of the picture, becoming their own file named after their jpg of origin and    assigned class.
+      - the predicted segmentation outputs are also saved as a csv (filename, class, prediction score, coordinates).
 
 * tesseract_ocr.py
-   Performs the ocr on the segmented labels and returns it as a json file. 
+   Performs Pytesseract on the segmented labels and returns it as a json file. 
    Before the ocr, preprocessing is done on the pictures to enhance the results.
 
    **Inputs:**
       - the path to the directory of the input jpgs (crop_dir)
-      - optional argument: select whether OCR should also be performed without preprocessed pictures (no_preprocessing)
+      - optional argument: select whether the verbose should be visible or not
 
    **Outputs:**
       - ocr results as a json file
+      - preprocessed images
 
-* vision.py
-   Performs the ocr on the segmented labels by calling the google vision API and returns it as a json file. 
+* vision_api.py
+   Performs the Google Vision OCR on the segmented labels by calling the API and returns it as a json file. 
    
    **Inputs:**
       - the path to the google credentials json file (credentials) 
       - the path to the directory of the input jpgs (crop_dir)
 
-   **Outputs:**
+   **Output:**
       - ocr results as a json file
+
+* label_redundancy.py
+   Module calculating labels' redundancy of a given text transcription (Ground Truth or OCR generated).
+   
+   **Input:**
+      - the path to the transcription dataset
+
+   **Output:**
+      - redundancy percentage of the dataset
+
 
 Input preparation
 -----------------
@@ -119,9 +129,21 @@ Input preparation
 
 Setting up google cloud vision API and getting credentials
 ----------------------------------------------------------
-- In order to use the google API you need to create a google account and set it up for vision.
-- How to setup your google cloud vsion is explained `here`_.
+- In order to use the google API you need to create a Google account and set it up for Vision.
+- How to setup your Google Cloud Vision is explained `here`_.
 - You then need to retrieve your credentials json (everything is explained in the provided link).
 - The credentials json file should then be provided as an input in the `vision.py` script.
 
 .. _here: https://cloud.google.com/vision/docs/setup
+
+
+Installing Pytesseract for MacOS
+--------------------------------
+Informations about Pytesseract can be found `here`_ or `here`_.
+To install Pytesseract with Homebrew, first install `it`_ and follow the `steps`_.
+
+
+.. _here: https://pypi.org/project/pytesseract/
+.. _here: https://tesseract-ocr.github.io/tessdoc/Installation.html
+.. _it: https://brew.sh/
+.. _steps: https://formulae.brew.sh/formula/tesseract
