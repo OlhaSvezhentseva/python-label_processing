@@ -8,7 +8,7 @@ setup(
     name='label_processing',
     version='1.1',
     description='Package for label processing',
-    py_modules=["segmentation_cropping", "text_recognition", "vision", "utils"],
+    py_modules=["redundancy", "segmentation_cropping", "text_recognition", "vision", "utils"],
     package_dir={'': 'label_processing'},
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -18,7 +18,8 @@ setup(
     ],
     scripts=["scripts/crop_seg.py",
              "scripts/tesseract_ocr.py",
-             "scripts/vision_api.py"],
+             "scripts/vision_api.py",
+             "scripts/label_redundancy.py"],
     #include_package_data=True, #include the static data specified in the MANIFEST.in
     long_description=long_description,
     long_description_content_type="text/markdown",

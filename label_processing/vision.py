@@ -1,6 +1,8 @@
 """
-Module for the Vision API call
+Module to call the Google Vision OCR API to be performed on the _cropped jpg outputs from
+the segmentation_cropping.py module.
 """
+
 from __future__ import annotations
 import io
 import os

@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
+
 """
 Module containing the Pytesseract OCR parameters to be performed on the _cropped jpg outputs.
 """
+
+#Import module from this package
 import utils
+#import third party libraries
 import argparse
 import os
 import json
@@ -53,17 +57,17 @@ def parsing_args():
 
 def ocr_on_dir(crop_dir: str, new_dir: str,
                verbose_print: Callable) -> list[dict[str,str]]:
-    #initialise tessereact wrapper
+    #Initialise Tesseract wrapper
     tesseract = Tesseract()
     
     ocr_results: list = []
     for file_path in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
-        #preprocessing
+        #Preprocessing
         image = Image.read_image(file_path)
         verbose_print(f"Performing preprocessing on {image.filename}")
         image = image.preprocessing() #preprocessed image
         image.save_image(new_dir)#saving image in new directory
-        #ocr
+        #OCR
         tesseract.image = image
         verbose_print(f"Performing OCR on {image.filename}")
         transcript: dict[str, str] = tesseract.image_to_string()
@@ -73,7 +77,7 @@ def ocr_on_dir(crop_dir: str, new_dir: str,
         
 if __name__ == "__main__":
     args = parsing_args()
-    #new function verbose print
+    #New function verbose print
     verbose_print: Callable = print if args.verbose else lambda *a, **k: None    
     #Find path to tesseract
     find_tesseract()
@@ -82,7 +86,7 @@ if __name__ == "__main__":
     crop_dir = args.crop_dir
     utils.check_dir(crop_dir)
     new_dir = utils.generate_filename(crop_dir, "preprocessed")
-    #parent directory of the cropped pictures
+    #Parent directory of the cropped pictures
     parent_dir = os.path.join(crop_dir, os.pardir) 
     new_dir_path = os.path.join(parent_dir, new_dir)
     Path(new_dir_path).mkdir(parents=True, exist_ok=True)
