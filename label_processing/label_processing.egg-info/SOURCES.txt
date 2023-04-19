@@ -3,6 +3,7 @@ setup.py
 label_processing/segmentation_cropping.py
 label_processing/text_recognition.py
 label_processing/utils.py
+label_processing/vision.py
 label_processing/label_processing.egg-info/PKG-INFO
 label_processing/label_processing.egg-info/SOURCES.txt
 label_processing/label_processing.egg-info/dependency_links.txt

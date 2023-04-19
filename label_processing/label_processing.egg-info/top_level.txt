@@ -1,3 +1,4 @@
 segmentation_cropping
 text_recognition
 utils
+vision

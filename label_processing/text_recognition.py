@@ -1,9 +1,8 @@
 """
-Module containing the Pytesseract OCR parameters and image preprocessing to be performed on the _cropped jpg outputs from
+Module containing the Pytesseract OCR parameters and image preprocessing to be 
+performed on the _cropped jpg outputs from
 the segmentation_cropping.py module.
 """
-
-# Import Librairies
 from __future__ import annotations
 import os
 import cv2
@@ -99,7 +98,7 @@ class Image():
         if thresh_mode == "otsu":
             image = cv2.threshold(self.image, 0, 255,
                                 cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-        elif(thresh_mode == "adaptive"):
+        elif thresh_mode == "adaptive":
             image = cv2.adaptiveThreshold(self.image ,255,
                 cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)            
         return Image(image, self.path)

@@ -8,7 +8,7 @@ setup(
     name='label_processing',
     version='1.1',
     description='Package for label processing',
-    py_modules=["segmentation_cropping", "text_recognition", "utils"],
+    py_modules=["segmentation_cropping", "text_recognition", "vision", "utils"],
     package_dir={'': 'label_processing'},
     classifiers=[
         "Programming Language :: Python :: 3",

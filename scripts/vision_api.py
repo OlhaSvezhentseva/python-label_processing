@@ -2,9 +2,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 import argparse
-import text_recognition
+import vision
 import utils
-import json
 import glob
 import os
 
@@ -14,7 +13,7 @@ RESULTS_JSON = "ocr_google_vision.json" #TODO make this customizable
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
-    usage = 'vision.py [-h] [-np] -d <crop-dir> -c <credentials>'
+    usage = 'vision_api.py [-h] [-np] -d <crop-dir> -c <credentials>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
@@ -62,7 +61,7 @@ def main(crop_dir: str, credentials: str,
     results_json = []
     utils.check_dir(crop_dir) #check if jpegs exist
     for file in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
-        image = text_recognition.VisionApi.read_image(file, credentials)
+        image = vision.VisionApi.read_image(file, credentials)
         ocr_result: dict = image.vision_ocr()
         results_json.append(ocr_result)
     
