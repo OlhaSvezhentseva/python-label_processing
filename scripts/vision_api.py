@@ -6,11 +6,11 @@ Performs the Google Vision OCR on the segmented labels by calling the API and re
 '''
 from __future__ import annotations
 import argparse
-import json
 import glob
 import os
 
 import vision
+import utils
 
 #CREDENTIALS = '/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/total-contact-297417-48ed6585325e.json'
 #DIR = '/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/results_ocr/test'
@@ -66,6 +66,7 @@ def main(crop_dir: str, credentials: str,
     results_json = []
     utils.check_dir(crop_dir) #Check if jpegs exist
     for file in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
+        print(f"performing ocr on {os.path.basename(file)}")
         image = vision.VisionApi.read_image(file, credentials)
         ocr_result: dict = image.vision_ocr()
         results_json.append(ocr_result)

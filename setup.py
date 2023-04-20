@@ -35,6 +35,7 @@ setup(
         "tesseract",
         "pillow",
         "google-cloud",
-        "deskew"
+        "deskew",
+        "google"
     ],
 )

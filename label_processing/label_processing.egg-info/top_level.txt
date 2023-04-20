@@ -1,3 +1,4 @@
+redundancy
 segmentation_cropping
 text_recognition
 utils

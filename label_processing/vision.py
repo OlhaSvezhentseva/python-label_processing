@@ -87,11 +87,14 @@ class VisionApi():
         #list of transcripts
         transcripts = [str(transcript.description) for transcript in single_transcripts]
         #create string of transcripts
-        transcript = self.process_string(transcripts[0])
+        if transcripts: #check if transcripts is not empty
+            transcript = self.process_string(transcripts[0])
+        else:
+            transcript = " "
         #get filename
         filename = os.path.basename(self.path)
         if response.error.message:
             raise Exception(
-                f'{response.error.message}\nFor more icheck_IDnfo on error messages, '
+                f'{response.error.message}\nFor more info on error messages, '
                 'check:  https://cloud.google.com/apis/design/errors')
         return {'ID' : filename, 'text': transcript}
