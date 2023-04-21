@@ -50,7 +50,7 @@ def generate_filename(original_path: str, appendix: str,
         new_filename = (f"{os.path.basename(os.path.dirname(new_filename))}"
                         f"_{appendix}")
     else:
-        new_filename = f"{os.path.basename(original_path)}_appendix"
+        new_filename = f"{os.path.basename(original_path)}_{appendix}"
     
     if extension is not None:
         if extension[0] != ".":

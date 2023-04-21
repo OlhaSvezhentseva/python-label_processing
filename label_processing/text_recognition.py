@@ -10,11 +10,11 @@ import shutil
 import math
 import pytesseract as py
 import numpy as np
+import utils #from this package
 from typing import  Union, Tuple, Optional, Literal, get_args
 from deskew import determine_skew
-
 #Possibilities for threshold
-_THRESHS = Literal["adaptive", "otsu"] 
+_THRESHS = Literal["adaptive_mean", "adaptive_gaussian", "otsu"] 
 #Configuarations
 CONFIG = r'--psm 6 --oem 3' #configuration for ocr
 LANGUAGES = 'eng+deu+fra+ita+spa+por' #specifying languages used for ocr
@@ -96,9 +96,12 @@ class Image():
         if thresh_mode == "otsu":
             image = cv2.threshold(self.image, 0, 255,
                                 cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-        elif thresh_mode == "adaptive":
+        elif thresh_mode == "adaptive_gaussian":
             image = cv2.adaptiveThreshold(self.image ,255,
-                cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)            
+                cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
+        elif thresh_mode == "adaptive_mean":
+            image = cv2.adaptiveThreshold(self.image ,255,
+                cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,11,2)             
         return Image(image, self.path)
     
 
@@ -153,14 +156,20 @@ class Image():
         #skewangle has to be calculated before processing
         angle = self.get_skew_angle()
         image = self.get_grayscale()
-        image = image.thresholding()
+        #blurring before thresholding
         image = image.blur()
-        image = image.remove_noise()
+        image = image.thresholding()
+        #image = image.remove_noise()
         image = image.deskew(angle)
         return Image(image.image, self.path)
         
-    def save_image(self, dir_path: str) -> None:
-        filename_processed = os.path.join(dir_path, self.filename)
+    def save_image(self, dir_path: str, appendix: Optional[str]) -> None:
+        if appendix:
+            filename = utils.generate_filename(self.filename, appendix,
+                                               extension = "jpg")
+        else:
+            filename = self.filename
+        filename_processed = os.path.join(dir_path, filename)
         cv2.imwrite(filename_processed, self.image)
     
 
