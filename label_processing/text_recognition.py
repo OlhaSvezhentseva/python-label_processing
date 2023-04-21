@@ -33,7 +33,7 @@ def find_tesseract() -> None:
 
 class Image():
     """
-    A class for image preprocessing.
+    A class for image preprocessing and other image actions.
     """
     def __init__(self, image: np.ndarray, path: str):
         """
@@ -162,7 +162,19 @@ class Image():
         #image = image.remove_noise()
         image = image.deskew(angle)
         return Image(image.image, self.path)
-        
+    
+    def read_qr_code(self) -> Optional[str]:
+        """
+        tries to identify if picture has a qr-code and then reads and returns it
+
+        Returns:
+            Optional[str]: decoded qr-code text as a str or none if there is no
+            qr-code found
+        """
+        detect = cv2.QRCodeDetector()
+        value = detect.detectAndDecode(self.image)[0]
+        return value if value else None
+    
     def save_image(self, dir_path: str, appendix: Optional[str]) -> None:
         if appendix:
             filename = utils.generate_filename(self.filename, appendix,
@@ -171,6 +183,7 @@ class Image():
             filename = self.filename
         filename_processed = os.path.join(dir_path, filename)
         cv2.imwrite(filename_processed, self.image)
+    
     
 
 class Tesseract():
