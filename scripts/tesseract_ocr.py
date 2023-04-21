@@ -54,6 +54,7 @@ def parsing_args():
     args = parser.parse_args()
 
     return args
+    
 
 def ocr_on_dir(crop_dir: str, new_dir: str,
                verbose_print: Callable) -> list[dict[str,str]]:
@@ -62,15 +63,22 @@ def ocr_on_dir(crop_dir: str, new_dir: str,
     
     ocr_results: list = []
     for file_path in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
-        #Preprocessing
         image = Image.read_image(file_path)
-        verbose_print(f"Performing preprocessing on {image.filename}")
-        image = image.preprocessing() #preprocessed image
-        image.save_image(new_dir)#saving image in new directory
-        #OCR
-        tesseract.image = image
-        verbose_print(f"Performing OCR on {image.filename}")
-        transcript: dict[str, str] = tesseract.image_to_string()
+        decoded_qr: str = image.read_qr_code()
+        #trying to read the qr_code
+        if decoded_qr:
+            transcript: dict[str, str] = {"ID": image.filename,
+                                          "text": decoded_qr}
+        else:
+            #Preprocessing
+            verbose_print(f"Performing preprocessing on {image.filename}")
+            image = image.preprocessing() #preprocessed image
+            image.save_image(new_dir)#saving image in new directory
+            #OCR
+            tesseract.image = image
+            verbose_print(f"Performing OCR on {image.filename}")
+            transcript: dict[str, str] = tesseract.image_to_string()
+        
         ocr_results.append(transcript)
     
     return ocr_results
@@ -100,12 +108,4 @@ if __name__ == "__main__":
     
     verbose_print(f"Saving results in {os.path.abspath(parent_dir)} .")
     utils.save_json(result_data, FILENAME, parent_dir)
-    #Get the json with regex nuri
-    result_data = utils.get_nuri(result_data)
-    utils.save_json(result_data, FILENAME_NURI, parent_dir)
-    verbose_print(f"Saving results in {os.path.abspath(parent_dir)} .")
-    utils.save_json(result_data, FILENAME, parent_dir)
-    #Get the json with regex nuri
-    result_data = utils.get_nuri(result_data)
-    utils.save_json(result_data, FILENAME_NURI, parent_dir)
         
