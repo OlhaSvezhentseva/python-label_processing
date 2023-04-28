@@ -173,9 +173,10 @@ class Image():
         """
         detect = cv2.QRCodeDetector()
         value = detect.detectAndDecode(self.image)[0]
+        print(value)
         return value if value else None
     
-    def save_image(self, dir_path: str, appendix: Optional[str]) -> None:
+    def save_image(self, dir_path: str, appendix: Optional[str] = None) -> None:
         if appendix:
             filename = utils.generate_filename(self.filename, appendix,
                                                extension = "jpg")

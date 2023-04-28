@@ -9,7 +9,6 @@ import utils
 #import third party libraries
 import argparse
 import os
-import json
 import glob
 
 from text_recognition import Tesseract, Image, find_tesseract
@@ -42,7 +41,7 @@ def parsing_args():
             )
     
     parser.add_argument(
-            '-d', '--crop_dir',
+            '-d', '--dir',
             metavar='',
             type=str,
             required = True,
@@ -64,9 +63,11 @@ def ocr_on_dir(crop_dir: str, new_dir: str,
     ocr_results: list = []
     for file_path in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
         image = Image.read_image(file_path)
-        decoded_qr: str = image.read_qr_code()
+        decoded_qr = image.read_qr_code()
+        print(decoded_qr)
         #trying to read the qr_code
-        if decoded_qr:
+        if decoded_qr is not None:
+            verbose_print(f"Qr-Code detected in {image.filename}")
             transcript: dict[str, str] = {"ID": image.filename,
                                           "text": decoded_qr}
         else:
@@ -91,7 +92,7 @@ if __name__ == "__main__":
     find_tesseract()
     verbose_print("Tesseract succesfully detected.\n")
     
-    crop_dir = args.crop_dir
+    crop_dir = args.dir
     utils.check_dir(crop_dir)
     new_dir = utils.generate_filename(crop_dir, "preprocessed")
     #Parent directory of the cropped pictures
