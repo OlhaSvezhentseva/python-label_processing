@@ -3,6 +3,8 @@ Module containing the Pytesseract OCR parameters and image preprocessing to be
 performed on the _cropped jpg outputs from
 the segmentation_cropping.py module.
 """
+
+#Import Librairies
 from __future__ import annotations
 import os
 import cv2
@@ -13,8 +15,10 @@ import numpy as np
 import utils #from this package
 from typing import  Union, Tuple, Optional, Literal, get_args
 from deskew import determine_skew
+
 #Possibilities for threshold
 _THRESHS = Literal["adaptive_mean", "adaptive_gaussian", "otsu"] 
+
 #Configuarations
 CONFIG = r'--psm 6 --oem 3' #configuration for ocr
 LANGUAGES = 'eng+deu+fra+ita+spa+por' #specifying languages used for ocr
@@ -29,6 +33,9 @@ def find_tesseract() -> None:
                                  "Please read the README for instructions!"))
     else:
         py.pytesseract.tesseract_cmd = tesseract_path
+
+
+#---------------------Image Preprocessing---------------------#
 
 
 class Image():
@@ -79,7 +86,7 @@ class Image():
     @staticmethod
     def _check_thresh_params(thresh_mode: _THRESHS) -> None:
         """
-        checks if the thresholding parameter is valid -> asserts if right param
+        Checks if the thresholding parameter is valid -> asserts if right param
 
         Args:
             thresh_mode (_THRESH): Thresholding mode -> defined by typin.Literal
@@ -162,10 +169,14 @@ class Image():
         #image = image.remove_noise()
         image = image.deskew(angle)
         return Image(image.image, self.path)
+
+
+#---------------------Read QR-Code---------------------#
     
+
     def read_qr_code(self) -> Optional[str]:
         """
-        tries to identify if picture has a qr-code and then reads and returns it
+        Tries to identify if picture has a qr-code and then reads and returns it.
 
         Returns:
             Optional[str]: decoded qr-code text as a str or none if there is no
@@ -184,7 +195,9 @@ class Image():
         filename_processed = os.path.join(dir_path, filename)
         cv2.imwrite(filename_processed, self.image)
     
-    
+
+#---------------------OCR Tesseract---------------------#
+
 
 class Tesseract():
     
