@@ -10,17 +10,33 @@ warnings.filterwarnings('ignore')
 
 
 def clean_data(df):
+    '''
+    Dataset preprocessing
+
+    Arg:
+        DataFrame(pandas.DataFrame): Pandas Dataframe with labels' transcription
+
+    Returns:
+        DataFrame: Preprocessed Pandas Dataframe
+    '''
     df['text'] = df['text'].str.lower() #remove lowercase
     df['text'] = df['text'].str.replace('[^\w\s]','') #remove punctuation
     df['text'] = df['text'].str.replace(' ', '') #remove whitespace
     patternDel = "http"
     filter = df['text'].str.contains(patternDel)
     df = df[~filter] #remove NURIs
-    #df['text'] = df['text'].str.replace(r'httpcollmfnberlindeu([0-9a-zA-Z]+)', 'httpcollmfnberlindeu') #remove NURIs numbers - completly?
-    #df['text'] = df['text'].str.replace('\d+', '') #remove digits? y/n
     return df
 
 def redundancy(df):
+    '''
+    Calculate transcription redundancy in preprocessed dataset.
+
+    Arg:
+        DataFrame(pandas.DataFrame): Preprocessed Pandas Dataframe with labels' transcription
+
+    Returns:
+        DataFrame: Preprocessed Pandas Dataframe with grouped duplicates
+    '''
     df = clean_data(df)
     duplicates = df["text"]
     df[duplicates.isin(duplicates[duplicates.duplicated()])].sort_values("text") #groupby duplicates
@@ -28,6 +44,15 @@ def redundancy(df):
     return df
 
 def per_redundancy(df):
+    '''
+    Calculate percenage of transcription redundancy in preprocessed dataset with grouped duplicates.
+
+    Arg:
+        DataFrame(pandas.DataFrame): Preprocessed Pandas Dataframe with labels' transcription and grouped duplicates
+
+    Returns:
+        String: Percentage redundant text
+    '''
     df = pd.read_csv(df, sep= ";")
     df_clean = df
     df = redundancy(df)
