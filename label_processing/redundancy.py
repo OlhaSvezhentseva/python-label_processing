@@ -2,7 +2,7 @@
 Check the redundancy of a given transcription (Ground Truth or OCR generated).
 '''
 
-# Import librairies
+# Import Librairies
 import pandas as pd
 import re
 import warnings
@@ -13,7 +13,7 @@ def clean_data(df):
     '''
     Dataset preprocessing
 
-    Arg:
+    Args:
         DataFrame(pandas.DataFrame): Pandas Dataframe with labels' transcription
 
     Returns:
@@ -31,7 +31,7 @@ def redundancy(df):
     '''
     Calculate transcription redundancy in preprocessed dataset.
 
-    Arg:
+    Args:
         DataFrame(pandas.DataFrame): Preprocessed Pandas Dataframe with labels' transcription
 
     Returns:
@@ -47,7 +47,7 @@ def per_redundancy(df):
     '''
     Calculate percenage of transcription redundancy in preprocessed dataset with grouped duplicates.
 
-    Arg:
+    Args:
         DataFrame(pandas.DataFrame): Preprocessed Pandas Dataframe with labels' transcription and grouped duplicates
 
     Returns:
