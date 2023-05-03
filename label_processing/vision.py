@@ -3,6 +3,7 @@ Module to call the Google Vision OCR API to be performed on the _cropped jpg out
 the segmentation_cropping.py module.
 """
 
+#Import Librairies
 from __future__ import annotations
 import io
 import os
@@ -53,7 +54,7 @@ class VisionApi():
     def process_string(self, result_raw: str) -> str:
         """
         Processes the google vision ocr output and replaces newlines by spaces
-        and if specified turns sting from unicode into ascii encoding.
+        and if specified turns string from unicode into ascii encoding.
 
         Args:
             result_raw (str): the raw output string directly from google_vision
