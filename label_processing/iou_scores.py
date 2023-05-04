@@ -1,6 +1,3 @@
-
-
-
 #Import Librairies
 import pandas as pd
 import torch
@@ -12,6 +9,16 @@ import warnings
 warnings.filterwarnings('ignore')
 
 def calculate_iou(df_pred, df_gt):
+    """
+    Calculates IOU scores by comparing the ground truth and predicted segmentation coordinates.
+
+    Args:
+        df_pred (csv): path to predicted coordinates csv
+        df_gt (csv): path to ground truth coordinates csv
+    
+    Returns:
+        IoU (str): iou scores for each prediction
+    """
     #Extract bounding boxes coordinates
     xmin_pred, ymin_pred, xmax_pred, ymax_pred = df_pred
     class_gt, xmin_gt, ymin_gt, xmax_gt, ymax_gt = df_gt
@@ -73,7 +80,6 @@ def concat_frames(df_pred, df_gt, folder):
     filepath = Path(f'{folder}/iou_scores.csv')
     df.to_csv(filepath)
     return df
-
 
 def box_plot_iou(df_pred, df_gt, folder):
     IOU_df = concat_frames(df_pred, df_gt, folder)
