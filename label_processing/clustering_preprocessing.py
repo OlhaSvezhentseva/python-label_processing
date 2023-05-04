@@ -1,3 +1,7 @@
+"""
+Module containing the preprocessing parameter for the OCR json file(s) before clustering. It adds an specific identifier to each text outputs coming from the same picture.
+"""
+
 #Import Librairies
 import pandas as pd
 from json import loads, dumps
@@ -6,6 +10,17 @@ warnings.filterwarnings('ignore')
 
 
 def cluster_ID(json):
+    """
+    Uses the json file OCR output to preprocess it before clustering.
+    It adds a new key "label_ID", a unique identifier for the outputs coming from the same picture
+    and group them together.
+
+    Args:
+        json (str): path to the OCR json file.
+                                       
+    Returns:
+        df: pandas Dataframe with cluster_ID new key.
+    """
     df = pd.read_json(json)
     df["label_ID"] = df['ID']
     df['label_ID'] = df['label_ID'].str.replace('_typed_\d+\.jpg','')
@@ -16,6 +31,15 @@ def cluster_ID(json):
     return df
 
 def df_to_json(json, cluster_json):
+    """
+    Save the pandas Dataframe has a new json file.
+
+    Args:
+        json (str): path to the OCR json file.
+        cluster_json (str): path to where we want to save the preprocessed json file.                           
+    Returns:
+        json (str): preprocessed json file.
+    """
     df = cluster_ID(json)
     result = df.to_json(orient='records')
     parsed = loads(result)
