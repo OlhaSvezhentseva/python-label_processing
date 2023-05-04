@@ -14,7 +14,7 @@ import evaluate_text
 
 def parsing_args():
     '''generate the command line arguments using argparse'''
-    usage = 'OCR_accuracy.py [-h] -gt <ground_truth_dataset> -pred <cpredicted_ocr> -pred <cpredicted_ocr> -r <results>'
+    usage = 'OCR_accuracy.py [-h] -gt <ground_truth_dataset> -pred <predicted_ocr> -r <results>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
