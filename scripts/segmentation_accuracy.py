@@ -1,5 +1,5 @@
 """
-Module containing the accuracy evaluation parameters of the OCR outputs.
+Module containing the accuracy evaluation parameters of the segmentation model.
 """
 
 
