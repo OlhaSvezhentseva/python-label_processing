@@ -11,7 +11,15 @@ import pandas as pd
 
 
 def get_predicted_transcriptions(filename):
-    """This function loads predictions from a json file."""
+    """
+    Loads predictions from the OCR outputs as a json file.
+
+        Args:
+            filename (str): path to the json file
+
+        Returns:
+            transcriptions (str): loaded json file
+    """
     f = open(filename)
     transcriptions = json.load(f)
     return transcriptions
@@ -19,9 +27,13 @@ def get_predicted_transcriptions(filename):
 
 def get_gold_transcriptions(filename):
     """
-    This function loads gold transcriptions from a csv file.
-    :param filename: filename as a string
-    :return: dictionary of the form {'ID': text, }
+    Loads predictions from the ground truth transcriptions as a csv file.
+
+    Args:
+        filename (str): path to the ground truth csv
+
+    Returns:
+        gold_transcriptions (dict): dictionary of the form {'ID': text}
     """
     gold_transcriptions = {}
     with open(filename, encoding='utf-8-sig') as file_in:
@@ -36,10 +48,14 @@ def get_gold_transcriptions(filename):
 
 def calculate_scores(gold_text, predicted_text):
     """
-    This function calculates CER and WER comparing 2 strings.
-    :param gold_text: gold transcription as a string
-    :param predicted_text:  predicted transcription as a string
-    :return: tuple of 2 scores/None
+    Calculates CER and WER by comparing the predicted and ground truth transcriptions.
+
+    Args:
+        gold_text (str): ground truth transcription as a string
+        predicted_text (str): predicted transcription as a string
+
+    Returns:
+        wer, cer (tup): tuple of the two scores/None
     """
     # Ignore NURIs
     if not gold_text.startswith("http") and not gold_text.startswith("MfN URI"):
@@ -56,11 +72,15 @@ def calculate_scores(gold_text, predicted_text):
 
 def compare_transcriptions(gold_transcriptions, ocr_transcriptions, file_name):
     """
-    This function writes evaluation results into a csv table.
-    :param gold_transcriptions: ground truth data as a dictionary
-    :param ocr_transcriptions: predicted transcriptions as a list of dicts
-    :param file_name: the name of a CSV file which will be created
-    :return: tuple of 2 lists with scores
+    Writes evaluation results into a csv table.
+
+    Args:
+        gold_transcriptions (dict): ground truth data as a dictionary
+        ocr_transcriptions (list): predicted transcriptions as a list of dicts
+        file_name (str): the name of a CSV file which will be created
+
+    Returns:
+        all_wers, all_cers (tup): tuple of two lists with scores
     """
     all_wers = []
     all_cers = []
@@ -81,11 +101,12 @@ def compare_transcriptions(gold_transcriptions, ocr_transcriptions, file_name):
 
 def create_plot(data, name, file_name):
     """
-    This function creates a violin plot and saves it.
-    :param data: scores as a list
-    :param name: name of the future plot
-    :param file_name: the name of the file the plot will be saved in
-    :return: None
+    Create violin plots for the CER and WER scores respectively. 
+
+    Args:
+        data (list): scores as a list
+        name (list): name of the future plot
+        file_name (str): the name of the file the plot will be saved in
     """
     plot = pd.DataFrame(data, columns=[name])
     sns.violinplot(data=plot[name], cut=1.0).set(title=name)
@@ -96,13 +117,13 @@ def create_plot(data, name, file_name):
 
 def evaluate_text_predictions(ground_truth_file, predictions_file, result_folder):
     """
-    This function evaluates OCR predictions
-    :param ground_truth_file: ground truth data as a CSV
-    :param predictions_file:  OCR output in json
-    :param result_folder: name of the folder the evaluation result will be saved in
-    :return: None
-    """
+    Evaluates OCR predictions. 
 
+    Args:
+        ground_truth_file (str): path to ground truth data as a CSV
+        predictions_file (str): path to OCR output as a json file
+        result_folder (str): path to the folder the evaluation result will be saved in
+    """
     ground_truth = get_gold_transcriptions(ground_truth_file)
     generated_transcriptions = get_predicted_transcriptions(predictions_file)
 
