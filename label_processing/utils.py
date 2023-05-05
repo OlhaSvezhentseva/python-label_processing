@@ -12,6 +12,8 @@ import re
 import json
 from typing import Optional
 
+PATTERN = 
+
 
 #---------------------Check dir JPG---------------------#
 
@@ -97,12 +99,12 @@ def check_text(transcript: str) -> bool:
         str: Boolean
     """
     #search for NURI patterns in "text"
-    pattern = re.compile(r"/u/|http|u/|coll|mfn|/u|URI")
+    pattern = re.compile(PATTERN)
     match = pattern.search(transcript)
     return True if match else False
 
 def get_nuri(data: list[dict[str, str]]) -> list[dict[str, str]]:
-        """
+    """
     Correct NURIs' format in OCR transcription json file outputs "text.
 
     Args:
