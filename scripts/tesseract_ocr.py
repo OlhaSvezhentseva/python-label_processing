@@ -61,15 +61,17 @@ def ocr_on_dir(crop_dir: str, new_dir: str,
     tesseract = Tesseract()
     
     ocr_results: list = []
+    count_qr: int = 0
+    total_nuri: int = 0
     for file_path in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
         image = Image.read_image(file_path)
-        decoded_qr = image.read_qr_code()
-        print(decoded_qr)
         #trying to read the qr_code
+        decoded_qr = image.read_qr_code_2()
         if decoded_qr is not None:
-            verbose_print(f"Qr-Code detected in {image.filename}")
+            verbose_print(f"Qr-Code detected in {image.filename}\n")
             transcript: dict[str, str] = {"ID": image.filename,
                                           "text": decoded_qr}
+            count_qr+=1
         else:
             #Preprocessing
             verbose_print(f"Performing preprocessing on {image.filename}")
@@ -77,11 +79,15 @@ def ocr_on_dir(crop_dir: str, new_dir: str,
             image.save_image(new_dir)#saving image in new directory
             #OCR
             tesseract.image = image
-            verbose_print(f"Performing OCR on {image.filename}")
+            verbose_print(f"Performing OCR on {image.filename}\n")
             transcript: dict[str, str] = tesseract.image_to_string()
-        
+            #get nuri
+            if utils.check_text(transcript["text"]):
+                total_nuri+= 1 
+            transcript = utils.replace_nuri(transcript)
         ocr_results.append(transcript)
-    
+    verbose_print(f"QR-codes read: {count_qr}")
+    verbose_print(f"get_nuri: {total_nuri}")
     return ocr_results
         
 if __name__ == "__main__":

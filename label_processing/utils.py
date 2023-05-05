@@ -8,7 +8,8 @@ the NURI transcriptions in the json files to have a clean output.
 import os
 import re
 import json
-from typing import Optional
+import sys
+from typing import Optional, Pattern
 
 
 def check_dir(dir) -> None:
@@ -81,19 +82,33 @@ def check_text(transcript: str) -> bool:
     match = pattern.search(transcript)
     return True if match else False
 
+def replace_nuri(entry: dict[str, str]) -> dict[str, str]:
+    find_string = entry["text"]
+    find_nuri = entry["ID"]
+    pattern = re.compile(r"_u_[A-Za-z0-9]+") 
+    if check_text(find_string): #checks if label is a NURI - True/False
+        try:
+            nuri = pattern.search(find_nuri).group()
+            replace_string = "http://coll.mfn-berlin.de/u/"+ nuri[3:]
+            #replace "text" with NURI patterns formatted "ID"
+            entry["text"] = replace_string 
+        except AttributeError:
+                pass
+    return entry
+
 def get_nuri(data: list[dict[str, str]]) -> list[dict[str, str]]:
     new_data=data.copy()
     #search for NURI number in "ID"
-    reg = re.compile(r"_u_[A-Za-z0-9]+") 
     for item, new_item in zip(data, new_data):
-        findString = item["text"]
-        findNURI = item["ID"]
-        if check_text(findString): #checks if label is a NURI - True/False
-            try:
-                NURI = reg.search(findNURI).group()
-                replaceString = "http://coll.mfn-berlin.de/u/"+ NURI[3:]
-                #replace "text" with NURI patterns formatted "ID"
-                new_item["text"] = replaceString 
-            except AttributeError:
-                    pass
+        new_item['text'] = replace_nuri(item, pattern)['text']
     return new_data
+
+class HiddenPrints:
+    """class to block codeblock from writing to stdout"""
+    def __enter__(self):
+        self._original_stdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        sys.stdout.close()
+        sys.stdout = self._original_stdout
