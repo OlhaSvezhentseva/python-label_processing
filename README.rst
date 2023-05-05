@@ -145,3 +145,19 @@ To install Pytesseract with Homebrew, first install `it`_ and follow the `steps`
 .. _this website: https://tesseract-ocr.github.io/tessdoc/Installation.html
 .. _it: https://brew.sh/
 .. _steps: https://formulae.brew.sh/formula/tesseract
+
+Installing zbar for MacOS and Linux
+--------------------------------
+To use the more powerful qr-code reading function of zbar additional dependencies
+have to be installed (only for Mac OS and Linux. On Windows they come with the 
+Python DLLs) These can be installed via the command line with the following
+commands:
+
+Mac OS X:
+
+``brew install zbar``
+
+Linux:
+
+``sudo apt-get install libzbar0``
+

@@ -44,6 +44,7 @@ setup(
         "jiwer",
         "cer",
         "plotly",
-        "kaleido"
+        "kaleido",
+        "pyzbar"
     ],
 )
