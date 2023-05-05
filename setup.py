@@ -8,7 +8,9 @@ setup(
     name='label_processing',
     version='1.1',
     description='Package for label processing',
-    py_modules=["redundancy", "segmentation_cropping", "text_recognition", "utils", "vision", "cluster_ID", "evaluate_text", "iou_scores"],
+    py_modules=["redundancy", "segmentation_cropping", "text_recognition",
+                "utils", "vision", "cluster_id", "evaluate_text", "iou_scores",
+                "clustering_preprocessing"],
     package_dir={'': 'label_processing'},
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -20,8 +22,7 @@ setup(
              "scripts/tesseract_ocr.py",
              "scripts/vision_api.py",
              "scripts/label_redundancy.py",
-             "scripts/clustering_preprocessing.py",
-             "scripts/OCR_accuracy.py",
+             "scripts/ocr_accuracy.py",
              "scripts/segmentation_accuracy.py"],
     #include_package_data=True, #include the static data specified in the MANIFEST.in
     long_description=long_description,

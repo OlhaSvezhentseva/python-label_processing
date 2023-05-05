@@ -1,3 +1,5 @@
+
+#!/usr/bin/env python3
 """
 Module containing the accuracy evaluation parameters of the segmentation model.
 """
@@ -7,14 +9,19 @@ Module containing the accuracy evaluation parameters of the segmentation model.
 import argparse
 import os
 import warnings
+import pandas as pd
+import plotly.io as pio
 warnings.filterwarnings('ignore')
 
 #Import module from this package
 import iou_scores
+FILENAME_CSV = "iou_scores.csv"
+FILENAME_BOXPLOT = "iou_box.jpg"
+FILENAME_BARCHART = "class_pred.jpg"
 
 def parsing_args():
     '''generate the command line arguments using argparse'''
-    usage = 'segmentation_accuracy.py [-h] -gt <ground_truth_coord> -pred <predicted_coord> -r <results>'
+    usage = 'segmentation_accuracy.py [-h] -g <ground_truth_coord> -p <predicted_coord> -r <results>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
@@ -27,7 +34,7 @@ def parsing_args():
             )
     
     parser.add_argument(
-            '-gt', '--ground_truth_coord',
+            '-g', '--ground_truth_coord',
             metavar='',
             type=str,
             required = True,
@@ -35,7 +42,7 @@ def parsing_args():
             )
 
     parser.add_argument(
-            '-pred', '--predicted_coord',
+            '-p', '--predicted_coord',
             metavar='',
             type=str,
             required = True,
@@ -59,11 +66,26 @@ if __name__ == "__main__":
     args = parsing_args()
     gt = args.ground_truth_coord
     pred = args.predicted_coord
-    folder = args.results
+    result_dir = args.results
 
 
-    out_dir = os.path.dirname(os.path.realpath(folder))
-    print(f"\nThe new json_file has been successfully saved in {out_dir}")
-    iou_scores.accuracy_segmentation(pred, gt, folder)
+    out_dir = os.path.realpath(result_dir)
+    df_gt = pd.read_csv(args.ground_truth_coord)
+    df_pred = pd.read_csv(args.predicted_coord)
+    
+    df_concat = iou_scores.concat_frames(df_gt, df_pred)
+    filepath = os.path.join(result_dir, FILENAME_CSV)
+    df_concat.to_csv(FILENAME_CSV)
+    print(f"The csv has been successfully saved in {filepath}")
+    #create boxplot
+    fig = iou_scores.box_plot_iou(df_concat)
+    boxplot_path = os.path.join(result_dir, FILENAME_BOXPLOT)
+    pio.write_image(fig, boxplot_path, format = "jpg")
+    print(f"The boxplot has been successfully saved in {boxplot_path}")
+    #create barchart
+    fig = iou_scores.class_pred(df_concat)
+    barchart_path = os.path.join(result_dir, FILENAME_BARCHART)
+    pio.write_image(fig, barchart_path, format = "jpg")
+    print(f"The boxplot has been successfully saved in {barchart_path}")
 
 

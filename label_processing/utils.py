@@ -10,6 +10,8 @@ Module containing general functions:
 import os
 import re
 import json
+import pandas as pd
+import cv2
 from typing import Optional
 
 PATTERN = r"/u/|http|u/|coll|mfn|/u|URI"
@@ -128,3 +130,28 @@ def get_nuri(data: list[dict[str, str]]) -> list[dict[str, str]]:
             except AttributeError:
                     pass
     return new_data
+
+def load_dataframe(filepath_csv):
+    """
+    Loads the csv file using Pandas.
+
+    Args:
+        filepath_csv(str): string containing the path to the csv with the
+                           results from applying the model.
+                           
+    Returns:
+        pd.Dataframe: The csv as a Pandas Dataframe
+    """
+    dataframe = pd.read_csv(filepath_csv)
+    return dataframe
+
+
+def load_jpg(filepath):
+    """
+    Loads the jpg file using the opencv module.
+
+    Returns:
+        Mat: cv2 image object
+    """
+    jpg = cv2.imread(filepath)
+    return jpg

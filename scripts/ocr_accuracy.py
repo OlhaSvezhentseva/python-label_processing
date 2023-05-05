@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Module containing the accuracy evaluation parameters of the OCR outputs.
 """
@@ -14,20 +15,20 @@ import evaluate_text
 
 def parsing_args():
     '''generate the command line arguments using argparse'''
-    usage = 'OCR_accuracy.py [-h] -gt <ground_truth_dataset> -pred <predicted_ocr> -r <results>'
+    usage = 'ocr_accuracy.py [-h] -g <ground_truth> -p <predicted_ocr> -r <results>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
             )
 
     parser.add_argument(
-            '-h','--help',
+            '-h', '--help',
             action='help',
             help='Open this help text.'
             )
     
     parser.add_argument(
-            '-gt', '--ground_truth_dataset',
+            '-g', '--ground_truth',
             metavar='',
             type=str,
             required = True,
@@ -35,7 +36,7 @@ def parsing_args():
             )
 
     parser.add_argument(
-            '-pred', '--predicted_ocr',
+            '-p', '--predicted_ocr',
             metavar='',
             type=str,
             required = True,
@@ -57,13 +58,13 @@ def parsing_args():
 
 if __name__ == "__main__":
     args = parsing_args()
-    gt = args.ground_truth_dataset
+    gt = args.ground_truth
     pred = args.predicted_ocr
     folder = args.results
 
 
-    out_dir = os.path.dirname(os.path.realpath(folder))
-    print(f"\nThe new json_file has been successfully saved in {out_dir}")
+    out_dir = os.path.realpath(folder)
+    print(f"\nThe new csv has been successfully saved in {out_dir}")
     evaluate_text.evaluate_text_predictions(gt, pred, folder)
 
 

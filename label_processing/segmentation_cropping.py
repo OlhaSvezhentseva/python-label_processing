@@ -119,35 +119,7 @@ class Predict_Labels():
         return dataframe
 
 
-#---------------------Image Cropping---------------------#
-
-
-def load_dataframe(filepath_csv):
-    """
-    Loads the csv file using Pandas.
-
-    Args:
-        filepath_csv(str): string containing the path to the csv with the
-                           results from applying the model.
-                           
-    Returns:
-        Dataframe: The csv as a Pandas Dataframe
-    """
-    dataframe = pd.read_csv(filepath_csv)
-    return dataframe
-
-
-def load_jpgs(filepath):
-    """
-    Loads the jpg file using the opencv module.
-
-    Returns:
-        Mat: cv2 image object
-    """
-    with open(filepath) as f:
-        jpg = cv2.imread(filepath)
-    return jpg
-    
+#---------------------Image Cropping---------------------#    
     
 def crop_picture(img_raw,path,filename,pic_class,**coordinates):
     """
@@ -216,7 +188,7 @@ def create_crops(jpg_dir, dataframe, out_dir = os.getcwd()):
     for filepath in glob.glob(os.path.join(dir_path, '*.jpg')):
         filename = os.path.basename(filepath)
         match = dataframe[dataframe.filename == filename]
-        image_raw = load_jpgs(filepath)
+        image_raw = utils.load_jpg(filepath)
         label_id = Path(filename).stem
         classes = []
         for _,row in match.iterrows(): 

@@ -9,3 +9,10 @@ tesseract
 pillow
 google-cloud
 deskew
+seaborn
+matplotlib
+jiwer
+cer
+plotly
+kaleido
+pyzbar

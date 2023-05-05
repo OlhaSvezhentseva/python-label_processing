@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Module containing the preprocessing parameter for the OCR json file(s) before clustering. It adds an specific identifier to each text outputs coming from the same picture.
 """
@@ -14,7 +15,7 @@ import clustering_preprocessing
 
 def parsing_args():
     '''generate the command line arguments using argparse'''
-    usage = 'cluster_ID.py [-h] -j <json_file> -p <clu_json>'
+    usage = 'cluster_id.py [-h] -j <json_file> -p <clu_json>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
