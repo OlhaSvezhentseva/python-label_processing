@@ -14,7 +14,7 @@ warnings.filterwarnings('ignore')
 
 FILENAME_TXT = "percentage_red.txt"
 
-def parsing_args() -> argparse.ArgumentParser::
+def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
     usage = 'redundancy.py [-h] -d <dataset-dir>'
     parser =  argparse.ArgumentParser(description=__doc__,
