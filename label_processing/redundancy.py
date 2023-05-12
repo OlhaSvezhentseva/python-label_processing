@@ -4,19 +4,20 @@ Check the redundancy of a given transcription (Ground Truth or OCR generated).
 
 # Import Librairies
 import pandas as pd
+import re
 import warnings
 warnings.filterwarnings('ignore')
 
 
-def clean_data(df: pandas.DataFrame) -> pandas.DataFrame:
+def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     '''
     Dataset preprocessing
 
     Args:
-        DataFrame(pandas.DataFrame): Pandas Dataframe with labels' transcription
+        DataFrame(pd.DataFrame): Pandas Dataframe with labels' transcription
 
     Returns:
-        DataFrame (pandas.DataFrame): Preprocessed Pandas Dataframe
+        DataFrame (pd.DataFrame): Preprocessed Pandas Dataframe
     '''
     df['text'] = df['text'].str.lower() #remove lowercase
     df['text'] = df['text'].str.replace('[^\w\s]','') #remove punctuation
@@ -26,15 +27,15 @@ def clean_data(df: pandas.DataFrame) -> pandas.DataFrame:
     df = df[~filter] #remove NURIs
     return df
 
-def redundancy(df: pandas.DataFrame) -> pandas.DataFrame:
+def redundancy(df: pd.DataFrame) -> pd.DataFrame:
     '''
     Calculate transcription redundancy in preprocessed dataset.
 
     Args:
-        DataFrame(pandas.DataFrame): Preprocessed Pandas Dataframe with labels' transcription
+        DataFrame(pd.DataFrame): Preprocessed Pandas Dataframe with labels' transcription
 
     Returns:
-        DataFrame (pandas.DataFrame): Preprocessed Pandas Dataframe with grouped duplicates
+        DataFrame (pd.DataFrame): Preprocessed Pandas Dataframe with grouped duplicates
     '''
     df = clean_data(df)
     duplicates = df["text"]
@@ -42,12 +43,12 @@ def redundancy(df: pandas.DataFrame) -> pandas.DataFrame:
     df = pd.concat(g for _, g in df.groupby("text") if len(g) > 1)
     return df
 
-def per_redundancy(df: pandas.DataFrame) -> pandas.DataFrame:
+def per_redundancy(df: pd.DataFrame) -> txt:
     '''
     Calculate percentage of transcription redundancy in preprocessed dataset with grouped duplicates.
 
     Args:
-        DataFrame(pandas.DataFrame): Preprocessed Pandas Dataframe with labels' transcription and grouped duplicates
+        DataFrame(pd.DataFrame): Preprocessed Pandas Dataframe with labels' transcription and grouped duplicates
 
     Returns:
         String (str): Percentage redundant text
@@ -58,6 +59,8 @@ def per_redundancy(df: pandas.DataFrame) -> pandas.DataFrame:
     sum_text = df_clean["text"].value_counts().sum()
     sum_dup = df["text"].duplicated().sum() #find sum of duplicates
     percentage_red = round(sum_dup/sum_text*100)
-    return print("Percentage redundant text:", "%s%%"%percentage_red)
+    with open("percentage_red.txt", "w") as text_file:
+        text_file.write("Percentage redundant text:", "%s%%"%percentage_red)
+    return text_file
 
     
