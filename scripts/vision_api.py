@@ -9,8 +9,8 @@ import argparse
 import glob
 import os
 
-import vision
-import utils
+##Import module from this package
+from label_processing import vision, utils
 
 #CREDENTIALS = '/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/total-contact-297417-48ed6585325e.json'
 #DIR = '/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/results_ocr/test'

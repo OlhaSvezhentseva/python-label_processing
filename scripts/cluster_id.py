@@ -11,7 +11,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 #Import module from this package
-import clustering_preprocessing
+import label_processing.clustering_preprocessing
 
 def parsing_args():
     '''generate the command line arguments using argparse'''

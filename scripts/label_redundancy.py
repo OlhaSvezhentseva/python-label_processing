@@ -4,14 +4,14 @@
 Module calculating labels' redundancy of a given text transcription (Ground Truth or OCR generated).
 """
 
-#Import module from this package
-import redundancy
+
 #import third party libraries
 import argparse
-import pandas as pd
-import re
 import warnings
 warnings.filterwarnings('ignore')
+
+#Import module from this package
+from label_processing import redundancy
 
 
 def parsing_args():

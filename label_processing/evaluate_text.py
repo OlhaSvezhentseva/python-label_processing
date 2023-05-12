@@ -8,7 +8,7 @@ from cer import calculate_cer
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
-
+#TODO typehints + seperating saving from functions
 
 def get_predicted_transcriptions(filename):
     """
@@ -20,8 +20,8 @@ def get_predicted_transcriptions(filename):
         Returns:
             transcriptions (str): loaded json file
     """
-    f = open(filename)
-    transcriptions = json.load(f)
+    with open(filename) as f:
+        transcriptions = json.load(f)
     return transcriptions
 
 
@@ -61,7 +61,8 @@ def calculate_scores(gold_text, predicted_text):
     if not gold_text.startswith("http") and not gold_text.startswith("MfN URI"):
         all_scores = jiwer.compute_measures(gold_text, predicted_text)
         # Calculate normalized WER
-        wer = (all_scores["insertions"] + all_scores["deletions"] + all_scores["substitutions"])/len(gold_text)
+        wer = ((all_scores["insertions"] + all_scores["deletions"] + 
+            all_scores["substitutions"])/len(gold_text))
         # Calculate normalized CER
         cer = calculate_cer([gold_text], [predicted_text])
         wer = round(wer, 2)

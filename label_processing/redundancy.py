@@ -4,7 +4,6 @@ Check the redundancy of a given transcription (Ground Truth or OCR generated).
 
 # Import Librairies
 import pandas as pd
-import re
 import warnings
 warnings.filterwarnings('ignore')
 

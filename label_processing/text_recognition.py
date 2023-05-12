@@ -12,12 +12,12 @@ import shutil
 import math
 import pytesseract as py
 import numpy as np
-import utils #from this package
 import qreader
 from pyzbar.pyzbar import decode
 from typing import  Union, Tuple, Optional, Literal, get_args
 from deskew import determine_skew
 
+from label_processing import utils #from this package
 #Possibilities for threshold
 _THRESHS = Literal["adaptive_mean", "adaptive_gaussian", "otsu"] 
 
@@ -75,8 +75,8 @@ class Image():
         return Image(image, self.path)
 
     
-    def blur(self) -> Image:
-        image = cv2.GaussianBlur(self.image, (5,5), 0)
+    def blur(self, ksize: tuple[int, int] = (5,5)) -> Image:
+        image = cv2.GaussianBlur(self.image, ksize, 0)
         return Image(image, self.path)
 
     

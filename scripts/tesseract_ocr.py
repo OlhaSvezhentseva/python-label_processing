@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 
 """
-Module containing the Pytesseract OCR parameters to be performed on the _cropped jpg outputs.
+Module containing the Pytesseract OCR parameters to be performed on the croppend
+jpg outputs.
 """
 
-#Import module from this package
-import utils
 #import third party libraries
 import argparse
 import os
 import glob
 
-from text_recognition import Tesseract, Image, find_tesseract
 from pathlib import Path
 from typing import Callable
+
+
+#Import module from this package
+from label_processing.text_recognition import Tesseract, Image, find_tesseract
+from label_processing import utils
 
 FILENAME = "ocr_preprocessed.json"
 FILENAME_NURI = "ocr_preprocessed_nuri.json"
@@ -97,7 +100,6 @@ if __name__ == "__main__":
     #Find path to tesseract
     find_tesseract()
     verbose_print("Tesseract succesfully detected.\n")
-    
     crop_dir = args.dir
     utils.check_dir(crop_dir)
     new_dir = utils.generate_filename(crop_dir, "preprocessed")

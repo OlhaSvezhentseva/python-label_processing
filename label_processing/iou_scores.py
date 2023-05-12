@@ -1,9 +1,7 @@
 #Import Librairies
 import pandas as pd
-import torch
 import numpy as np
 import plotly.express as px
-import plotly.io as pio
 import plotly.graph_objs as go
 import warnings
 warnings.filterwarnings('ignore')

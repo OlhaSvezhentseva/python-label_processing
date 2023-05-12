@@ -5,7 +5,7 @@ Execute the segmentation_cropping.py module.
 '''
 
 #Import module from this package
-import segmentation_cropping
+from label_processing import segmentation_cropping
 #import third party libraries
 import argparse
 import os

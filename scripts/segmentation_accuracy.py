@@ -14,7 +14,10 @@ import plotly.io as pio
 warnings.filterwarnings('ignore')
 
 #Import module from this package
-import iou_scores
+from label_processing import iou_scores
+
+#Setting filenames as Constants
+#TODO change this
 FILENAME_CSV = "iou_scores.csv"
 FILENAME_BOXPLOT = "iou_box.jpg"
 FILENAME_BARCHART = "class_pred.jpg"
