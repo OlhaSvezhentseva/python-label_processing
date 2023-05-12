@@ -12,7 +12,7 @@ def calculate_iou(pred_coords: tuple[float, float, float, float],
                   gt_coords: tuple[str, float, float, float, float]) -> float:
     """
     Calculates IOU scores by comparing the ground truth and predicted 
-        segmentation coordinates.
+    segmentation coordinates.
 
     Args:
         df_pred (pd.Dataframe): path to predicted coordinates csv
@@ -49,12 +49,12 @@ def calculate_iou(pred_coords: tuple[float, float, float, float],
 def comparison(df_pred_filename: pd.DataFrame,
                df_gt_filename: pd.DataFrame) -> pd.DataFrame:
     """
-    for one unique jpg filename this function uses the bounding box-coordinates 
+    For one unique jpg filename this function uses the bounding box-coordinates 
     of each predicted label and calculates for every label of the ground truth 
     the iou-score. Then it takes the maximum score and adds it to the dataframe. 
 
     Args:
-        df_pred_filename (pd.DataFrame): Subdataframe of predicted labels 
+        df_pred_filename (pd.DataFrame): subdataframe of predicted labels 
             containing all the rows belonging to one filename
         df_gt_filename (pd.DataFrame):  Subdataframe of groundtruth 
             containing all the rows belonging to one filename
@@ -86,7 +86,7 @@ def comparison(df_pred_filename: pd.DataFrame,
 
 def concat_frames(df_pred: pd.DataFrame, df_gt: pd.DataFrame) -> pd.DataFrame:
     """
-    TODO
+    Concats predicted and groundtruth dataset with the coordinates' IOU scores.
 
     Args:
         df_pred (pd.DataFrame): dataframe with predicted bounding boxes from 
@@ -118,7 +118,7 @@ def concat_frames(df_pred: pd.DataFrame, df_gt: pd.DataFrame) -> pd.DataFrame:
 
 def box_plot_iou(df_concat: pd.DataFrame) -> go.Figure():
     """
-    TODO
+    Creates box plot of the calculated IOU scores for each class.
 
     Args:
         df_pred (pd.DataFrame): dataframe with predicted bounding boxes from 
@@ -134,7 +134,8 @@ def box_plot_iou(df_concat: pd.DataFrame) -> go.Figure():
 
 def class_pred(df_concat: pd.DataFrame) -> go.Figure():
     """
-    TODO
+    Creates a bar chart of the predicted and groundtruth classes. 
+    Shows the accuracy of the predicted classes of each label compared to the groundtruth.
 
     Args:
         df_concat (pd.DataFrame): concatenated dataframe
