@@ -24,7 +24,7 @@ from detecto.core import Model
 
 class Predict_Labels():
 
-    def __init__(self, path_to_model, classes, jpg_dir, threshold = 0.8):
+    def __init__(self, path_to_model: str , classes: list, jpg_dir: str, threshold = 0.8: float):
         """
         Init Method for the Predict labels Class.
 
@@ -90,17 +90,17 @@ class Predict_Labels():
         dataframe = pd.DataFrame(all_predictions)
         return dataframe
 
-    def clean_predictions(self, dataframe, out_dir = None):
+    def clean_predictions(self, dataframe: pd.DataFrame, out_dir = None) -> pd.DataFrame:
         """
         Creates a clean dataframe only with boxes´ coordinates exceeding a 
         given threshold score.
 
         Args:
-            DataFrame(pandas.DataFrame): Pandas Dataframe with predicted 
+            DataFrame (pd.DataFrame): Pandas Dataframe with predicted 
             coordinates and labels' scores.
             
         Returns:
-            DataFrame: Pandas Dataframe with the trimmed results.
+            DataFrame (pd.DataFrame): Pandas Dataframe with the trimmed results.
         """
         print("\nFilter coordinates")
         colnames = ['score', 'xmin', 'ymin', 'xmax', 'ymax']
@@ -121,14 +121,15 @@ class Predict_Labels():
 
 #---------------------Image Cropping---------------------#    
     
-def crop_picture(img_raw,path,filename,pic_class,**coordinates):
+def crop_picture(img_raw: numpy.matrix, path: str, filename: str,pic_class: str,**coordinates):
     """
     Crops the picture using the given coordinates.
 
     Args:
-        img_raw (numpy matrix): input jpg converted to numpy matrix by cv2.
+        img_raw (numpy.matrix): input jpg converted to numpy matrix by cv2.
         path (str): path where the picture should be saved.
         filename (str): name of the picture.
+        pic_class (str): class of the label.
     """
     xmin = coordinates['xmin']
     ymin = coordinates['ymin']
@@ -139,7 +140,7 @@ def crop_picture(img_raw,path,filename,pic_class,**coordinates):
     cv2.imwrite(filepath, crop)
 
 
-def make_file_name(label_id, pic_class, occurence):
+def make_file_name(label_id: str, pic_class: str, occurence: int):
     """
     Creates a fitting filename.
 
@@ -153,13 +154,13 @@ def make_file_name(label_id, pic_class, occurence):
     filename = f"{label_id}_label_{pic_class}_{occurence}.jpg"
     return filename
 
-def create_dirs(dataframe, path):
+def create_dirs(dataframe: pd.Dataframe, path: str):
     """
     Creates for every class a seperate directory.
     In image preprocessing, erosion and dilation are often
     combined in the presented order to remove noise.
     Args:
-        dataframe (pandas.Dataframe): dataframe containig the classes as a column
+        dataframe (pd.Dataframe): dataframe containig the classes as a column
         path (str): path of chosen directory
     """
     uniques = dataframe["class"].unique()
@@ -167,7 +168,7 @@ def create_dirs(dataframe, path):
         Path(f"{path}/{uni_class}").mkdir(parents=True, exist_ok=True)
     
 
-def create_crops(jpg_dir, dataframe, out_dir = os.getcwd()):
+def create_crops(jpg_dir: str, dataframe: str, out_dir = os.getcwd(): str):
     """
     Creates crops by using the csv from applying the model and the original
     pictures inside a directory.
