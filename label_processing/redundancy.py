@@ -43,7 +43,7 @@ def redundancy(df: pd.DataFrame) -> pd.DataFrame:
     df = pd.concat(g for _, g in df.groupby("text") if len(g) > 1)
     return df
 
-def per_redundancy(df: pd.DataFrame) -> txt:
+def per_redundancy(df: pd.DataFrame) -> int:
     '''
     Calculate percentage of transcription redundancy in preprocessed dataset with grouped duplicates.
 
@@ -51,7 +51,7 @@ def per_redundancy(df: pd.DataFrame) -> txt:
         DataFrame(pd.DataFrame): Preprocessed Pandas Dataframe with labels' transcription and grouped duplicates
 
     Returns:
-        String (str): Percentage redundant text
+        String (int): Percentage redundant text
     '''
     df = pd.read_csv(df, sep= ";")
     df_clean = df
@@ -59,8 +59,5 @@ def per_redundancy(df: pd.DataFrame) -> txt:
     sum_text = df_clean["text"].value_counts().sum()
     sum_dup = df["text"].duplicated().sum() #find sum of duplicates
     percentage_red = round(sum_dup/sum_text*100)
-    with open("percentage_red.txt", "w") as text_file:
-        text_file.write("Percentage redundant text:", "%s%%"%percentage_red)
-    return text_file
+    return percentage_red
 
-    
