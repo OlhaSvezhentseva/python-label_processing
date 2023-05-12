@@ -13,7 +13,7 @@ warnings.filterwarnings('ignore')
 #Import module from this package
 import evaluate_text
 
-def parsing_args():
+def parsing_args() -> argparse.ArgumentParser::
     '''generate the command line arguments using argparse'''
     usage = 'ocr_accuracy.py [-h] -g <ground_truth> -p <predicted_ocr> -r <results>'
     parser =  argparse.ArgumentParser(description=__doc__,
