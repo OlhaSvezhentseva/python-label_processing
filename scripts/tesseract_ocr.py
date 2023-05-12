@@ -21,7 +21,7 @@ from label_processing import utils
 FILENAME = "ocr_preprocessed.json"
 FILENAME_NURI = "ocr_preprocessed_nuri.json"
 
-def parsing_args():
+def parsing_args()-> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
     usage = 'perform_ocr.py [-h] [-v] -d <crop-dir>'
     parser =  argparse.ArgumentParser(description=__doc__,
