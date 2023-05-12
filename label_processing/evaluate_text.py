@@ -10,7 +10,7 @@ import seaborn as sns
 import pandas as pd
 #TODO typehints + seperating saving from functions
 
-def get_predicted_transcriptions(filename):
+def get_predicted_transcriptions(filename: str) -> str:
     """
     Loads predictions from the OCR outputs as a json file.
 
@@ -25,7 +25,7 @@ def get_predicted_transcriptions(filename):
     return transcriptions
 
 
-def get_gold_transcriptions(filename):
+def get_gold_transcriptions(filename: str) -> dict:
     """
     Loads predictions from the ground truth transcriptions as a csv file.
 
@@ -46,7 +46,7 @@ def get_gold_transcriptions(filename):
     return gold_transcriptions
 
 
-def calculate_scores(gold_text, predicted_text):
+def calculate_scores(gold_text: str, predicted_text: str) -> tuple:
     """
     Calculates CER and WER by comparing the predicted and ground truth transcriptions.
 
@@ -55,7 +55,7 @@ def calculate_scores(gold_text, predicted_text):
         predicted_text (str): predicted transcription as a string
 
     Returns:
-        wer, cer (tup): tuple of the two scores/None
+        wer, cer (tuple): tuple of the two scores/None
     """
     # Ignore NURIs
     if not gold_text.startswith("http") and not gold_text.startswith("MfN URI"):
@@ -71,7 +71,7 @@ def calculate_scores(gold_text, predicted_text):
     return None
 
 
-def compare_transcriptions(gold_transcriptions, ocr_transcriptions, file_name):
+def compare_transcriptions(gold_transcriptions: dict, ocr_transcriptions: list, file_name: str) -> tuple:
     """
     Writes evaluation results into a csv table.
 
@@ -81,7 +81,7 @@ def compare_transcriptions(gold_transcriptions, ocr_transcriptions, file_name):
         file_name (str): the name of a CSV file which will be created
 
     Returns:
-        all_wers, all_cers (tup): tuple of two lists with scores
+        all_wers, all_cers (tuple): tuple of two lists with scores
     """
     all_wers = []
     all_cers = []
@@ -100,7 +100,7 @@ def compare_transcriptions(gold_transcriptions, ocr_transcriptions, file_name):
     return all_wers, all_cers
 
 
-def create_plot(data, name, file_name):
+def create_plot(data: list, name: list, file_name: str) -> None:
     """
     Create violin plots for the CER and WER scores respectively. 
 
@@ -131,7 +131,7 @@ def evaluate_text_predictions(ground_truth_file, predictions_file, result_folder
     # create result_folder
     # parent_dir = "text_evaluation"
     # path = os.path.join(parent_dir, result_folder)
-    path = os.path.join(result_folder)
+    path = os.path.join(parent_dir, result_folder)
     if not os.path.exists(path):
         os.mkdir(path)
     wers, cers = compare_transcriptions(ground_truth, generated_transcriptions, f"{path}/ocr_evaluation.csv")
