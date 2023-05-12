@@ -16,7 +16,7 @@ def clean_data(df):
         DataFrame(pandas.DataFrame): Pandas Dataframe with labels' transcription
 
     Returns:
-        DataFrame: Preprocessed Pandas Dataframe
+        DataFrame (pandas.DataFrame): Preprocessed Pandas Dataframe
     '''
     df['text'] = df['text'].str.lower() #remove lowercase
     df['text'] = df['text'].str.replace('[^\w\s]','') #remove punctuation
@@ -34,7 +34,7 @@ def redundancy(df):
         DataFrame(pandas.DataFrame): Preprocessed Pandas Dataframe with labels' transcription
 
     Returns:
-        DataFrame: Preprocessed Pandas Dataframe with grouped duplicates
+        DataFrame (pandas.DataFrame): Preprocessed Pandas Dataframe with grouped duplicates
     '''
     df = clean_data(df)
     duplicates = df["text"]
@@ -44,13 +44,13 @@ def redundancy(df):
 
 def per_redundancy(df):
     '''
-    Calculate percenage of transcription redundancy in preprocessed dataset with grouped duplicates.
+    Calculate percentage of transcription redundancy in preprocessed dataset with grouped duplicates.
 
     Args:
         DataFrame(pandas.DataFrame): Preprocessed Pandas Dataframe with labels' transcription and grouped duplicates
 
     Returns:
-        String: Percentage redundant text
+        String (str): Percentage redundant text
     '''
     df = pd.read_csv(df, sep= ";")
     df_clean = df
