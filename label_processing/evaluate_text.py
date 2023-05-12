@@ -8,6 +8,9 @@ from cer import calculate_cer
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+import utils
+from pathlib import Path
+
 #TODO typehints + seperating saving from functions
 
 def get_predicted_transcriptions(filename: str) -> str:
@@ -61,7 +64,7 @@ def calculate_scores(gold_text: str, predicted_text: str) -> tuple:
     if not gold_text.startswith("http") and not gold_text.startswith("MfN URI"):
         all_scores = jiwer.compute_measures(gold_text, predicted_text)
         # Calculate normalized WER
-        wer = ((all_scores["insertions"] + all_scores["deletions"] + 
+        wer = ((all_scores["insertions"] + all_scores["deletions"] +
             all_scores["substitutions"])/len(gold_text))
         # Calculate normalized CER
         cer = calculate_cer([gold_text], [predicted_text])
@@ -102,7 +105,7 @@ def compare_transcriptions(gold_transcriptions: dict, ocr_transcriptions: list, 
 
 def create_plot(data: list, name: list, file_name: str) -> None:
     """
-    Create violin plots for the CER and WER scores respectively. 
+    Create violin plots for the CER and WER scores respectively.
 
     Args:
         data (list): scores as a list
@@ -116,26 +119,22 @@ def create_plot(data: list, name: list, file_name: str) -> None:
     print(f"Plot saved in {file_name}")
 
 
-def evaluate_text_predictions(ground_truth_file, predictions_file, result_folder):
+def evaluate_text_predictions(ground_truth_file: str, predictions_file: str, out_dir) -> tuple:
     """
-    Evaluates OCR predictions. 
+    Evaluates OCR predictions.
 
     Args:
         ground_truth_file (str): path to ground truth data as a CSV
         predictions_file (str): path to OCR output as a json file
-        result_folder (str): path to the folder the evaluation result will be saved in
+    
+    Returns:
+        wers, cers (tuple): tuple of two lists with scores
     """
     ground_truth = get_gold_transcriptions(ground_truth_file)
     generated_transcriptions = get_predicted_transcriptions(predictions_file)
-
-    # create result_folder
-    # parent_dir = "text_evaluation"
-    # path = os.path.join(parent_dir, result_folder)
-    path = os.path.join(parent_dir, result_folder)
-    if not os.path.exists(path):
-        os.mkdir(path)
-    wers, cers = compare_transcriptions(ground_truth, generated_transcriptions, f"{path}/ocr_evaluation.csv")
+    wers, cers = compare_transcriptions(ground_truth, generated_transcriptions, f"{out_dir}/ocr_evaluation.csv")
     print(f"Mean CER: {round(np.mean(cers), 2)}, Mean WER: {round(np.mean(wers), 2)}")
-    create_plot(cers, "CERs", f"{path}/cers.png")
-    create_plot(wers, "WERs", f"{path}/wers.png")
-    return
+    create_plot(cers, "CERs", f"{out_dir}/cers.png")
+    create_plot(wers, "WERs", f"{out_dir}/wers.png")
+    return wers, cers
+    
