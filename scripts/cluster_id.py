@@ -40,8 +40,9 @@ def parsing_args() -> argparse.ArgumentParser:
             '-p', '--clu_json',
             metavar='',
             type=str,
-            required = True,
-            help=('Path to where we want to save the preprocessed json file')
+            default = os.getcwd(),
+            help=('Path to where we want to save the preprocessed json file.\n'
+                  'Default is the user current working directory.')
             )
 
     
@@ -56,6 +57,6 @@ if __name__ == "__main__":
     
     out_dir = os.path.dirname(os.path.realpath(clu_json))
     print(f"\nThe new json_file has been successfully saved in {out_dir}")
-    clustering_preprocessing.df_to_json(json, clu_json)
+    clustering_preprocessing.df_to_json(json, cluster_json = clu_json)
 
 
