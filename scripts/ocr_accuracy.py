@@ -47,8 +47,9 @@ def parsing_args() -> argparse.ArgumentParser:
             '-r', '--results',
             metavar='',
             type=str,
-            required = True,
-            help=('Target folder where the accuracy results are saved')
+            default = os.getcwd(),
+            help=('Target folder where the accuracy results are saved.\n'
+                  'Default is the user current working directory.')
             )
 
     
