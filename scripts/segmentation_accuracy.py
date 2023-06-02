@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 """
 Module containing the accuracy evaluation parameters of the segmentation model.
@@ -22,7 +21,7 @@ FILENAME_CSV = "iou_scores.csv"
 FILENAME_BOXPLOT = "iou_box.jpg"
 FILENAME_BARCHART = "class_pred.jpg"
 
-def parsing_args():
+def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
     usage = 'segmentation_accuracy.py [-h] -g <ground_truth_coord> -p <predicted_coord> -r <results>'
     parser =  argparse.ArgumentParser(description=__doc__,
@@ -56,8 +55,9 @@ def parsing_args():
             '-r', '--results',
             metavar='',
             type=str,
-            required = True,
-            help=('Target folder where the iou accuracy results and plots are saved')
+            default = os.getcwd(),
+            help=('Target folder where the iou accuracy results and plots are saved.\n'
+                  'Default is the user current working directory.')
             )
 
     

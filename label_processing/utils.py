@@ -123,12 +123,12 @@ def get_nuri(data: list[dict[str, str]]) -> list[dict[str, str]]:
                     pass
     return new_data
 
-def load_dataframe(filepath_csv):
+def load_dataframe(filepath_csv: str) -> pd.Dataframe:
     """
     Loads the csv file using Pandas.
 
     Args:
-        filepath_csv(str): string containing the path to the csv with the
+        filepath_csv (str): string containing the path to the csv with the
                            results from applying the model.
                            
     Returns:
@@ -138,12 +138,15 @@ def load_dataframe(filepath_csv):
     return dataframe
 
 
-def load_jpg(filepath):
+def load_jpg(filepath: str) -> numpy.typing.NDArray:
     """
-    Loads the jpg file using the opencv module.
+    Loads the jpg files using the opencv module.
+
+    Args:
+        filepath (str): path to jpg files
 
     Returns:
-        Mat: cv2 image object
+        Mat (numpy.typing.NDArray): cv2 image object
     """
     jpg = cv2.imread(filepath)
     return jpg

@@ -13,7 +13,7 @@ warnings.filterwarnings('ignore')
 #Import module from this package
 import evaluate_text
 
-def parsing_args():
+def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
     usage = 'ocr_accuracy.py [-h] -g <ground_truth> -p <predicted_ocr> -r <results>'
     parser =  argparse.ArgumentParser(description=__doc__,
@@ -47,8 +47,9 @@ def parsing_args():
             '-r', '--results',
             metavar='',
             type=str,
-            required = True,
-            help=('Target folder where the accuracy results are saved')
+            default = os.getcwd(),
+            help=('Target folder where the accuracy results are saved.\n'
+                  'Default is the user current working directory.')
             )
 
     
@@ -64,7 +65,7 @@ if __name__ == "__main__":
 
 
     out_dir = os.path.realpath(folder)
-    print(f"\nThe new csv has been successfully saved in {out_dir}")
+    print(f"\nThe OCR accuracy results have been successfully saved in {out_dir}")
     evaluate_text.evaluate_text_predictions(gt, pred, folder)
 
 

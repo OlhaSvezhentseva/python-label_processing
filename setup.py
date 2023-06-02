@@ -4,7 +4,7 @@ from setuptools import setup
 with open ("README.rst", "r") as fh:
     long_description = fh.read()
 
-setup(  
+setup(
     name='label_processing',
     version='1.1',
     description='Package for label processing',
@@ -23,7 +23,10 @@ setup(
              "scripts/vision_api.py",
              "scripts/label_redundancy.py",
              "scripts/ocr_accuracy.py",
-             "scripts/segmentation_accuracy.py"],
+             "scripts/segmentation_accuracy.py",
+             "scripts/postprocessing_nuri.py",
+             "scripts/cluster_id.py"],
+    #include_package_data=True, #include the static data specified in the MANIFEST.in
     long_description=long_description,
     long_description_content_type="text/markdown",
     platforms=['any'],
@@ -45,6 +48,6 @@ setup(
         "cer",
         "plotly",
         "kaleido",
-        "pyzbar"
+        "pyzbar",
     ],
 )

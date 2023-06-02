@@ -1,22 +1,22 @@
-#!/usr/bin/env python3
 """
-Module containing the preprocessing parameter for the OCR json file(s) before clustering. 
-It adds an specific identifier to each text outputs coming from the same picture.
+Creates two separated json files from the OCR output json file.
+One for the NURIs and one of the rest of the transcription.
 """
 
 
-#Import Librairies
+# Import Librairies
 import argparse
 import os
 import warnings
 warnings.filterwarnings('ignore')
 
 #Import module from this package
-import label_processing.clustering_preprocessing
+import nuri_postprocessing
+
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
-    usage = 'cluster_id.py [-h] -j <json_file> -p <clu_json>'
+    usage = 'postprocessing_nuri.py [-h] -j <json_file> -d <saving_directory>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
@@ -30,33 +30,36 @@ def parsing_args() -> argparse.ArgumentParser:
     
     parser.add_argument(
             '-j', '--json_file',
-            metavar='',
             type=str,
+            action='store',
             required = True,
-            help=('Path to the OCR output json file')
+            help=('Path to the json file - OCR output.')
             )
 
     parser.add_argument(
-            '-p', '--clu_json',
+            '-d', '--saving_directory',
             metavar='',
             type=str,
             default = os.getcwd(),
-            help=('Path to where we want to save the preprocessed json file.\n'
+            help=('Directory in which the json files will be saved.\n'
                   'Default is the user current working directory.')
             )
 
-    
     args = parser.parse_args()
 
     return args
 
-if __name__ == "__main__":
+
+
+#does not execute main if the script is imported as a module
+if __name__ == '__main__': 
     args = parsing_args()
     json = args.json_file
-    clu_json = args.clu_json
+    out_dir = args.saving_directory
     
-    out_dir = os.path.dirname(os.path.realpath(clu_json))
-    print(f"\nThe new json_file has been successfully saved in {out_dir}")
-    clustering_preprocessing.df_to_json(json, cluster_json = clu_json)
+    #filter and write new json files
+    nuri_postprocessing.write_json_with(json, filepath = out_dir)
+    nuri_postprocessing.write_json_without(json, filepath = out_dir)
 
+    print(f"The json files have been successfully saved in {out_dir}")
 

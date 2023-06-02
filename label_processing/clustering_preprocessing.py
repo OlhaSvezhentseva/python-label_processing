@@ -5,7 +5,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-def cluster_ID(json):
+def cluster_ID(json: str) -> pd.DataFrame:
     """
     Uses the json file OCR output to preprocess it before clustering.
     It adds a new key "label_ID", a unique identifier for the outputs coming from the same picture
@@ -15,7 +15,7 @@ def cluster_ID(json):
         json (str): path to the OCR json file.
                                        
     Returns:
-        df: pandas Dataframe with cluster_ID new key.
+        df (pd.DataFrame): pandas Dataframe with cluster_ID new key.
     """
     df = pd.read_json(json)
     df["label_ID"] = df['ID']
@@ -26,7 +26,7 @@ def cluster_ID(json):
     df.drop(columns=['label_ID'], inplace = True)
     return df
 
-def df_to_json(json, cluster_json):
+def df_to_json(json: str, cluster_json: str) -> str:
     """
     Save the pandas Dataframe has a new json file.
 
