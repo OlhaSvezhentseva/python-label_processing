@@ -1,4 +1,3 @@
-cluster_id
 clustering_preprocessing
 evaluate_text
 iou_scores

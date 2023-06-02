@@ -2,7 +2,6 @@ Metadata-Version: 2.1
 Name: label-processing
 Version: 1.1
 Summary: Package for label processing
-License: UNKNOWN
 Platform: any
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.9
@@ -172,6 +171,4 @@ Mac OS X:
 Linux:
 
 ``sudo apt-get install libzbar0``
-
-
 

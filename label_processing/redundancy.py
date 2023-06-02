@@ -8,7 +8,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-def clean_data(df: pandas.DataFrame) -> pandas.DataFrame:
+def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     '''
     Dataset preprocessing
 
@@ -26,7 +26,7 @@ def clean_data(df: pandas.DataFrame) -> pandas.DataFrame:
     df = df[~filter] #remove NURIs
     return df
 
-def redundancy(df: pandas.DataFrame) -> pandas.DataFrame:
+def redundancy(df: pd.DataFrame) -> pd.DataFrame:
     '''
     Calculate transcription redundancy in preprocessed dataset.
 
@@ -42,7 +42,7 @@ def redundancy(df: pandas.DataFrame) -> pandas.DataFrame:
     df = pd.concat(g for _, g in df.groupby("text") if len(g) > 1)
     return df
 
-def per_redundancy(df: pandas.DataFrame) -> pandas.DataFrame:
+def per_redundancy(df: pd.DataFrame) -> pd.DataFrame:
     '''
     Calculate percentage of transcription redundancy in preprocessed dataset with grouped duplicates.
 

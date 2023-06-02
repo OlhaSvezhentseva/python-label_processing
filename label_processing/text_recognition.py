@@ -151,7 +151,7 @@ class Image():
         
     def deskew(self, angle: Optional[np.float64]) -> Image:
         #print(f"Rotating {self.filename}")
-        rotated = self._rotate(self.image, angle, (0, 0, 0))
+        rotated = self._rotate(self.image, angle, (255, 255, 255))
         return Image(rotated, self. path)
 
     def preprocessing(self) -> Image:
