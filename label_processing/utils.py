@@ -5,6 +5,7 @@ import json
 import pandas as pd
 import cv2
 from typing import Optional
+import numpy as np
 
 PATTERN = r"/u/|http|u/|coll|mfn|/u|URI"
 
@@ -123,7 +124,7 @@ def get_nuri(data: list[dict[str, str]]) -> list[dict[str, str]]:
                     pass
     return new_data
 
-def load_dataframe(filepath_csv: str) -> pd.Dataframe:
+def load_dataframe(filepath_csv: str) -> pd.DataFrame:
     """
     Loads the csv file using Pandas.
 
@@ -138,7 +139,7 @@ def load_dataframe(filepath_csv: str) -> pd.Dataframe:
     return dataframe
 
 
-def load_jpg(filepath: str) -> numpy.typing.NDArray:
+def load_jpg(filepath: str) -> np.ndarray:
     """
     Loads the jpg files using the opencv module.
 
