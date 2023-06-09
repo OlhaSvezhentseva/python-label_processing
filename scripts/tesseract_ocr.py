@@ -87,7 +87,7 @@ def ocr_on_dir(crop_dir: str, new_dir: str,
             #get nuri
             if utils.check_text(transcript["text"]):
                 total_nuri+= 1 
-            transcript = utils.replace_nuri(transcript)
+                transcript = utils.replace_nuri(transcript)
         ocr_results.append(transcript)
     verbose_print(f"QR-codes read: {count_qr}")
     verbose_print(f"get_nuri: {total_nuri}")

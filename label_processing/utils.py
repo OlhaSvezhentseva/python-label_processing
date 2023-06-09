@@ -98,7 +98,7 @@ def check_text(transcript: str) -> bool:
     match = pattern.search(transcript)
     return True if match else False
 
-def get_nuri(data: list[dict[str, str]]) -> list[dict[str, str]]:
+def replace_nuri(transcript: dict[str, str]) -> dict[str, str]:
     """
     Correct NURIs' format in OCR transcription json file outputs "text.
 
@@ -108,21 +108,16 @@ def get_nuri(data: list[dict[str, str]]) -> list[dict[str, str]]:
     Returns:
         str: correct NURI formats in "text" in json file ocr output
     """
-    new_data=data.copy()
     #search for NURI number in "ID"
-    reg = re.compile(r"_u_[A-Za-z0-9]+") 
-    for item, new_item in zip(data, new_data):
-        findString = item["text"]
-        findNURI = item["ID"]
-        if check_text(findString): #checks if label is a NURI - True/False
-            try:
-                NURI = reg.search(findNURI).group()
-                replaceString = "http://coll.mfn-berlin.de/u/"+ NURI[3:]
-                #replace "text" with NURI patterns formatted "ID"
-                new_item["text"] = replaceString 
-            except AttributeError:
-                    pass
-    return new_data
+    reg = re.compile(r"_u_[A-Za-z0-9]+")
+    try:
+        nuri = reg.search(transcript["ID"]).group()
+        replace_string = "http://coll.mfn-berlin.de/u/"+ nuri[3:]
+        #replace "text" with NURI patterns formatted "ID"
+        transcript["text"] = replace_string
+    except AttributeError:
+        pass
+    return transcript
 
 def load_dataframe(filepath_csv: str) -> pd.DataFrame:
     """

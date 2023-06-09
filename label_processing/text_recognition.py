@@ -12,7 +12,6 @@ import shutil
 import math
 import pytesseract as py
 import numpy as np
-import qreader
 from pyzbar.pyzbar import decode
 from typing import  Union, Tuple, Optional, Literal, get_args
 from deskew import determine_skew
@@ -146,7 +145,7 @@ class Image():
     def get_skew_angle(self) -> Optional[np.float64]: #returns either float or None 
         grayscale = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         #print(f"Calculating skew angle for {self.filename}")
-        angle = determine_skew(grayscale)
+        angle = determine_skew(grayscale, max_angle = 30)
         return angle
         
     def deskew(self, angle: Optional[np.float64]) -> Image:
