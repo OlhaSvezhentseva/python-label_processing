@@ -11,11 +11,12 @@ import os
 import re
 #import detecto
 import torch
-
+import detecto.utils
+import label_processing.utils
 import pandas as pd
+import numpy as np
 
 from pathlib import Path
-from detecto import utils
 from detecto.core import Model
 #from torchvision import transforms
 
@@ -24,7 +25,8 @@ from detecto.core import Model
 
 class Predict_Labels():
 
-    def __init__(self, path_to_model: str , classes: list, jpg_dir: str, threshold = 0.8: float) -> None:
+    def __init__(self, path_to_model: str , classes: list, jpg_dir: str,
+                 threshold: float  = 0.8) -> None:
         """
         Init Method for the Predict labels Class.
 
@@ -41,7 +43,7 @@ class Predict_Labels():
         self.jpg_dir = jpg_dir
         self.threshold = threshold
         
-    def get_model(self) -> detecto.core.Model:
+    def get_model(self) -> Model:
         """
         Call trained object detection model, for example *model_labels_class.pth*.
         The model was trained with the Detecto python package which is built on top
@@ -59,7 +61,7 @@ class Predict_Labels():
                                                 )
         return model
 
-    def class_prediction(self, model: detecto.core.Model) -> pd.Dataframe:
+    def class_prediction(self, model: Model) -> pd.DataFrame:
         """
         Uses the trained model created by Detecto and tries to predict the 
         labelling of all files in a directory. It then returns a Pandas Dataframe.
@@ -74,7 +76,7 @@ class Predict_Labels():
         all_predictions = []
         print("\nPredicting coordinates")
         for file in glob.glob(f"{self.jpg_dir}/*.jpg"):
-            image = utils.read_image(file)
+            image = detecto.utils.read_image(file)
             predictions = model.predict(image)
             labels, boxes, scores = predictions
             for i, labelname in enumerate(labels):
@@ -121,7 +123,8 @@ class Predict_Labels():
 
 #---------------------Image Cropping---------------------#    
     
-def crop_picture(img_raw: numpy.matrix, path: str, filename: str,pic_class: str,**coordinates) -> None:
+def crop_picture(img_raw: np.ndarray , path: str,
+                 filename: str,pic_class: str,**coordinates) -> None:
     """
     Crops the picture using the given coordinates.
 
@@ -154,7 +157,7 @@ def make_file_name(label_id: str, pic_class: str, occurence: int) -> None:
     filename = f"{label_id}_label_{pic_class}_{occurence}.jpg"
     return filename
 
-def create_dirs(dataframe: pd.Dataframe, path: str) -> None:
+def create_dirs(dataframe: pd.DataFrame, path: str) -> None:
     """
     Creates for every class a seperate directory.
     In image preprocessing, erosion and dilation are often
@@ -169,7 +172,8 @@ def create_dirs(dataframe: pd.Dataframe, path: str) -> None:
         Path(f"{path}/{uni_class}").mkdir(parents=True, exist_ok=True)
     
 
-def create_crops(jpg_dir: str, dataframe: str, out_dir = os.getcwd(): str) -> None:
+def create_crops(jpg_dir: str, dataframe: str,
+                 out_dir: str = os.getcwd()) -> None:
     """
     Creates crops by using the csv from applying the model and the original
     pictures inside a directory.
@@ -190,7 +194,7 @@ def create_crops(jpg_dir: str, dataframe: str, out_dir = os.getcwd(): str) -> No
     for filepath in glob.glob(os.path.join(dir_path, '*.jpg')):
         filename = os.path.basename(filepath)
         match = dataframe[dataframe.filename == filename]
-        image_raw = utils.load_jpg(filepath)
+        image_raw = label_processing.utils.load_jpg(filepath)
         label_id = Path(filename).stem
         classes = []
         for _,row in match.iterrows(): 

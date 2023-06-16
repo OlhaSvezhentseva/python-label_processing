@@ -1,8 +1,11 @@
 README.rst
 setup.py
+label_processing/backgroundcolor_detection.py
 label_processing/clustering_preprocessing.py
 label_processing/evaluate_text.py
 label_processing/iou_scores.py
+label_processing/nuri_postprocessing.py
+label_processing/ocr_postprocessing.py
 label_processing/redundancy.py
 label_processing/segmentation_cropping.py
 label_processing/text_recognition.py
@@ -13,9 +16,12 @@ label_processing.egg-info/SOURCES.txt
 label_processing.egg-info/dependency_links.txt
 label_processing.egg-info/requires.txt
 label_processing.egg-info/top_level.txt
+scripts/background_color.py
+scripts/cluster_id.py
 scripts/crop_seg.py
 scripts/label_redundancy.py
 scripts/ocr_accuracy.py
+scripts/postprocessing_nuri.py
 scripts/segmentation_accuracy.py
 scripts/tesseract_ocr.py
 scripts/vision_api.py

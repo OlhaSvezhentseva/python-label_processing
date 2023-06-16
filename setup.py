@@ -25,7 +25,9 @@ setup(
              "scripts/ocr_accuracy.py",
              "scripts/segmentation_accuracy.py",
              "scripts/postprocessing_nuri.py",
-             "scripts/cluster_id.py"],
+             "scripts/cluster_id.py",
+             "scripts/postprocessing_nuri.py",
+             "scripts/background_color.py"],
     #include_package_data=True, #include the static data specified in the MANIFEST.in
     long_description=long_description,
     long_description_content_type="text/markdown",
