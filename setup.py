@@ -52,6 +52,10 @@ setup(
         "plotly",
         "kaleido",
         "pyzbar",
-        "torchvision"
+        "torchvision",
+        "regex",
+        "nltk",
+        "jiwer",
+
     ],
 )
