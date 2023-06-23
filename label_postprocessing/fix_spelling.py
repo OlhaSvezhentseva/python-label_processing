@@ -1,14 +1,18 @@
-
 import re
 import jiwer
 from nltk import word_tokenize
+import argparse
+from vocabulary import extract_vocabulary
 from utils import load_json, dump_json, read_vocabulary
 
-def get_popular_words(vocabulary, most_frequent):
+
+def get_popular_words(vocabulary: dict, most_frequent: int):
+    """The function extracts the first n-words with the highest occurence from vocabulary."""
     return list(vocabulary.keys())[:most_frequent]
 
 
-def fix_spelling(labels, vocabulary, most_frequent, threshold):
+def fix_spelling(labels: list, vocabulary: dict, most_frequent: int, threshold: float):
+    """The function fixes words' spelling in transcripts if necessary."""
     fixed_labels = []
     popular_words = get_popular_words(vocabulary, most_frequent)
     for label in labels:
@@ -28,9 +32,21 @@ def fix_spelling(labels, vocabulary, most_frequent, threshold):
         fixed_labels.append(fixed_label)
 
     dump_json(fixed_labels, "spell_checked_transcripts.json")
+    print(f"Saved transcripts in spell_checked_transcripts.json")
 
 
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--transcripts", type=str)
+    parser.add_argument("--freq", type=int)
+    parser.add_argument("--dist", type=float)
+    parser.add_argument("--voc", nargs='?')
+    args = parser.parse_args()
+    if not args.voc:
+        vocabulary = extract_vocabulary(args.transcripts)
+    else:
+        vocabulary = read_vocabulary(args.voc)
 
-labels = load_json("corrected_transcripts.json")
-vocabulary = read_vocabulary('vocabulary.csv')
-print(fix_spelling(labels, vocabulary, 20, 0.34))
+    labels = load_json(args.transcripts)
+    fix_spelling(labels, vocabulary, args.freq, args.dist)
+

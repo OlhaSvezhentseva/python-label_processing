@@ -4,23 +4,25 @@ import pandas as pd
 import string
 
 
-def contains_only_letters(token):
+def contains_only_letters(token: str):
+    """The function checks if a token consists only of letters."""
     for letter in token:
         if not letter.isalpha():
             return False
     return True
 
 
-def is_punctuation(token):
+def is_punctuation(token: str):
+    """The function checks if a token is a punctuation mark."""
     if token in string.punctuation:
         return True
 
 
-def get_popular_words(vocabulary):
-    return list(vocabulary.keys())[:20]
-
-
 def extract_vocabulary(ocr):
+    """
+    The function extracts unique words from the transcripts.
+    These words must solely contain letters and be at least 3 characters long.
+    """
     vocabulary = {}
     with open(ocr, 'r') as f:
         labels = json.load(f)
@@ -42,10 +44,3 @@ def extract_vocabulary(ocr):
     new_df = df.sort_values(by=['Count'], ascending=False)
     new_df.to_csv("vocabulary.csv", index=False)
     return "Vocabulary saved"
-
-
-
-# print(extract_vocabulary("corrected_transcripts.json"))
-
-
-
