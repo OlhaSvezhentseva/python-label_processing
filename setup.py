@@ -27,7 +27,8 @@ setup(
              "scripts/postprocessing_nuri.py",
              "scripts/cluster_id.py",
              "scripts/postprocessing_nuri.py",
-             "scripts/background_color.py"],
+             "scripts/background_color.py",
+             "scripts/rotation.py"],
     #include_package_data=True, #include the static data specified in the MANIFEST.in
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -51,5 +52,6 @@ setup(
         "plotly",
         "kaleido",
         "pyzbar",
+        "torchvision"
     ],
 )
