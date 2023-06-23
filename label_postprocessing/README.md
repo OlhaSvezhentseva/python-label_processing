@@ -43,6 +43,8 @@ to be a small one, so that the low-frequent word can be changed.
 
 3. If you already have `vocabulary.csv` file and it should not be generated again,
 you may specify it:
+
+
     `python fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34 --voc vocabulary.csv`
 
 ## Contact
