@@ -44,6 +44,38 @@ def parsing_args() -> argparse.ArgumentParser:
             )
     
     parser.add_argument(
+            '-t', '--thresholding',
+            metavar='',
+            choices = ("otsu", "mean", "gaussian"),
+            type=str,
+            default = "otsu",
+            action='store',
+            help=('Optional argument: select which thrsholding should be used primarily.\n'
+                 'otsu : Otsu\'s tresholding (TODO explain).\n'
+                 'mean : adaptive mean thresholding.\n'
+                 'gaussian : gaussian adaptive thrsholding.\n'
+                 'Default is otsus')
+            )
+    
+    parser.add_argument(
+            '-b', '--blocksize',
+            metavar='',
+            action="store",
+            type = int,
+            default = None,
+            help=('Optional argument: blocksize parameter for adaptive thresholding')
+            )
+    
+    parser.add_argument(
+            '-c', '--c_value',
+            metavar='',
+            action="store",
+            type = int,
+            default = None,
+            help=('Optional argument: c_value parameter for adaptive thesholding')
+            )
+    
+    parser.add_argument(
             '-d', '--dir',
             metavar='',
             type=str,

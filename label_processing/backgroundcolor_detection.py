@@ -60,6 +60,7 @@ class BackgroundColorDetector():
     def get_graytone(self):
         red, green, blue = self.detect()
         graytone: float = (0.299* red) + (0.587* green) + (0.114* blue)
+        print(graytone)
         return graytone
     
     def decide(self) -> bool:

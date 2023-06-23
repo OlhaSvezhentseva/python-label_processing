@@ -43,7 +43,8 @@ class Image():
     """
     A class for image preprocessing and other image actions.
     """
-    def __init__(self, image: np.ndarray, path: str):
+    def __init__(self, image: np.ndarray, path: str, blocksize: int = None,
+                 c_value: int = None):
         """
 
         Args:
@@ -53,8 +54,29 @@ class Image():
         self.image = image
         self.path = path
         self.filename = os.path.basename(self.path)
+        self.blocksize: Optional[int] = blocksize
+        self.c_value: Optional[int] = c_value
         #preprocessing parameters
+        
+    @property 
+    def blocksize(self) -> int:
+        return self.blocksize
+        
+    @blocksize.setter
+    def blocksize(self, value: int) -> None:
+        if value <= 1 or value % 2 == 0:
+            raise ValueError("value for blocksize has to be atleast 3 and needs\
+                to be odd")
+        self._blocksize = value
     
+    @property
+    def c_value(self) -> int:
+        return self._c_value
+    
+    @c_value.setter
+    def c_value(self, value: int) -> None:
+        self._c_value = value
+        
     @staticmethod
     def read_image(path: str) -> Image:
         """
@@ -99,17 +121,40 @@ class Image():
             
     
     def thresholding(self, thresh_mode: _THRESHS = "otsu") -> Image:
+        """
+        Method for thresholding: can perform three different kinds of 
+        thresholding: otsu's global thresholding, adaptive mean local
+        thresholding and adaptive gaussian local thresholding
+        
+        Args:
+            thresh_mode (_THRESHS, optional): Thresholding type. has to be 
+            either "otsu", "adaptive_mean" or "adaptive_gaussian".
+            Defaults to "otsu".
+
+        Returns:
+            Image: Instance of image 
+        """
         self._check_thresh_params(thresh_mode)
         
         if thresh_mode == "otsu":
             image = cv2.threshold(self.image, 0, 255,
                                 cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
         elif thresh_mode == "adaptive_gaussian":
+            #set blocksize and c_value
+            gaussian_blocksize = self.blocksize if self.blocksize  else 73
+            gaussian_c = self.c_value if self.c_value else 16
+            
             image = cv2.adaptiveThreshold(self.image ,255,
-                cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
+                cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,
+                gaussian_blocksize, gaussian_c)
         elif thresh_mode == "adaptive_mean":
+            #set blocksize and c_value
+            mean_blocksize = self.blocksize if self.blocksize  else 35
+            mean_c = self.c_value if self.c_value else 17
+            
             image = cv2.adaptiveThreshold(self.image ,255,
-                cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,11,2)             
+                cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,
+                mean_blocksize,mean_c)             
         return Image(image, self.path)
     
 
@@ -201,20 +246,20 @@ class Image():
             value = value[0][0].decode("utf8")
         return value if value else None
     
-    def read_qr_code_3(self) -> Optional[str]:
-        """
-        tries to identify if picture has a qr-code and then reads and returns it
+    # def read_qr_code_3(self) -> Optional[str]:
+    #     """
+    #     tries to identify if picture has a qr-code and then reads and returns it
 
-        Returns:
-            Optional[str]: decoded qr-code text as a str or none if there is no
-            qr-code found
-        """
-        #decode function imported from pyzbar
-        with utils.HiddenPrints():
-            qread = qreader.QReader()
-            image = image = cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
-            decoded_text = qread.detect_and_decode(image=image)
-        return decoded_text[0] if decoded_text else None
+    #     Returns:
+    #         Optional[str]: decoded qr-code text as a str or none if there is no
+    #         qr-code found
+    #     """
+    #     #decode function imported from pyzbar
+    #     with utils.HiddenPrints():
+    #         qread = qreader.QReader()
+    #         image = image = cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
+    #         decoded_text = qread.detect_and_decode(image=image)
+    #     return decoded_text[0] if decoded_text else None
     
     def save_image(self, dir_path: str, appendix: Optional[str] = None) -> None:
         if appendix:
