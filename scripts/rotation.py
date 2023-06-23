@@ -16,7 +16,12 @@ In no event shall Licensor be liable for any indirect, incidental, special, or c
 7. Governing Law
 This Agreement shall be governed by and construed in accordance with the laws of Austria, without regard to its conflict of laws principles.
 '''
-#import third party libraries
+
+'''
+Classifier to detect orientation of image (0°, 90°, 180°, 270°) and to correct orientation.
+'''
+
+#Import third party libraries
 
 import torch
 import torch.nn as nn
