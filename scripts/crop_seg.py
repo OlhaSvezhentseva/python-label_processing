@@ -12,6 +12,7 @@ import os
 import warnings
 warnings.filterwarnings('ignore')
 
+
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
     usage = 'crop_seg.py [-h] [-c N] -m <model/number> -j </path/to/jpgs> -o </path/to/jpgs_outputs> '

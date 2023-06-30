@@ -1,16 +1,18 @@
 #!/usr/bin/env python 
+"""
+Tries to recognize the background color of a picture and checks if it exceeds
+a given threshold. If it exceeds the threshold it moves the corresponding pictures
+into a newly created directory
+"""
+
+#Import Librairies
 import sys
 import os
 import argparse
 import glob
 from pathlib import Path
+#Import module from this package
 from label_processing.backgroundcolor_detection import BackgroundColorDetector
-
-"""
-Tries to recognize the background color of a picture and checks if it exceeds
-a given thrshold. If it exceeds the threshold it moves the corresponding pictures
-into a newly created directory
-"""
 
 
 def parsing_args() -> argparse.ArgumentParser:
@@ -33,7 +35,7 @@ def parsing_args() -> argparse.ArgumentParser:
             type=str,
             required = True,
             help=('Directory which contains the cropped jpgs on which the'
-                  'ocr is supposed to be applied')
+                  'ocr is supposed to be applied.')
             )
     args = parser.parse_args()
 

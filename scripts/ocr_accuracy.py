@@ -3,15 +3,14 @@
 Module containing the accuracy evaluation parameters of the OCR outputs.
 """
 
-
 #Import Librairies
 import argparse
 import os
 import warnings
 warnings.filterwarnings('ignore')
-
 #Import module from this package
-import evaluate_text
+from label_evaluation import evaluate_text
+
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''

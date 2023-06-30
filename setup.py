@@ -7,11 +7,8 @@ with open ("README.rst", "r") as fh:
 setup(
     name='label_processing',
     version='1.1',
-    description='Package for label processing',
-    #py_modules=["redundancy", "segmentation_cropping", "text_recognition",
-    #            "utils", "vision", "cluster_id", "evaluate_text", "iou_scores",
-    #           "clustering_preprocessing"],
-    packages=["label_processing"],
+    description='Package for specimen label information extraction and processing',
+    packages=["label_processing", "label_evaluation", "label_postprocessing"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.9",
@@ -24,11 +21,13 @@ setup(
              "scripts/label_redundancy.py",
              "scripts/ocr_accuracy.py",
              "scripts/segmentation_accuracy.py",
-             "scripts/postprocessing_nuri.py",
              "scripts/cluster_id.py",
              "scripts/postprocessing_nuri.py",
              "scripts/background_color.py",
-             "scripts/rotation.py"],
+             "scripts/rotation.py",
+             "scripts/process_ocr.py",
+             "scripts/filter.py",
+             "scripts/fix_spelling.py"],
     #include_package_data=True, #include the static data specified in the MANIFEST.in
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -55,7 +54,6 @@ setup(
         "torchvision",
         "regex",
         "nltk",
-        "jiwer",
 
     ],
 )

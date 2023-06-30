@@ -4,17 +4,16 @@ Module containing the preprocessing parameter for the OCR json file(s) before cl
 It adds an specific identifier to each text outputs coming from the same picture.
 """
 
-
 #Import Librairies
 import argparse
 import os
 import warnings
 warnings.filterwarnings('ignore')
-
 #Import module from this package
 import label_processing.clustering_preprocessing
 
-def parsing_args() -> argparse.ArgumentParser:
+
+def parsing_args() ©:
     '''generate the command line arguments using argparse'''
     usage = 'cluster_id.py [-h] -j <json_file> -p <clu_json>'
     parser =  argparse.ArgumentParser(description=__doc__,
@@ -45,7 +44,6 @@ def parsing_args() -> argparse.ArgumentParser:
                   'Default is the user current working directory.')
             )
 
-    
     args = parser.parse_args()
 
     return args

@@ -21,8 +21,7 @@ This Agreement shall be governed by and construed in accordance with the laws of
 Classifier to detect orientation of image (0°, 90°, 180°, 270°) and to correct orientation.
 '''
 
-#Import third party libraries
-
+#Import Libraries
 import torch
 import torch.nn as nn
 import torchvision

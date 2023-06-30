@@ -30,7 +30,7 @@ def calculate_iou(pred_coords: tuple[float, float, float, float],
     #Calculate width and height of the intersection area
     width_I = x1_I - x0_I 
     height_I = y1_I - y0_I  
-    # Handle the negative value width or height of the intersection area
+    #Handle the negative value width or height of the intersection area
     if width_I<0 : width_I=0
     if height_I<0 : height_I=0
     # Calculate the intersection area:
@@ -39,9 +39,9 @@ def calculate_iou(pred_coords: tuple[float, float, float, float],
     width_A, height_A = xmax_pred - xmin_pred, ymax_pred - ymin_pred
     width_B, height_B = xmax_gt - xmin_gt, ymax_gt - ymin_gt
     union = (width_A * height_A) + (width_B * height_B) - intersection   
-    # Calculate the IoU:
+    #Calculate the IOU:
     iou: float = intersection/union      
-    # Return the IoU and intersection box
+    #Return the IOU and intersection box
     return iou
 
 def comparison(df_pred_filename: pd.DataFrame,
@@ -54,7 +54,7 @@ def comparison(df_pred_filename: pd.DataFrame,
     Args:
         df_pred_filename (pd.DataFrame): subdataframe of predicted labels 
             containing all the rows belonging to one filename
-        df_gt_filename (pd.DataFrame):  Subdataframe of groundtruth 
+        df_gt_filename (pd.DataFrame):  subdataframe of groundtruth 
             containing all the rows belonging to one filename
 
     Returns:

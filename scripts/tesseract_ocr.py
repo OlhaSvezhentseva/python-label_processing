@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 
 """
-Module containing the Pytesseract OCR parameters to be performed on the croppend
+Module containing the Pytesseract OCR parameters to be performed on the cropped
 jpg outputs.
 """
 
-#import third party libraries
+#Import Libraries
 import argparse
 import os
 import glob
-
 from pathlib import Path
 from typing import Callable
-
-
 #Import module from this package
 from label_processing.text_recognition import Tesseract, Image, find_tesseract
 from label_processing import utils

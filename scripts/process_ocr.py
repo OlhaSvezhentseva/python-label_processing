@@ -1,7 +1,7 @@
 import json
 import argparse
 import label_processing.utils as utils
-from label_processing.ocr_postprocessing import (
+from label_postprocessing.ocr_postprocessing import (
     is_empty,
     is_nuri,
     is_plausible_prediction,
@@ -38,7 +38,7 @@ def parsing_args() -> argparse.ArgumentParser:
 
     return args
 
-def main(ocr_output):
+def main(ocr_output: dir) -> json_file:
     nuri_labels = {}
     empty_labels = {}
     plausible_labels = []

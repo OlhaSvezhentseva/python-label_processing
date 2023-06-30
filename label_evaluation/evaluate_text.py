@@ -10,8 +10,9 @@ import seaborn as sns
 import pandas as pd
 import utils
 from pathlib import Path
+import warnings
+warnings.filterwarnings('ignore')
 
-#TODO typehints + seperating saving from functions
 
 def get_predicted_transcriptions(filename: str) -> str:
     """
@@ -30,10 +31,10 @@ def get_predicted_transcriptions(filename: str) -> str:
 
 def get_gold_transcriptions(filename: str) -> dict:
     """
-    Loads predictions from the ground truth transcriptions as a csv file.
+    Loads predictions from the groundtruth transcriptions as a csv file.
 
     Args:
-        filename (str): path to the ground truth csv
+        filename (str): path to the groundtruth csv
 
     Returns:
         gold_transcriptions (dict): dictionary of the form {'ID': text}
@@ -51,16 +52,15 @@ def get_gold_transcriptions(filename: str) -> dict:
 
 def calculate_scores(gold_text: str, predicted_text: str) -> tuple:
     """
-    Calculates CER and WER by comparing the predicted and ground truth transcriptions.
+    Calculates CER and WER by comparing the predicted and groundtruth transcriptions.
 
     Args:
-        gold_text (str): ground truth transcription as a string
+        gold_text (str): groundtruth transcription as a string
         predicted_text (str): predicted transcription as a string
 
     Returns:
         wer, cer (tuple): tuple of the two scores/None
     """
-    # Ignore NURIs
     if not gold_text.startswith("http") and not gold_text.startswith("MfN URI"):
         all_scores = jiwer.compute_measures(gold_text, predicted_text)
         # Calculate normalized WER
@@ -79,7 +79,7 @@ def compare_transcriptions(gold_transcriptions: dict, ocr_transcriptions: list, 
     Writes evaluation results into a csv table.
 
     Args:
-        gold_transcriptions (dict): ground truth data as a dictionary
+        gold_transcriptions (dict): groundtruth data as a dictionary
         ocr_transcriptions (list): predicted transcriptions as a list of dicts
         file_name (str): the name of a CSV file which will be created
 
@@ -124,7 +124,7 @@ def evaluate_text_predictions(ground_truth_file: str, predictions_file: str, out
     Evaluates OCR predictions.
 
     Args:
-        ground_truth_file (str): path to ground truth data as a CSV
+        ground_truth_file (str): path to groundtruth data as a CSV
         predictions_file (str): path to OCR output as a json file
     
     Returns:

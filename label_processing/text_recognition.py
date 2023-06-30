@@ -1,9 +1,3 @@
-"""
-Module containing the Pytesseract OCR parameters and image preprocessing to be 
-performed on the _cropped jpg outputs from
-the segmentation_cropping.py module.
-"""
-
 #Import Librairies
 from __future__ import annotations
 import os
@@ -15,8 +9,8 @@ import numpy as np
 from pyzbar.pyzbar import decode
 from typing import  Union, Tuple, Optional, Literal, get_args
 from deskew import determine_skew
-
 from label_processing import utils #from this package
+
 #Possibilities for threshold
 _THRESHS = Literal["adaptive_mean", "adaptive_gaussian", "otsu"] 
 

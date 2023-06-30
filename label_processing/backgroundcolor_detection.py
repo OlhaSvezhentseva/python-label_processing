@@ -15,7 +15,7 @@ class BackgroundColorDetector():
     #NOTE This can be very slow because it iterates through all pixels of a picture
     def count(self) -> None:
         """
-        iterates through all pixels in a picture and retrieves their RGB VALUE
+        Iterates through all pixels in a picture and retrieves their RGB VALUE
         """
         for y in range(0, self.h):
             for x in range(0, self.w):
