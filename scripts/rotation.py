@@ -133,7 +133,7 @@ def main():
         image = tr(image)
         # print(image)
 
-        # # image = Image.open(input_image_dir + os.sep + img_file, mode="r")
+        # image = Image.open(input_image_dir + os.sep + img_file, mode="r")
         new_image = transform(image)
         new_image = new_image.to(device)
 
