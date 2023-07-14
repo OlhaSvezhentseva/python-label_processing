@@ -11,7 +11,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 #Import module from this package
-import evaluate_text
+import label_processing.evaluate_text as evaluate_text
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''

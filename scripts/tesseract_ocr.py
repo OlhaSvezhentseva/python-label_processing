@@ -10,12 +10,17 @@ import argparse
 import os
 import glob
 
+from enum import Enum
 from pathlib import Path
 from typing import Callable
 
 
 #Import module from this package
-from label_processing.text_recognition import Tesseract, Image, find_tesseract
+from label_processing.text_recognition import (Tesseract, 
+                                               Image,
+                                               Threshmode,
+                                               find_tesseract,
+                                               )
 from label_processing import utils
 
 FILENAME = "ocr_preprocessed.json"
@@ -46,14 +51,14 @@ def parsing_args() -> argparse.ArgumentParser:
     parser.add_argument(
             '-t', '--thresholding',
             metavar='',
-            choices = ("otsu", "mean", "gaussian"),
-            type=str,
-            default = "otsu",
+            choices = (1, 2, 3),
+            type=int,
+            default = 1,
             action='store',
             help=('Optional argument: select which thrsholding should be used primarily.\n'
-                 'otsu : Otsu\'s tresholding (TODO explain).\n'
-                 'mean : adaptive mean thresholding.\n'
-                 'gaussian : gaussian adaptive thrsholding.\n'
+                 '1 : Otsu\'s tresholding (TODO explain).\n'
+                 '2 : adaptive mean thresholding.\n'
+                 '3 : gaussian adaptive thrsholding.\n'
                  'Default is otsus')
             )
     
@@ -90,16 +95,25 @@ def parsing_args() -> argparse.ArgumentParser:
     return args
     
 
-def ocr_on_dir(crop_dir: str, new_dir: str,
-               verbose_print: Callable) -> list[dict[str,str]]:
+
+def ocr_on_dir(crop_dir: str,
+               new_dir: str,
+               verbose_print: Callable,
+               args: argparse.ArgumentParser
+               ) -> list[dict[str,str]]:
     #Initialise Tesseract wrapper
     tesseract = Tesseract()
     
     ocr_results: list = []
     count_qr: int = 0
     total_nuri: int = 0
+    thresh_mode: Enum = Threshmode.eval(args.thresholding)
     for file_path in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
         image = Image.read_image(file_path)
+        if args.blocksize is not None:
+            image.blocksize(args.blocksize)
+        if args.c_value is not None:
+            image.c_value(args.c_value)
         #trying to read the qr_code
         decoded_qr = image.read_qr_code_2()
         if decoded_qr is not None:
@@ -110,7 +124,7 @@ def ocr_on_dir(crop_dir: str, new_dir: str,
         else:
             #Preprocessing
             verbose_print(f"Performing preprocessing on {image.filename}")
-            image = image.preprocessing() #preprocessed image
+            image = image.preprocessing(thresh_mode) #preprocessed image
             image.save_image(new_dir)#saving image in new directory
             #OCR
             tesseract.image = image
@@ -124,7 +138,7 @@ def ocr_on_dir(crop_dir: str, new_dir: str,
     verbose_print(f"QR-codes read: {count_qr}")
     verbose_print(f"get_nuri: {total_nuri}")
     return ocr_results
-        
+
 if __name__ == "__main__":
     args = parsing_args()
     #New function verbose print
@@ -143,7 +157,8 @@ if __name__ == "__main__":
     verbose_print(f"\nPerforming OCR on {os.path.abspath(crop_dir)} .\n")
     result_data = ocr_on_dir(crop_dir,
                              new_dir_path,
-                             verbose_print)
+                             verbose_print,
+                             args)
     verbose_print((f"\nPreprocessed images have been saved in"
                    f"os.path.abspath{os.path.abspath(new_dir_path)} ."))
     

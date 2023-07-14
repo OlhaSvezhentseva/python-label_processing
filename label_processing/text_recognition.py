@@ -7,6 +7,7 @@ the segmentation_cropping.py module.
 #Import Librairies
 from __future__ import annotations
 import os
+import copy
 import cv2
 import shutil
 import math
@@ -15,10 +16,11 @@ import numpy as np
 from pyzbar.pyzbar import decode
 from typing import  Union, Tuple, Optional, Literal, get_args
 from deskew import determine_skew
+from enum import Enum
 
 from label_processing import utils #from this package
-#Possibilities for threshold
-_THRESHS = Literal["adaptive_mean", "adaptive_gaussian", "otsu"] 
+
+
 
 #Configuarations
 CONFIG = r'--psm 6 --oem 3' #configuration for ocr
@@ -57,16 +59,17 @@ class Image():
         self.blocksize: Optional[int] = blocksize
         self.c_value: Optional[int] = c_value
         #preprocessing parameters
-        
+    
     @property 
     def blocksize(self) -> int:
-        return self.blocksize
+        return self._blocksize
         
     @blocksize.setter
-    def blocksize(self, value: int) -> None:
-        if value <= 1 or value % 2 == 0:
-            raise ValueError("value for blocksize has to be atleast 3 and needs\
-                to be odd")
+    def blocksize(self, value: int|None) -> None:
+        if value is not None:
+            if (value <= 1 or value % 2 == 0):
+                raise ValueError("value for blocksize has to be atleast 3 and needs\
+                    to be odd")
         self._blocksize = value
     
     @property
@@ -76,7 +79,26 @@ class Image():
     @c_value.setter
     def c_value(self, value: int) -> None:
         self._c_value = value
-        
+    
+    @property
+    def image(self) -> np.ndarray:
+        return self._image
+    
+    @image.setter
+    def image(self, image: np.ndarray) -> None:
+        self._image = image
+    
+    @property
+    def path(self) -> str:
+        return self._path
+    
+    @path.setter
+    def path(self, path: str) -> None:
+        self._path = path
+    
+    def copy_this(self) -> Image:
+        return copy.copy(self)
+    
     @staticmethod
     def read_image(path: str) -> Image:
         """
@@ -88,58 +110,47 @@ class Image():
         Returns:
             Preprocessing: instance of preprocessing
         """
+        
         return Image(cv2.imread(path), path)
         
     
     def get_grayscale(self) -> Image:
         image = cv2.cvtColor(self.image, cv2.COLOR_RGB2GRAY)
-        return Image(image, self.path)
+        image_instance = self.copy_this()
+        image_instance.image = image
+        return image_instance
 
     
     def blur(self, ksize: tuple[int, int] = (5,5)) -> Image:
         image = cv2.GaussianBlur(self.image, ksize, 0)
-        return Image(image, self.path)
+        image_instance = self.copy_this()
+        image_instance.image = image
+        return image_instance
 
     
     def remove_noise(self) -> Image:
         image = cv2.medianBlur(self.image,5)
-        return Image(image, self.path)
+        image_instance = self.copy_this()
+        image_instance.image = image
+        return image_instance
     
-    
-    @staticmethod
-    def _check_thresh_params(thresh_mode: _THRESHS) -> None:
-        """
-        Checks if the thresholding parameter is valid -> asserts if right param
-
-        Args:
-            thresh_mode (_THRESH): Thresholding mode -> defined by typin.Literal
-        """
-        #test if the treshold parameter is valid
-        options = get_args(_THRESHS)
-        assert thresh_mode in options, f"'{thresh_mode}' has to be in \
-            {options}"
-            
-    
-    def thresholding(self, thresh_mode: _THRESHS = "otsu") -> Image:
+    def thresholding(self, thresh_mode: Enum) -> Image:
         """
         Method for thresholding: can perform three different kinds of 
         thresholding: otsu's global thresholding, adaptive mean local
         thresholding and adaptive gaussian local thresholding
-        
+
         Args:
-            thresh_mode (_THRESHS, optional): Thresholding type. has to be 
-            either "otsu", "adaptive_mean" or "adaptive_gaussian".
-            Defaults to "otsu".
+            thresh_mode (Enum): Thresholding mode
 
         Returns:
-            Image: Instance of image 
+            Image: Instance of this class
         """
-        self._check_thresh_params(thresh_mode)
         
-        if thresh_mode == "otsu":
+        if thresh_mode == Threshmode.OTSU:
             image = cv2.threshold(self.image, 0, 255,
                                 cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-        elif thresh_mode == "adaptive_gaussian":
+        elif thresh_mode == Threshmode.ADAPTIVE_GAUSSIAN:
             #set blocksize and c_value
             gaussian_blocksize = self.blocksize if self.blocksize  else 73
             gaussian_c = self.c_value if self.c_value else 16
@@ -147,7 +158,7 @@ class Image():
             image = cv2.adaptiveThreshold(self.image ,255,
                 cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,
                 gaussian_blocksize, gaussian_c)
-        elif thresh_mode == "adaptive_mean":
+        elif thresh_mode == Threshmode.ADAPTIVE_MEAN:
             #set blocksize and c_value
             mean_blocksize = self.blocksize if self.blocksize  else 35
             mean_c = self.c_value if self.c_value else 17
@@ -155,18 +166,24 @@ class Image():
             image = cv2.adaptiveThreshold(self.image ,255,
                 cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,
                 mean_blocksize,mean_c)             
-        return Image(image, self.path)
+        image_instance = self.copy_this()
+        image_instance.image = image
+        return image_instance
     
 
     def dilate(self) -> Image:
         kernel = np.ones((5,5),np.uint8)
         image =  cv2.dilate(self.image, kernel, iterations = 1)
-        return Image(image, self.path)
+        image_instance = self.copy_this()
+        image_instance.image = image
+        return image_instance
     
     def erode(self) -> Image:
         kernel = np.ones((5,5),np.uint8)
         image = cv2.erode(self.image, kernel, iterations = 1)
-        return Image(image, self.path)
+        image_instance = self.copy_this()
+        image_instance.image = image
+        return image_instance
     
     @staticmethod
     def _rotate(
@@ -195,14 +212,18 @@ class Image():
         
     def deskew(self, angle: Optional[np.float64]) -> Image:
         #print(f"Rotating {self.filename}")
-        rotated = self._rotate(self.image, angle, (255, 255, 255))
-        return Image(rotated, self. path)
+        image = self._rotate(self.image, angle, (255, 255, 255))
+        image_instance = self.copy_this()
+        image_instance.image = image
+        return image_instance
 
-    def preprocessing(self) -> Image:
+    def preprocessing(self, thresh_mode: Enum) -> Image:
         """
         Performs preprocessing -> grayscaling, binarization,
         blurring, noise removal, deskewing
 
+        Args:
+            thresh_mode: threshmode. Defaults to "otsu".
         Returns:
             Image: Image object
         """
@@ -211,11 +232,10 @@ class Image():
         image = self.get_grayscale()
         #blurring before thresholding
         image = image.blur()
-        image = image.thresholding()
+        image = image.thresholding(thresh_mode=thresh_mode)
         #image = image.remove_noise()
         image = image.deskew(angle)
-        return Image(image.image, self.path)
-
+        return image
 
 #---------------------Read QR-Code---------------------#
     
@@ -270,6 +290,29 @@ class Image():
         filename_processed = os.path.join(dir_path, filename)
         cv2.imwrite(filename_processed, self.image)
     
+
+class Threshmode(Enum):
+    """
+    diferent possibilities for threholding
+
+    Args:
+        Enum (int):  
+    """
+    OTSU = 1
+    ADAPTIVE_MEAN = 2
+    ADAPTIVE_GAUSSIAN = 3
+    
+    @classmethod
+    def eval(cls, threshmode: int) -> Enum:
+        if threshmode == 1:
+            return cls.OTSU
+        if threshmode == 2:
+            return cls.ADAPTIVE_GAUSSIAN
+        if threshmode == 3:
+            return cls.ADAPTIVE_MEAN
+    
+    
+
 
 #---------------------OCR Tesseract---------------------#
 

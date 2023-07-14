@@ -8,7 +8,7 @@ from cer import calculate_cer
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
-import utils
+import label_processing.utils as utils
 from pathlib import Path
 
 #TODO typehints + seperating saving from functions
