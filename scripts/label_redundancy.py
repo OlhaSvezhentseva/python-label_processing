@@ -3,8 +3,8 @@
 Module calculating labels' redundancy
 """
 #Import module from this package
-import redundancy
-#import third party libraries
+from label_evaluation import redundancy
+#Import Libraries
 import argparse
 import pandas as pd
 import re
@@ -13,6 +13,7 @@ import os
 warnings.filterwarnings('ignore')
 
 FILENAME_TXT = "percentage_red.txt"
+
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''

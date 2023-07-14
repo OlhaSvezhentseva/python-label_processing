@@ -1,3 +1,4 @@
+#Import Librairies
 import json
 from nltk import word_tokenize
 import pandas as pd
@@ -40,7 +41,6 @@ def extract_vocabulary(ocr):
                             vocabulary[token] = 1
     # df = pd.DataFrame.from_dict(vocabulary, orient='index')
     df = pd.DataFrame(vocabulary.items(), columns=['Type', 'Count'])
-
     new_df = df.sort_values(by=['Count'], ascending=False)
     new_df.to_csv("vocabulary.csv", index=False)
     return "Vocabulary saved"

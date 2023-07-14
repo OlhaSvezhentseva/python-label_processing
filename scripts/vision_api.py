@@ -4,11 +4,12 @@
 '''
 Performs the Google Vision OCR on the segmented labels by calling the API and returns it as a json file. 
 '''
+
+#Import Librairies
 from __future__ import annotations
 import argparse
 import glob
 import os
-
 ##Import module from this package
 from label_processing import vision, utils
 

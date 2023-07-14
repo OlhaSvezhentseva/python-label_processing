@@ -10,7 +10,7 @@ import numpy as np
 PATTERN = r"/u/|http|u/|coll|mfn|/u|URI"
 
 
-#---------------------Check dir JPG---------------------#
+#---------------------Check dir JPEG---------------------#
 
 def check_dir(dir) -> None:
     """

@@ -1,18 +1,17 @@
+#Import Librairies
+import json
 import re
 from nltk import word_tokenize
 import string
 import json
-import argparse
 import pandas as pd
-from utils import dump_json
 
 NON_ASCII = re.compile(" [^\x00-\x7F] ")
 NON_ALPHA_NUM = re.compile("[^a-zA-Z\d\s]{2,}")
 PIPE = re.compile("[|]")
 
 
-def count_mean_token_length(tokens: list):
-    """The function counts mean token length in the list of tokens."""
+def count_mean_token_length(tokens):
     total_length = 0
     for token in tokens:
         total_length += len(token)
@@ -21,18 +20,16 @@ def count_mean_token_length(tokens: list):
     return 0
 
 
-def is_plausible_prediction(transcript: str):
-    """The function check if the transcript seems to plausible."""
+def is_plausible_prediction(transcript):
     tokens = word_tokenize(transcript)
     tokens_no_punct = [token for token in tokens if token not in string.punctuation]
     average_token_length = count_mean_token_length(tokens_no_punct)
-    if 0 <= average_token_length < 3:
+    if 0 <= average_token_length < 2:
         return False
     return True
 
 
-def correct_transcript(transcript: str):
-    """The function corrects the transcript."""
+def correct_transcript(transcript):
     # remove single non-ASCII (spaces?)
     new_string = re.sub(NON_ASCII, ' ', transcript)
     # remove 2 or more non alphanumeric characters in a row
@@ -42,32 +39,31 @@ def correct_transcript(transcript: str):
     return result
 
 
-def is_nuri(transcript: str):
-    """The function checks if the transcript is a nuri."""
+def is_nuri(transcript):
     if transcript.startswith("http"):
         return True
 
 
-def is_empty(transcript: str):
-    """The function checks if the transcript is empty."""
+def is_empty(transcript):
     if len(transcript) == 0:
         return True
 
 
-def save_transcripts(transcripts: dict, file_name: str):
-    """The function saves transcripts as a csv-file."""
+def save_transcripts(transcripts, file_name):
     data = pd.DataFrame.from_dict(transcripts, orient="index")
     data.to_csv(file_name)
 
 
-def process_ocr_output(ocr_output: str):
-    """The function splits the transcript in different categories."""
+def save_json(transcripts, file_name):
+    transcripts = json.dumps(transcripts, indent=4)
+    with open(file_name, "w") as outfile:
+        outfile.write(transcripts)
+
+def process_ocr_output(ocr_output):
     nuri_labels = {}
     empty_labels = {}
-    implausible_labels = {}
     plausible_labels = []
     clean_labels = []
-
     with open(ocr_output, 'r') as f:
         labels = json.load(f)
         for label in labels:
@@ -81,22 +77,8 @@ def process_ocr_output(ocr_output: str):
                 clean_transcript = correct_transcript(label["text"])
                 clean_label = {"ID": label["ID"], "text": clean_transcript}
                 clean_labels.append(clean_label)
-            else:
-                implausible_labels[label["ID"]] = label["text"]
     save_transcripts(nuri_labels, "nuris.csv")
     save_transcripts(empty_labels, "empty_transcripts.csv")
-    save_transcripts(implausible_labels, "nonsense_transcripts.csv")
-    dump_json(plausible_labels, "plausible_transcripts.json")
-    dump_json(clean_labels, "corrected_transcripts.json")
-    return f"Data was filtered."
-
-
-# print(process_ocr_output("ocr_pytesseract_all.json"))
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--ocr_output", type=str)
-    args = parser.parse_args()
-    print(process_ocr_output(args.ocr_output))
-
-
+    save_json(plausible_labels, "plausible_transcripts.json")
+    save_json(clean_labels, "corrected_transcripts.json")
+    return

@@ -1,8 +1,3 @@
-"""
-Module containing all functions concerning the application of the segmenation
-models and the use of the predicted coordinates for cropping the labels.  
-"""
-
 # Import Librairies
 import glob
 import cv2

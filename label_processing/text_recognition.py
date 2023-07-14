@@ -1,9 +1,3 @@
-"""
-Module containing the Pytesseract OCR parameters and image preprocessing to be 
-performed on the _cropped jpg outputs from
-the segmentation_cropping.py module.
-"""
-
 #Import Librairies
 from __future__ import annotations
 import os
@@ -19,7 +13,6 @@ from deskew import determine_skew
 from enum import Enum
 
 from label_processing import utils #from this package
-
 
 
 #Configuarations

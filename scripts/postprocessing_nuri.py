@@ -3,15 +3,13 @@ Creates two separated json files from the OCR output json file.
 One for the NURIs and one of the rest of the transcription.
 """
 
-
 # Import Librairies
 import argparse
 import os
 import warnings
 warnings.filterwarnings('ignore')
-
 #Import module from this package
-import nuri_postprocessing
+from label_postprocessing import nuri_postprocessing
 
 
 def parsing_args() -> argparse.ArgumentParser:
