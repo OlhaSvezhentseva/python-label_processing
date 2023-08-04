@@ -23,73 +23,58 @@ Classifier to detect orientation of image (0°, 90°, 180°, 270°) and to corre
 
 #Import Libraries
 import torch
-import torchvision
-import os
-from PIL import Image
-import argparse
-import warnings
-from torchvision.utils import save_image
+import torch.nn as nn
 from pathlib import Path
-#import from this package
-import label_processing.rotator as rotator
+import numpy as np
+from torchvision import transforms
+import warnings
 warnings.filterwarnings('ignore')
 
+ROTATIONS: tuple[int, int, int, int] = (0, 90, 180, 270)
 
-def parsing_args() -> argparse.ArgumentParser:
-    '''generate the command line arguments using argparse'''
-    usage = 'rotation.py [-h] -o <output_image_dir> -i <input_image_dir>'
-    parser =  argparse.ArgumentParser(description=__doc__,
-            add_help = False,
-            usage = usage
-            )
-
-    parser.add_argument(
-            '-h','--help',
-            action='help',
-            help='Open this help text.'
-            )
-            
-    parser.add_argument(
-            '-o', '--output_image_dir',
-            metavar='',
-            type=str,
-            default = os.getcwd(),
-            help=('Directory where the rotated images will be stored.\n'
-                  'Default is the user current working directory.')
+class TorchConfig():
+    def __init__(self, model_path = None):
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        path: str = Path(__file__).parent.joinpath("../models/mfn_rot_classifier.pth")
+        self.model_path =  path if model_path == None else model_path
+        if torch.cuda.is_available():
+            self.map_location = lambda storage, loc: storage.cuda()
+        else:
+            self.map_location = 'cpu'
+        self.transform = torch.nn.Sequential(
+            transforms.ConvertImageDtype(dtype=torch.float32),
+            transforms.Resize(size=(224,224), antialias=True),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
             )
     
-    parser.add_argument(
-            '-i', '--input_image_dir',
-            metavar='',
-            type=str,
-            required = True,
-            help=('Directory where the jpgs are stored.')
-            )
-    
-    args = parser.parse_args()
+        
+class RotationDetector(nn.Module):
+    def __init__(self, basenet):
+        super().__init__()
+        self.basenet = basenet
 
-    return args
+        self.basenet.classifier = nn.Sequential(
+            nn.Dropout(p=0.2, inplace=True),
+            nn.Linear(in_features=1280, out_features=4, bias=True)
+        )
+        self.SM = nn.Softmax(dim=-1)
+
+    def forward(self, x):
+        y = self.basenet(x)
+        y = self.SM(y)
+        return y
+        
+def rotation(model, image: np.ndarray, config: TorchConfig):
+    tr = transforms.ToTensor()
+    image = tr(image)
+    new_image = config.transform(image)
+    new_image = new_image.to(config.device)
+    with torch.no_grad():
+        output = model.forward(new_image.unsqueeze(0))
+
+    pred = output.argmax(dim=1)[0]
+    rotation_deg = ROTATIONS[pred]
+    image = transforms.functional.rotate(image, -rotation_deg, expand=True)
+    return image
 
 
-def main(input_image_dir, output_image_dir) -> None:
-    efficientnet = torchvision.models.efficientnet_b0()
-    model = rotator.RotationDetector(efficientnet)
-    config = rotator.TorchConfig()
-    # model.load_state_dict(torch.load(f"{model_path}"))
-    model.load_state_dict(torch.load(f"{config.model_path}",
-                                     map_location=config.map_location))
-    model.to(config.device)
-    model.eval()
-    img_files = [f for f in os.listdir(input_image_dir) if \
-        os.path.isfile(input_image_dir + os.sep + f) and f.endswith('.jpg')]
-
-    for img_file in img_files:
-        image_in = Image.open(Path(input_image_dir).joinpath(img_file))
-        image_out = rotator.rotation(model,image_in,config)
-        save_image(image_out, output_image_dir + os.sep + img_file)
-
-if __name__ == "__main__":
-    args = parsing_args()
-    input_image_dir = args.input_image_dir
-    output_image_dir = args.output_image_dir
-    main(input_image_dir, output_image_dir)
