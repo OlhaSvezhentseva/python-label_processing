@@ -8,7 +8,8 @@ from label_postprocessing.ocr_postprocessing import (
     save_transcripts
 )
 """
-TODO
+Responsible for filtering the OCR ouputs according to 4 categories:nuris, empty transcripts, plausible output, nonsense output.
+Plausible outputs are corrected using regular expressions and is saved as corrected_transcripts.json.
 """
 
 def parsing_args() -> argparse.ArgumentParser:
