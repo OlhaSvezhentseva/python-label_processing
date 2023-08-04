@@ -224,4 +224,5 @@ def create_crops(jpg_dir: Path, dataframe: str,
             crop_picture(image_raw,path,filename,pic_class,**coordinates)
             classes.append(pic_class)
     print(f"\nThe images have been successfully saved in \
-        {os.path.join(out_dir, new_dir)}")
+        {path}")
+    

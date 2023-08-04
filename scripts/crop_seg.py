@@ -120,40 +120,6 @@ def get_classtype(model_int: int) -> list:
                 "casent_number", "dna", "other", "collection"]
     else:
         return ["handwritten", "typed"]
-        
-def create_crops(jpg_dir: str, dataframe: str,
-                 out_dir: str = os.getcwd()) -> None:
-    """
-    Creates crops by using the csv from applying the model and the original
-    pictures inside a directory.
-
-    Args:
-        jpg_dir (str): path to directory with jpgs.
-        dataframe (str): path to csv file.
-        out_dir (str): path to the target directory to save the cropped jpgs.
-    """
-    dir_path = jpg_dir
-    new_dir_name = Path(dir_path.name + "_cropped")
-    new_dir = dir_path.parent.joinpath(new_dir_name)
-    path = (f"{out_dir}/{new_dir}/")
-    Path(path).mkdir(parents=True, exist_ok=True)
-    scrop.create_dirs(dataframe, path) #creates dirs for every class
-    for filepath in glob.glob(os.path.join(dir_path, '*.jpg')):
-        filename = os.path.basename(filepath)
-        match = dataframe[dataframe.filename == filename]
-        image_raw = label_processing.utils.load_jpg(filepath)
-        label_id = Path(filename).stem
-        classes = []
-        for _,row in match.iterrows(): 
-            pic_class = row['class']
-            occ = classes.count(pic_class) + 1 
-            filename = scrop.make_file_name(label_id, pic_class, occ)
-            coordinates = {'xmin':int(row.xmin),'ymin':int(row.ymin),
-                           'xmax':int(row.xmax),'ymax':int(row.ymax)}
-            scrop.crop_picture(image_raw,path,filename,pic_class,**coordinates)
-            classes.append(pic_class)
-    print(f"\nThe images have been successfully saved in \
-        {os.path.join(out_dir, new_dir)}")
 
 # does not execute main if the script is imported as a module
 if __name__ == '__main__': 
