@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Module containing the preprocessing parameter for the OCR json file(s) before clustering. 
-It adds an specific identifier to each text outputs coming from the same picture.
+It adds a specific identifier to each text outputs coming from the same picture.
 """
 
 #Import Librairies
