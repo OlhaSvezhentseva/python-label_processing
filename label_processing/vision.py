@@ -3,6 +3,7 @@ from __future__ import annotations
 import io
 import os
 from google.cloud import vision
+import label_processing.utils
 
 class VisionApi():
     """
@@ -93,4 +94,9 @@ class VisionApi():
             raise Exception(
                 f'{response.error.message}\nFor more info on error messages, '
                 'check:  https://cloud.google.com/apis/design/errors')
-        return {'ID' : filename, 'text': transcript}
+        entry = {'ID' : filename, 'text': transcript}
+        if label_processing.utils.check_text(entry["text"]): 
+            entry = label_processing.utils.replace_nuri(entry)
+        return entry
+        
+                

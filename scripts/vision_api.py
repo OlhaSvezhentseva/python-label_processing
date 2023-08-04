@@ -10,6 +10,8 @@ from __future__ import annotations
 import argparse
 import glob
 import os
+import concurrent.futures
+from typing import Iterator
 ##Import module from this package
 from label_processing import vision, utils
 
@@ -53,6 +55,12 @@ def parsing_args() -> argparse.ArgumentParser:
 
     return args
 
+def vision_caller(filename: str, credentials: str) -> dict[str, str]:
+    vision_image = vision.VisionApi.read_image(filename, credentials)
+    ocr_result: dict = vision_image.vision_ocr()
+    return ocr_result
+
+
 def main(crop_dir: str, credentials: str,
                        encoding: str = 'utf8') -> None:
     """
@@ -66,18 +74,18 @@ def main(crop_dir: str, credentials: str,
     
     results_json = []
     utils.check_dir(crop_dir) #Check if jpegs exist
-    for file in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
-        print(f"performing ocr on {os.path.basename(file)}")
-        image = vision.VisionApi.read_image(file, credentials)
-        ocr_result: dict = image.vision_ocr()
-        results_json.append(ocr_result)
+    filenames = [file for file in glob.glob(os.path.join(f"{crop_dir}/*.jpg"))]
+    #run api calls on multiple threads
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        results: Iterator[dict[str, str]] = executor.map(vision_caller,
+                                                         filenames,
+                                                         [credentials]* len(filenames))
+    
+    results_json = list(results)
     
     parent_dir = os.path.join(crop_dir, os.pardir) #Get the parent_directory
     #Select wheteher it should be saved as utf-8 or ascii
     utils.save_json(results_json, RESULTS_JSON, parent_dir)
-    #Get the json with regex nuri
-    result_data = utils.get_nuri(results_json)
-    utils.save_json(result_data, RESULTS_JSON, parent_dir)
 
 
 if __name__ == '__main__':

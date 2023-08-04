@@ -8,7 +8,7 @@ import math
 import pytesseract as py
 import numpy as np
 from pyzbar.pyzbar import decode
-from typing import  Union, Tuple, Optional, Literal, get_args
+from typing import  Union, Tuple, Optional
 from deskew import determine_skew
 from enum import Enum
 
