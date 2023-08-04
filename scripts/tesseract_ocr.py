@@ -25,7 +25,8 @@ FILENAME_NURI = "ocr_preprocessed_nuri.json"
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
-    usage = 'perform_ocr.py [-h] [-v] -d <crop-dir>'
+    usage = 'tesseract_ocr.py [-h] [-v] [-t <threshmode>] [-b <blocksize>] \
+            [-c <c_value>] -d <crop-dir>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage

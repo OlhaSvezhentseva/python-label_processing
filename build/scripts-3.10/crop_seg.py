@@ -1,24 +1,25 @@
 #!python
-'''
-Execute the segmentation_cropping.py and ocr_pytesseract.py modules.
-Takes as inputs: the path to the jpgs (jpg_dir),
-                 the number of the model (model),
-                 the path to the directory in which the resulting crops and the csv will be stored (out_dir),
 
-Outputs: - the labels in the pictures are segmented and cropped out of the picture,
-           becoming their own file named after their jpg of origin and class.
-         - the segmentation outputs are also saved as a dataframe (filename, class, prediction score, coordinates).
+'''
+Execute the segmentation_cropping.py module.
 '''
 
 #Import module from this package
-import segmentation_cropping
+import label_processing.segmentation_cropping as scrop
+import label_processing
 #import third party libraries
 import argparse
 import os
 import warnings
+import glob
+import pandas as pd
 warnings.filterwarnings('ignore')
 
-def parsing_args():
+from pathlib import Path
+import concurrent.futures
+
+
+def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
     usage = 'crop_seg.py [-h] [-c N] -m <model/number> -j </path/to/jpgs> -o </path/to/jpgs_outputs> '
     parser =  argparse.ArgumentParser(description=__doc__,
@@ -45,7 +46,7 @@ def parsing_args():
             metavar='',
             type=str,
             required = True,
-            help='Directory where the jpgs are stored.'
+            help=('Directory where the jpgs are stored.')
             )
     
     parser.add_argument( 
@@ -108,6 +109,46 @@ def get_classtype(model_int: int) -> list:
     else:
         return ["handwritten", "typed"]
 
+
+def create_crops(jpg_dir: str, dataframe: str,
+                 out_dir: str = os.getcwd()) -> None:
+    """
+    Creates crops by using the csv from applying the model and the original
+    pictures inside a directory.
+
+    Args:
+        jpg_dir (str): path to directory with jpgs.
+        dataframe (str): path to csv file.
+        out_dir (str): path to the target directory to save the cropped jpgs.
+    """
+    dir_path = jpg_dir
+    if dir_path[-1] == "/" :
+        new_dir = f"{os.path.basename(os.path.dirname(dir_path))}_cropped"
+    else:
+        new_dir = f"{os.path.basename(dir_path)}_cropped"
+    path = (f"{out_dir}/{new_dir}/")
+    Path(path).mkdir(parents=True, exist_ok=True)
+    scrop.create_dirs(dataframe, path) #creates dirs for every class
+    for filepath in glob.glob(os.path.join(dir_path, '*.jpg')):
+        filename = os.path.basename(filepath)
+        match = dataframe[dataframe.filename == filename]
+        image_raw = label_processing.utils.load_jpg(filepath)
+        label_id = Path(filename).stem
+        classes = []
+        for _,row in match.iterrows(): 
+            pic_class = row['class']
+            occ = classes.count(pic_class) + 1 
+            filename = scrop.make_file_name(label_id, pic_class, occ)
+            coordinates = {'xmin':int(row.xmin),'ymin':int(row.ymin),
+                           'xmax':int(row.xmax),'ymax':int(row.ymax)}
+            scrop.crop_picture(image_raw,path,filename,pic_class,**coordinates)
+            classes.append(pic_class)
+    print(f"\nThe images have been successfully saved in \
+        {os.path.join(out_dir, new_dir)}")
+        
+
+    
+
 # does not execute main if the script is imported as a module
 if __name__ == '__main__': 
     args = parsing_args()
@@ -116,18 +157,16 @@ if __name__ == '__main__':
     classes = get_classtype(args.model)
     out_dir = args.out_dir
     
-    predictions = segmentation_cropping.Predict_Labels(model_path, classes, jpeg_dir)
+    predictor = scrop.PredictLabels(model_path, classes, jpeg_dir)
     
-    # 1. Call Model
-    model = predictions.get_model()
     
     # 2. Model Predictions
-    df = predictions.class_prediction(model)
+    df = scrop.prediction_parallel(args.jpg_dir,predictor)
     
     # 3. Filter model predictions and save csv
-    df = predictions.clean_predictions(df, out_dir = out_dir)
+    df = scrop.clean_predictions(df, out_dir = out_dir)
     
     # 4. Cropping
-    segmentation_cropping.create_crops(jpeg_dir, df, out_dir = out_dir)
+    scrop.create_crops(jpeg_dir, df, out_dir = out_dir)
     
 
