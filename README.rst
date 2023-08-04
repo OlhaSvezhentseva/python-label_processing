@@ -208,7 +208,9 @@ Linux:
 Contacts
 --------
 
-Margot Belot <margot.belot@mfn.berlin>
-Olha Svezhentseva <Olha.Svezhentseva@mfn.berlin>
-Leonardo Preuss <preuss.leonardo@gmail.com>
+Margot Belot margot.belot@mfn.berlin
+
+Olha Svezhentseva Olha.Svezhentseva@mfn.berlin
+
+Leonardo Preuss preuss.leonardo@gmail.com
 
