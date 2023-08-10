@@ -64,7 +64,7 @@ Modules
 
 
    * rotator
-     Classifier to detect orientation of image (0°, 90°, 180°, 270°) and to correct orientation.
+      Classifier to detect orientation of image (0°, 90°, 180°, 270°) and to correct orientation.
 
 
 - label_postprocessing:
@@ -183,6 +183,7 @@ For usage information, run any of these scripts with the option --help.
       transcripts: is the file you want correct transcripts from. It makes sense to use  `corrected_transcripts.json` that was created in the previous step (filter.py).
       freq: is the number of the most frequent words that low-frequent words will be compared to.
       dist: threshold for Edit distance. Distance less/equal than this value will be considered to be a small one, so that the low-frequent word can be changed.
+      
    2. If you already have `vocabulary.csv` file and it should not be generated again, you may specify it:
           `python fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34 --voc vocabulary.csv`
 
