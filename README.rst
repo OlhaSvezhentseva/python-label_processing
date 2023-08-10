@@ -111,7 +111,7 @@ For usage information, run any of these scripts with the option --help.
       - the path to the directory in which the resulting crops and the csv will be stored (out_dir)
 
    **Outputs:**
-      - the labels in the pictures are segmented and cropped out of the picture, becoming their own file named after their jpg of origin and assigned class.
+      - the labels in the pictures are segmented and cropped out of the picture, becoming their own file named after their jpg of origin and     assigned class.
       - the predicted segmentation outputs are also saved as a csv (filename, class, prediction score, coordinates).
 
 * vision_api.py
@@ -177,8 +177,7 @@ For usage information, run any of these scripts with the option --help.
    **Output:**
       - json file 
 
-   1. Run `fix_spelling.py` to extract vocabulary (optionally) of the transcripts and correct spelling mistakes.
-      Example:
+   1. Run `fix_spelling.py` to extract vocabulary (optionally) of the transcripts and correct spelling mistakes. Example:
          `python fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34`
       transcripts: is the file you want correct transcripts from. It makes sense to use  `corrected_transcripts.json` that was created in the previous step (filter.py).
       freq: is the number of the most frequent words that low-frequent words will be compared to.
@@ -246,7 +245,7 @@ For usage information, run any of these scripts with the option --help.
 
    **Inputs:**
       - select whether verbose or quiet mode (verbose)
-      - optional argument: select which thrsholding should be used primarily.
+      - optional argument: select which thrsholding should be used primarily
                   1 : Otsu thresholding
                   2 : adaptive mean thresholding
                   3 : gaussian adaptive thrsholding
