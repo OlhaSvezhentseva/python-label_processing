@@ -17,7 +17,7 @@ from label_processing import vision, utils
 
 #CREDENTIALS = '/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/total-contact-297417-48ed6585325e.json'
 #DIR = '/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/results_ocr/test'
-RESULTS_JSON = "ocr_google_vision.json" #TODO make this customizable
+RESULTS_JSON = "ocr_google_vision.json"
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
@@ -38,7 +38,7 @@ def parsing_args() -> argparse.ArgumentParser:
             metavar='',
             type=str,
             required = True,
-            help=('Path tom the google credentials json file')
+            help=('Path to the google credentials json file')
             )
     
     parser.add_argument(

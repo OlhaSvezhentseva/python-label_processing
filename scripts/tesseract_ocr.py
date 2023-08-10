@@ -54,7 +54,7 @@ def parsing_args() -> argparse.ArgumentParser:
             default = 1,
             action='store',
             help=('Optional argument: select which thrsholding should be used primarily.\n'
-                 '1 : Otsu\'s tresholding (TODO explain).\n'
+                 '1 : Otsu\'s thresholding.\n'
                  '2 : adaptive mean thresholding.\n'
                  '3 : gaussian adaptive thrsholding.\n'
                  'Default is otsus')

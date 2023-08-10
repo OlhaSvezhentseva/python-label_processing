@@ -12,7 +12,7 @@ from typing import  Union, Tuple, Optional
 from deskew import determine_skew
 from enum import Enum
 
-from label_processing import utils #from this package
+from label_processing import utils
 
 
 #Configuarations

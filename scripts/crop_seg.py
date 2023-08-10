@@ -133,13 +133,13 @@ if __name__ == '__main__':
     predictor = scrop.PredictLabel(model_path, classes)
     
     
-    # 2. Model Predictions
+    # 1. Model Predictions
     df = scrop.prediction_parallel(jpg_dir,predictor, PROCESSES)
     finish = time.perf_counter()
-    # 3. Filter model predictions and save csv
+    # 2. Filter model predictions and save csv
     df = scrop.clean_predictions(jpg_dir, df, THRESHOLD, out_dir = out_dir)
     print(f"Finished in {round(finish-start, 2)} second(s)")
-    # 4. Cropping
+    # 3. Cropping
     start = time.perf_counter()
     create_crops(jpg_dir, df, out_dir = out_dir)
     finish = time.perf_counter()
