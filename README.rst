@@ -69,7 +69,7 @@ Modules
 
 - label_postprocessing:
    * utils
-      Creates json files of the  postprocessing modules outputs.
+      Creates json files of the  postprocessing modules' outputs.
 
    * vocabulary
       Extracts unique words from the transcripts and counts their occurrences.
@@ -80,7 +80,7 @@ Modules
 
    * ocr_postprocessing
       Responsible for filtering the OCR ouputs according to 4 categories:nuris, empty transcripts, plausible output, nonsense output.
-      Plausible outputs are corrected using regular expressions and is saved as corrected_transcripts.json.
+      Plausible outputs are corrected using regular expressions and are saved as corrected_transcripts.json.
 
 
 - label_evaluation:
@@ -111,20 +111,8 @@ For usage information, run any of these scripts with the option --help.
       - the path to the directory in which the resulting crops and the csv will be stored (out_dir)
 
    **Outputs:**
-      - the labels in the pictures are segmented and cropped out of the picture, becoming their own file named after their jpg of origin and    assigned class.
+      - the labels in the pictures are segmented and cropped out of the picture, becoming their own file named after their jpg of origin and assigned class.
       - the predicted segmentation outputs are also saved as a csv (filename, class, prediction score, coordinates).
-
-* tesseract_ocr.py
-   Performs Pytesseract on the segmented labels and returns it as a json file. 
-   Before the ocr, preprocessing is done on the pictures to enhance the results.
-
-   **Inputs:**
-      - the path to the directory of the input jpgs (crop_dir)
-      - optional argument: select whether the verbose should be visible or not
-
-   **Outputs:**
-      - ocr results as a json file
-      - preprocessed images
 
 * vision_api.py
    Performs the Google Vision OCR on the segmented labels by calling the API and returns it as a json file. 
@@ -145,6 +133,130 @@ For usage information, run any of these scripts with the option --help.
    **Output:**
       - redundancy percentage of the dataset
 
+* background_color.py
+   Tries to recognize the background color of a picture before running the ocr. 
+   
+   **Inputs:**
+      - directory which contains the cropped jpgs on which the ocr is supposed to be applied (dir)
+
+   **Output:**
+      - new directory with the pictures that exceed the given color threshold.
+
+* cluster_id.py
+   Add unique identifiers to the pictures before clustering.
+   
+   **Inputs:**
+      - path to the OCR output json file (json_file)
+      - path to where we want to save the preprocessed json file. Default is the user current working directory (clu_json)
+
+   **Output:**
+      - unique identifiers are added to the json file
+
+* filter.py
+   Responsible for filtering the ocr ouput according to 4 categories: nuris, empty transcripts, plausible output, nonsense output.
+   Plausible output is corrected using regular expressions and is saved as `corrected_transcripts.json
+
+   **Inputs:**
+      - path to the OCR output json file
+
+   **Output:**
+      - one json file for each categorie
+
+* fix_spelling.py
+   Checks if there are any spelling mistakes and fixes them.
+   This is achieved by calculating Edit distance between words that appear fewer than 2 times with the 20 most frequent words in the transcript. 
+   If the Edit distance is lower/equal than a particular threshold, the word is substituted with a frequent word under the assumption that this is the same word 
+   spelled correctly.
+
+   **Inputs:**
+      - path to json file (transcripts)
+      - word frequency (freq)
+      - distance (dist)
+      - `vocabulary.csv` (voc)
+
+   **Output:**
+      - json file 
+
+   1. Run `fix_spelling.py` to extract vocabulary (optionally) of the transcripts and correct spelling mistakes.
+      Example:
+         `python fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34`
+      transcripts: is the file you want correct transcripts from. It makes sense to use  `corrected_transcripts.json` that was created in the previous step (filter.py).
+      freq: is the number of the most frequent words that low-frequent words will be compared to.
+      dist: threshold for Edit distance. Distance less/equal than this value will be considered to be a small one, so that the low-frequent word can be changed.
+   2. If you already have `vocabulary.csv` file and it should not be generated again, you may specify it:
+          `python fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34 --voc vocabulary.csv`
+
+* ocr_accuracy.py
+   Module containing the accuracy evaluation parameters of the OCR outputs.
+
+   **Inputs:**
+      - path to the ground truth dataset (ground_truth)
+      - path json file OCR output (predicted_ocr)
+      - target folder where the accuracy results are saved. Default is the user current working directory (results)
+
+   **Outputs:**
+      - ocr accuracy scores (json file, plots)
+
+* postprocessing_nuri.py
+   Creates two separated json files from the OCR output json file.
+   One for the NURIs and one of the rest of the transcription.
+
+   **Inputs:**
+      - path to the json file - OCR output (json_file)
+      - directory in which the json files will be saved. Default is the user current working directory (saving_directory)
+      - target folder where the accuracy results are saved. Default is the user current working directory (results)
+
+   **Outputs:**
+      - json file - postprocessed ocr outputs
+
+* process_ocr.py
+   Filter the OCR ouputs according to 4 categories:nuris, empty transcripts, plausible output, nonsense output.
+   Plausible outputs are corrected using regular expressions and is saved as corrected_transcripts.json.
+
+   **Inputs:**
+      - path to the json file - OCR output (json-file)
+
+   **Outputs:**
+      - json files for the four categories
+
+* rotation.py
+   Classifier to detect orientation of image (0°, 90°, 180°, 270°) and to correct orientation.
+
+   **Inputs:**
+      - directory where the rotated images will be stored. Default is the user current working directory (output_image_dir)
+      - directory where the jpgs are stored (input_image_dir)
+
+   **Outputs:**
+      - rotated images in new directory
+
+* segmentation_accuracy.py
+   Evaluate segmentation model.
+
+   **Inputs:**
+      - path to the ground truth coordinates csv (ground_truth_coord)
+      - path to the predicted coordinates csv (predicted_coord)
+      - target folder where the iou accuracy results and plots are saved. Default is the user current working directory (results)
+
+   **Outputs:**
+      - csv and box plots with accuracy scores
+   
+* tesseract_ocr.py
+   Module containing the Pytesseract OCR parameters to be performed on the cropped jpg outputs.
+
+   **Inputs:**
+      - select whether verbose or quiet mode (verbose)
+      - optional argument: select which thrsholding should be used primarily.
+                  1 : Otsu thresholding
+                  2 : adaptive mean thresholding
+                  3 : gaussian adaptive thrsholding
+                  Default is otsus (thresholding)
+      - optional argument: blocksize parameter for adaptive thresholding (blocksize)
+      - optional argument: c_value parameter for adaptive thesholding (c_value)
+      - directory which contains the cropped jpgs on which the ocr is supposed to be applied (dir)
+
+   **Outputs:**
+      - Preprocessed pictures, json file - OCR transcription
+
 
 Input preparation
 -----------------
@@ -157,7 +269,7 @@ Input preparation
 
 **In terms of data acquisition, the following standards are recommended to optimize the outputs:**
 
-- The pictures quality should be standardized and uniform as much as possible, preferably using macro photography, the .jpg format and    300 DPI resolution.
+- The pictures quality should be standardized and uniform as much as possible, preferably using macro photography, the .jpg format and 300 DPI resolution.
 - If there are multiple labels in one picture, they should be clearly separated from one another without overlapping. The text in the label should be aligned horizontally.
 - If possible, the specimen shouldn't be present in the picture with the labels.
 - If the labels in the different pictures are similar (same colours and/or same nature/content), they should always be placed the same way at the same spot from one picture to another. *ex: label with location always bottom right, collection number top left, taxonomy top right etc...*
