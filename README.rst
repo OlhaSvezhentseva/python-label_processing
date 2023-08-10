@@ -179,8 +179,11 @@ For usage information, run any of these scripts with the option --help.
 
    1. Run `fix_spelling.py` to extract vocabulary (optionally) of the transcripts and correct spelling mistakes. Example:
          `python fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34`
+
       transcripts: is the file you want correct transcripts from. It makes sense to use  `corrected_transcripts.json` that was created in the previous step (filter.py).
+
       freq: is the number of the most frequent words that low-frequent words will be compared to.
+
       dist: threshold for Edit distance. Distance less/equal than this value will be considered to be a small one, so that the low-frequent word can be changed.
       
    2. If you already have `vocabulary.csv` file and it should not be generated again, you may specify it:
@@ -245,11 +248,7 @@ For usage information, run any of these scripts with the option --help.
 
    **Inputs:**
       - select whether verbose or quiet mode (verbose)
-      - optional argument: select which thrsholding should be used primarily
-                  1 : Otsu thresholding
-                  2 : adaptive mean thresholding
-                  3 : gaussian adaptive thrsholding
-                  Default is otsus (thresholding)
+      - optional argument: select thresholding 
       - optional argument: blocksize parameter for adaptive thresholding (blocksize)
       - optional argument: c_value parameter for adaptive thesholding (c_value)
       - directory which contains the cropped jpgs on which the ocr is supposed to be applied (dir)
