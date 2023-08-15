@@ -3,7 +3,7 @@ Execute the accuracy_classifier.py module.
 '''
 
 #Import module from this package
-from label_processing import accuracy_classifier
+from label_evaluation import accuracy_classifier
 #Import third party libraries
 import argparse
 import os
