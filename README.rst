@@ -300,7 +300,7 @@ For usage information, run any of these scripts with the option --help.
 
 
 * evaluation_classifier.py
-  Execute the accuracy_classifier.py module. Evaluate the performance of the classification model.
+   Execute the accuracy_classifier.py module. Evaluate the performance of the classification model.
 
    **Inputs:**
       - path to the ground truth dataframe
