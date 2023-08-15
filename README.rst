@@ -66,6 +66,13 @@ Modules
       Classifier to detect orientation of image (0°, 90°, 180°, 270°) and to correct orientation.
 
 
+   * tensorflow_classifier
+      Classifier to detect and classify images of label specimens into three categories: handwritten, typed and to_crop.
+
+   * accuracy_classifier
+      Evaluate the performance of the tensorflow classifier.
+
+
 
 - label_postprocessing:
    * utils
@@ -279,6 +286,30 @@ For usage information, run any of these scripts with the option --help.
    **Outputs:**
       - preprocessed pictures
       - json file - OCR transcriptions
+
+
+* image_classifier.py
+   Execute the tensorflow_classifier.py module. Classify images into three categories: handwritten, typed and to_crop.
+
+   **Inputs:**
+      - path to the jpg images
+      - path to the target directory where the classifed images should be saved
+
+   **Output:**
+      - classified images into new target directories
+
+
+* evaluation_classifier.py
+  Execute the accuracy_classifier.py module. Evaluate the performance of the classification model.
+
+   **Inputs:**
+      - path to the ground truth dataframe
+      - path to the target directory where the confusion matrix should be saved
+
+   **Outputs:**
+      - accuracy metrics
+      - confusion matrix
+
 
 
 Input preparation
