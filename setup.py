@@ -27,7 +27,9 @@ setup(
              "scripts/rotation.py",
              "scripts/process_ocr.py",
              "scripts/filter.py",
-             "scripts/fix_spelling.py"],
+             "scripts/fix_spelling.py",
+             "scripts/image_classifier.py", 
+             "scripts/evaluation_classifier.py"],
     #include_package_data=True, #include the static data specified in the MANIFEST.in
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -54,6 +56,7 @@ setup(
         "torchvision",
         "regex",
         "nltk",
-
+        "tensorflow",
+        "scikit-learn"
     ],
 )
