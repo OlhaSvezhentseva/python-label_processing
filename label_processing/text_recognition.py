@@ -18,6 +18,8 @@ from label_processing import utils
 #Configuarations
 CONFIG = r'--psm 6 --oem 3' #configuration for ocr
 LANGUAGES = 'eng+deu+fra+ita+spa+por' #specifying languages used for ocr
+MIN_SKEW_ANGLE = -10
+MAX_SKEW_ANGLE = 10
 
 def find_tesseract() -> None:
     """
@@ -170,7 +172,7 @@ class Image():
         image_instance = self.copy_this()
         image_instance.image = image
         return image_instance
-    
+
     def erode(self) -> Image:
         kernel = np.ones((5,5),np.uint8)
         image = cv2.erode(self.image, kernel, iterations = 1)
@@ -200,7 +202,8 @@ class Image():
     def get_skew_angle(self) -> Optional[np.float64]: #returns either float or None 
         grayscale = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         #print(f"Calculating skew angle for {self.filename}")
-        angle = determine_skew(grayscale, max_angle = 30)
+        angle = determine_skew(grayscale, max_angle = MAX_SKEW_ANGLE,
+                               min_angle=MIN_SKEW_ANGLE)
         return angle
         
     def deskew(self, angle: Optional[np.float64]) -> Image:

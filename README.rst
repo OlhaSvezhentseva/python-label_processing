@@ -172,15 +172,15 @@ For usage information, run any of these scripts with the option --help.
 
 
 * filter.py
-   Responsible for filtering the ocr ouput according to 4 categories: nuris, empty transcripts, plausible output, 
-   nonsense output.
-   Plausible output is corrected using regular expressions and is saved as `corrected_transcripts.json
+   Responsible for filtering the ocr ouput according to 4 categories:
+   nuris, empty transcripts, plausible output, nonsense output.
+   Plausible output is corrected using regular expressions and is saveda as corrected_transcripts.json
 
    **Inputs:**
       - path to the OCR output json file
 
    **Output:**
-      - one json file per categorie
+      - one json file per category
 
 
 * fix_spelling.py
@@ -343,7 +343,10 @@ Setting up google cloud vision API and getting credentials
 - The credentials json file should then be provided as an input in the `vision.py` script.
 
 
-Installing Pytesseract for MacOS
+Installing Pytesseract for MacOS"""
+Responsible for filtering the OCR ouputs according to 4 categories:nuris, empty transcripts, plausible output, nonsense output.
+Plausible outputs are corrected using regular expressions and is saved as corrected_transcripts.json.
+"""
 --------------------------------
 Informations about Pytesseract can be found `here`_ or `this website`_.
 To install Pytesseract with Homebrew, first install `it`_ and follow the `steps`_.

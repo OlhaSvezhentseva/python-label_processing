@@ -45,13 +45,16 @@ def parsing_args() -> argparse.ArgumentParser:
 
     return args
 
-
-model = "../models/model_classifier"
+def get_modelpath() -> str:
+    rel_path = "../models/model_classifier"
+    script_path = os.path.dirname(__file__)
+    return os.path.join(script_path, rel_path)
+    
 
 # does not execute main if the script is imported as a module
 if __name__ == '__main__': 
     args = parsing_args()
-    model_path = model
+    model_path = get_modelpath()
     class_names = ['handwritten', 'to_crop', 'typed']
     jpeg_dir = args.jpg_dir
     out_dir = args.out_dir

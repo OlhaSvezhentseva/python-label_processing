@@ -29,7 +29,8 @@ setup(
              "scripts/filter.py",
              "scripts/fix_spelling.py",
              "scripts/image_classifier.py", 
-             "scripts/evaluation_classifier.py"],
+             "scripts/evaluation_classifier.py",
+             "pipelines/pipeline.sh"],
     #include_package_data=True, #include the static data specified in the MANIFEST.in
     long_description=long_description,
     long_description_content_type="text/markdown",

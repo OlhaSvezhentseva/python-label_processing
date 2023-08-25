@@ -1,16 +1,18 @@
+"""
+Responsible for filtering the OCR ouputs according to 4 categories:nuris, empty transcripts, plausible output, nonsense output.
+Plausible outputs are corrected using regular expressions and is saved as corrected_transcripts.json.
+"""
 import json
+import os
 import argparse
 import label_processing.utils as utils
 from label_postprocessing.ocr_postprocessing import (
     is_empty,
     is_nuri,
     is_plausible_prediction,
-    save_transcripts
+    save_transcripts,
+    correct_transcript
 )
-"""
-Responsible for filtering the OCR ouputs according to 4 categories:nuris, empty transcripts, plausible output, nonsense output.
-Plausible outputs are corrected using regular expressions and is saved as corrected_transcripts.json.
-"""
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
@@ -27,11 +29,19 @@ def parsing_args() -> argparse.ArgumentParser:
             )
     
     parser.add_argument(
-            '-j', '--json-file',
+            '-j', '--json',
             metavar='',
             type=str,
             required = True,
             help=('Path to ocr output json file')
+            )
+
+    parser.add_argument(
+            '-o', '--outdir',
+            metavar='',
+            type=str,
+            required = True,
+            help=('output directory where files should be saved')
             )
 
     
@@ -39,7 +49,7 @@ def parsing_args() -> argparse.ArgumentParser:
 
     return args
 
-def main(ocr_output: dir) -> json_file:
+def main(ocr_output: str, outdir: str) -> None:
     nuri_labels = {}
     empty_labels = {}
     plausible_labels = []
@@ -57,12 +67,12 @@ def main(ocr_output: dir) -> json_file:
                 clean_transcript = correct_transcript(label["text"])
                 clean_label = {"ID": label["ID"], "text": clean_transcript}
                 clean_labels.append(clean_label)
-    save_transcripts(nuri_labels, "nuris.csv")
-    save_transcripts(empty_labels, "empty_transcripts.csv")
-    utils.save_json(plausible_labels, "plausible_transcripts.json")
-    utils.save_json(clean_labels, "corrected_transcripts.json")
-    return
+    save_transcripts(nuri_labels, os.path.join(outdir, "nuris.csv"))
+    save_transcripts(empty_labels, os.path.join(outdir, "empty_transcripts.csv"))
+    utils.save_json(plausible_labels, "plausible_transcripts.json", outdir)
+    utils.save_json(clean_labels, "corrected_transcripts.json", outdir)
+    return 0
 
 if __name__ == "__main__":
-    args = parsing_args
-    main(args.j)
+    args = parsing_args()
+    exit(main(args.json, args.outdir))

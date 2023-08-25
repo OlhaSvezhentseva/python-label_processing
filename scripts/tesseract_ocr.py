@@ -21,7 +21,6 @@ from label_processing.text_recognition import (Tesseract,
 from label_processing import utils
 
 FILENAME = "ocr_preprocessed.json"
-FILENAME_NURI = "ocr_preprocessed_nuri.json"
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
@@ -79,6 +78,14 @@ def parsing_args() -> argparse.ArgumentParser:
             )
     
     parser.add_argument(
+            '-o', '--outdir',
+            metavar='',
+            type=str,
+            required = True,
+            help=('Directory where the json should be saved')
+            )
+    
+    parser.add_argument(
             '-d', '--dir',
             metavar='',
             type=str,
@@ -99,7 +106,7 @@ def ocr_on_dir(crop_dir: str,
                verbose_print: Callable,
                args: argparse.ArgumentParser
                ) -> list[dict[str,str]]:
-    #Initialise Tesseract wrapper
+    #Initialise Tesseracocr_preprocessed.jsont wrapper
     tesseract = Tesseract()
     
     ocr_results: list = []
@@ -148,8 +155,8 @@ if __name__ == "__main__":
     utils.check_dir(crop_dir)
     new_dir = utils.generate_filename(crop_dir, "preprocessed")
     #Parent directory of the cropped pictures
-    parent_dir = os.path.join(crop_dir, os.pardir) 
-    new_dir_path = os.path.join(parent_dir, new_dir)
+    outdir = args.outdir 
+    new_dir_path = os.path.join(outdir, new_dir)
     Path(new_dir_path).mkdir(parents=True, exist_ok=True)
     
     verbose_print(f"\nPerforming OCR on {os.path.abspath(crop_dir)} .\n")
@@ -160,6 +167,6 @@ if __name__ == "__main__":
     verbose_print((f"\nPreprocessed images have been saved in"
                    f"os.path.abspath{os.path.abspath(new_dir_path)} ."))
     
-    verbose_print(f"Saving results in {os.path.abspath(parent_dir)} .")
-    utils.save_json(result_data, FILENAME, parent_dir)
+    verbose_print(f"Saving results in {os.path.abspath(outdir)} .")
+    utils.save_json(result_data, FILENAME, outdir)
         

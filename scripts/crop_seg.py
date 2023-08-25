@@ -15,7 +15,7 @@ import warnings
 import glob
 import pandas as pd
 warnings.filterwarnings('ignore')
-label_processing
+from label_processing.segmentation_cropping import create_crops
 from pathlib import Path
 
 THRESHOLD = 0.8
@@ -120,6 +120,9 @@ def get_classtype(model_int: int) -> list:
                 "casent_number", "dna", "other", "collection"]
     else:
         return ["handwritten", "typed"]
+
+
+
 
 # does not execute main if the script is imported as a module
 if __name__ == '__main__': 

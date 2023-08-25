@@ -92,5 +92,6 @@ if __name__ == "__main__":
     args = parsing_args()
     input_image_dir = args.input_image_dir
     output_image_dir = args.output_image_dir
+    #output_image_dir = os.path.join(output_image_dir, "rotated")
     main(input_image_dir, output_image_dir)
     print(f"\nThe images have been successfully saved in {output_image_dir}")

@@ -128,13 +128,7 @@ def filter_pictures(jpg_dir: Path, dataframe: str,
     """
     dir_path = jpg_dir
     out_dir = out_dir
-    if dir_path[-1] == "/" :
-      new_dir = f"{os.path.basename(os.path.dirname(dir_path))}_rename"
-    else:
-      new_dir = f"{os.path.basename(dir_path)}_rename"
-    path = (f"{out_dir}/{new_dir}/")
-    Path(path).mkdir(parents=True, exist_ok=True)
-    create_dirs(dataframe, path) #creates dirs for every class
+    create_dirs(dataframe, out_dir) #creates dirs for every class
 
     for filepath in glob.glob(os.path.join(dir_path, '*.jpg')):
             filename = os.path.basename(filepath)
@@ -146,6 +140,6 @@ def filter_pictures(jpg_dir: Path, dataframe: str,
                 pic_class = row['class']
                 occ = classes.count(pic_class) + 1
                 filename = make_file_name(label_id, pic_class, occ)
-                rename_picture(image_raw,path,filename,pic_class)
-    print(f"\nThe images have been successfully saved in {os.path.join(out_dir, new_dir)}")
+                rename_picture(image_raw,out_dir,filename,pic_class)
+    print(f"\nThe images have been successfully saved in {out_dir}")
 
