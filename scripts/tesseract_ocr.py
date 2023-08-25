@@ -196,8 +196,8 @@ if __name__ == "__main__":
     verbose_print((f"\nPreprocessed images have been saved in"
                    f"os.path.abspath{os.path.abspath(new_dir_path)} ."))
     
-    verbose_print(f"Saving results in {os.path.abspath(parent_dir)} .")
-    utils.save_json(result_data, FILENAME, parent_dir)
+    verbose_print(f"Saving results in {os.path.abspath(outdir)} .")
+    utils.save_json(result_data, FILENAME, outdir)
     t2 = time()
     print(t2 - t1)
 
