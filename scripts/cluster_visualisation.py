@@ -15,8 +15,8 @@ import numpy as np
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
-    usage = 'crop_seg.py [-h] [-c N] [-m <model/number>] [-np N]\
-    -j </path/to/jpgs> -o </path/to/jpgs_outputs> '
+    usage = 'cluster_visualisation.py [-h] [-c N] \
+    -gt <ground truth ocr output> -c <cluster output>  -o <path to output directory>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
@@ -112,8 +112,9 @@ def main(ground_truth_json: str, cluster_json: str, out_dir: str):
         alpha=0.9
     ).set(title="Label data T-SNE projection")
     plt.legend(loc = 'upper right', bbox_to_anchor=(1.15, 1.5), ncol=1)
-    plt.savefig(os.path.join(out_dir, "cluster_plot.jpg"))
-    return 0
+    plt.savefig(os.path.join(out_dir, "cluster_plot.png"))
+    return print(f"\nThe image has been successfully saved in {out_dir}")
+
     
 if __name__ == "__main__":
     args = parsing_args()
