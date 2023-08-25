@@ -9,6 +9,8 @@ jpg outputs.
 import argparse
 import os
 import glob
+from time import time
+import multiprocessing as mp
 from enum import Enum
 from pathlib import Path
 from typing import Callable
@@ -24,8 +26,8 @@ FILENAME = "ocr_preprocessed.json"
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
-    usage = 'tesseract_ocr.py [-h] [-v] [-t <threshmode>] [-b <blocksize>] \
-            [-c <c_value>] -d <crop-dir>'
+    usage = 'tesseract_ocr.py [-h] [-v] [-t <thresholding>] [-b <blocksize>] \
+            [-c <c_value>] -d <crop-dir> [-multi <multiprocessing>]'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
@@ -94,58 +96,85 @@ def parsing_args() -> argparse.ArgumentParser:
                   'ocr is supposed to be applied')
             )
 
+    parser.add_argument(
+        '-multi', '--multiprocessing',
+        metavar='',
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help=('Select whether to use multiprocessing')
+    )
     
     args = parser.parse_args()
 
     return args
-    
+
+
+def ocr__on_file(file_path, args,  thresh_mode, tesseract, new_dir):
+    image = Image.read_image(file_path)
+    qr = False
+    nuri = False
+    if args.blocksize is not None:
+        image.blocksize(args.blocksize)
+    if args.c_value is not None:
+        image.c_value(args.c_value)
+    # trying to read the qr_code
+    decoded_qr = image.read_qr_code_2()
+    if decoded_qr is not None:
+        # verbose_print(f"Qr-Code detected in {image.filename}\n")
+        transcript: dict[str, str] = {"ID": image.filename,
+                                      "text": decoded_qr}
+        qr = True
+    else:
+        # Preprocessing
+        # verbose_print(f"Performing preprocessing on {image.filename}")
+        image = image.preprocessing(thresh_mode)  # preprocessed image
+        image.save_image(new_dir)  # saving image in new directory
+        # OCR
+        tesseract.image = image
+        # verbose_print(f"Performing OCR on {image.filename}\n")
+        transcript: dict[str, str] = tesseract.image_to_string()
+        # get nuri
+        if utils.check_text(transcript["text"]):
+            nuri = True
+            transcript = utils.replace_nuri(transcript)
+    return (transcript, qr, nuri)
 
 
 def ocr_on_dir(crop_dir: str,
                new_dir: str,
                verbose_print: Callable,
                args: argparse.ArgumentParser
-               ) -> list[dict[str,str]]:
-    #Initialise Tesseracocr_preprocessed.jsont wrapper
+               ) -> list[dict[str, str]]:
+    # Initialise Tesseract wrapper
     tesseract = Tesseract()
-    
     ocr_results: list = []
     count_qr: int = 0
     total_nuri: int = 0
     thresh_mode: Enum = Threshmode.eval(args.thresholding)
-    for file_path in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
-        image = Image.read_image(file_path)
-        if args.blocksize is not None:
-            image.blocksize(args.blocksize)
-        if args.c_value is not None:
-            image.c_value(args.c_value)
-        #trying to read the qr_code
-        decoded_qr = image.read_qr_code_2()
-        if decoded_qr is not None:
-            verbose_print(f"Qr-Code detected in {image.filename}\n")
-            transcript: dict[str, str] = {"ID": image.filename,
-                                          "text": decoded_qr}
-            count_qr+=1
-        else:
-            #Preprocessing
-            verbose_print(f"Performing preprocessing on {image.filename}")
-            image = image.preprocessing(thresh_mode) #preprocessed image
-            image.save_image(new_dir)#saving image in new directory
-            #OCR
-            tesseract.image = image
-            verbose_print(f"Performing OCR on {image.filename}\n")
-            transcript: dict[str, str] = tesseract.image_to_string()
-            #get nuri
-            if utils.check_text(transcript["text"]):
-                total_nuri+= 1 
-                transcript = utils.replace_nuri(transcript)
-        ocr_results.append(transcript)
+    # for file_path in glob.glob(os.path.join(f"{crop_dir}/*.jpg")):
+    files = glob.glob(os.path.join(f"{crop_dir}/*.jpg"))
+    if not args.multiprocessing:
+        for file in files:
+            transcript, qr, nuri = ocr__on_file(file, args,  thresh_mode, tesseract, new_dir)
+            ocr_results.append(transcript)
+            if qr == True: count_qr += 1
+            if nuri == True: total_nuri += 1
+    else:
+    # Use all the cores
+        with mp.Pool() as pool:
+            result = pool.starmap(ocr__on_file,  [(file, args,  thresh_mode, tesseract, new_dir) for file in files])
+            for transcript, qr, nuri in result:
+                ocr_results.append(transcript)
+                if qr == True: count_qr += 1
+                if nuri == True: total_nuri += 1
+
     verbose_print(f"QR-codes read: {count_qr}")
     verbose_print(f"get_nuri: {total_nuri}")
     return ocr_results
 
 if __name__ == "__main__":
     args = parsing_args()
+    t1 = time()
     #New function verbose print
     verbose_print: Callable = print if args.verbose else lambda *a, **k: None    
     #Find path to tesseract
@@ -167,6 +196,8 @@ if __name__ == "__main__":
     verbose_print((f"\nPreprocessed images have been saved in"
                    f"os.path.abspath{os.path.abspath(new_dir_path)} ."))
     
-    verbose_print(f"Saving results in {os.path.abspath(outdir)} .")
-    utils.save_json(result_data, FILENAME, outdir)
-        
+    verbose_print(f"Saving results in {os.path.abspath(parent_dir)} .")
+    utils.save_json(result_data, FILENAME, parent_dir)
+    t2 = time()
+    print(t2 - t1)
+
