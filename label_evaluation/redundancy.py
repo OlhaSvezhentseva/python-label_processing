@@ -39,11 +39,7 @@ def redundancy(df: pd.DataFrame) -> pd.DataFrame:
     df = pd.concat(g for _, g in df.groupby("text") if len(g) > 1)
     return df
 
-<<<<<<< HEAD
-def per_redundancy(df: pd.DataFrame) -> pd.DataFrame:
-=======
 def per_redundancy(df: pd.DataFrame) -> int:
->>>>>>> 62769a98c8cc92b042f14f21bd700c7780ad1346
     '''
     Calculate percentage of transcription redundancy in preprocessed dataset with grouped duplicates.
 

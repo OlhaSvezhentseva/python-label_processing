@@ -145,7 +145,19 @@ def ocr_on_dir(crop_dir: str,
                verbose_print: Callable,
                args: argparse.ArgumentParser
                ) -> list[dict[str, str]]:
-    # Initialise Tesseract wrapper
+    """
+    Performs ocr on a given directory 
+
+    Args:
+        crop_dir (str): path to directory with cropped pictures
+        new_dir (str): path to new directory
+        verbose_print (Callable): print funktion die abhängig vom user input 
+        printet oder nicht
+        args (argparse.ArgumentParser): arg parse argumente
+
+    Returns:
+        list[dict[str, str]]: _description_
+    """
     tesseract = Tesseract()
     ocr_results: list = []
     count_qr: int = 0

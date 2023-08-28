@@ -14,8 +14,16 @@ NON_ALPHA_NUM = re.compile("[^a-zA-Z\d\s]{2,}")
 PIPE = re.compile("[|]")
 
 
-def count_mean_token_length(tokens: list):
-    """The function counts mean token length in the list of tokens."""
+def count_mean_token_length(tokens: list) -> int|float:
+    """
+    The function counts mean token length in the list of tokens
+
+    Args:
+        tokens (list): list of tokens
+
+    Returns:
+        int|float: mean token length
+    """
     total_length = 0
     for token in tokens:
         total_length += len(token)
@@ -24,8 +32,16 @@ def count_mean_token_length(tokens: list):
     return 0
 
 
-def is_plausible_prediction(transcript: str):
-    """The function check if the transcript seems to plausible."""
+def is_plausible_prediction(transcript: str) -> bool:
+    """
+    The function check if the transcript seems to be plausible.
+
+    Args:
+        transcript (str): transcript string
+
+    Returns:
+        bool: true if transcript is predicted to be plausible or not
+    """
     tokens = word_tokenize(transcript)
     tokens_no_punct = [token for token in tokens if token not in string.punctuation]
     average_token_length = count_mean_token_length(tokens_no_punct)
@@ -34,8 +50,16 @@ def is_plausible_prediction(transcript: str):
     return True
 
 
-def correct_transcript(transcript: str):
-    """The function corrects the transcript."""
+def correct_transcript(transcript: str) -> str:
+    """
+    The function corrects the transcript.
+
+    Args:
+        transcript (str): raw transcript
+
+    Returns:
+        str: corrected transcript
+    """      
     # remove single non-ASCII (spaces?)
     new_string = re.sub(NON_ASCII, ' ', transcript)
     # remove 2 or more non alphanumeric characters in a row
@@ -45,26 +69,33 @@ def correct_transcript(transcript: str):
     return result
 
 
-def is_nuri(transcript: str):
+def is_nuri(transcript: str) -> bool:
     """The function checks if the transcript is a nuri."""
     if transcript.startswith("http"):
         return True
+    return False
 
 
-def is_empty(transcript: str):
+def is_empty(transcript: str) -> bool:
     """The function checks if the transcript is empty."""
     if len(transcript) == 0:
         return True
+    return False
 
 
-def save_transcripts(transcripts: dict, file_name: str):
+def save_transcripts(transcripts: dict, file_name: str) -> None:
     """The function saves transcripts as a csv-file."""
     data = pd.DataFrame.from_dict(transcripts, orient="index")
     data.to_csv(file_name)
 
 
-def process_ocr_output(ocr_output: str):
-    """The function splits the transcript in different categories."""
+def process_ocr_output(ocr_output: str)  -> None:
+    """
+    The function splits the transcript in different categories.
+
+    Args:
+        ocr_output (str): path to ocr output
+    """
     nuri_labels = {}
     empty_labels = {}
     implausible_labels = {}

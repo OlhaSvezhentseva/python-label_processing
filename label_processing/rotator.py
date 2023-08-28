@@ -29,6 +29,9 @@ warnings.filterwarnings('ignore')
 ROTATIONS: tuple[int, int, int, int] = (0, 90, 180, 270)
 
 class TorchConfig():
+    """
+    Configuration for PyTorch
+    """
     def __init__(self, model_path = None):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         path: str = Path(__file__).parent.joinpath("../models/mfn_rot_classifier.pth")
@@ -45,6 +48,9 @@ class TorchConfig():
     
         
 class RotationDetector(nn.Module):
+    """
+    Klasse for Rotation Detection. erbt von nn.Module
+    """
     def __init__(self, basenet):
         super().__init__()
         self.basenet = basenet
@@ -60,7 +66,20 @@ class RotationDetector(nn.Module):
         y = self.SM(y)
         return y
         
-def rotation(model, image: np.ndarray, config: TorchConfig):
+def rotation(model: RotationDetector,
+             image: np.ndarray,
+             config: TorchConfig) -> np.ndarray:
+    """
+    performs a rotation of an image
+
+    Args:
+        model (RotationDetector): model wrapper
+        image (np.ndarray): image that needs to be rotated
+        config (TorchConfig): pytorch configurations
+
+    Returns:
+        np.ndarray: rotated image
+    """
     tr = transforms.ToTensor()
     image = tr(image)
     new_image = config.transform(image)

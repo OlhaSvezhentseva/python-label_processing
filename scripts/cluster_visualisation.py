@@ -54,34 +54,62 @@ def parsing_args() -> argparse.ArgumentParser:
     return args
     
 
-def is_word(token):
+def is_word(token: str) -> bool:
+    """
+    checks if a token (str) is a word or not
+
+    Args:
+        token (str): token from word_tokenize
+
+    Returns:
+        bool: true if word and false if not
+    """
     if token not in string.punctuation and not token.isspace():
         if len(token) >= 3:
             return True 
+    return False
 
-def build_word_vectors(labels):
-    """The function builds a vector for each word in the label."""
+def build_word_vectors(labels: list[dict[str, str]]) -> tuple(Word2Vec,
+                                                              list[dict[str, str]]):
+    """
+    The function builds a vector for each word in the label.
+    Args:
+        labels (list[dict[str, str]]): labels from the json file
+    Returns:
+        tuple(Word2Vec,list[dict[str, str]]): tuple of model and tokenized labels
+    """
     tokenized_labels = []
     for label in labels:
         tokens = [token.lower() for token in word_tokenize(label["text"]) if is_word(token)]
         tokenized_label = {"ID": label["ID"], "tokens": tokens}
         tokenized_labels.append(tokenized_label)
-    model = gensim.models.Word2Vec([label["tokens"] for label in tokenized_labels], min_count = 1, vector_size = 100,
+    model = Word2Vec([label["tokens"] for label in tokenized_labels], min_count = 1, vector_size = 100,
                                              window = 2, sg = 1)
     return model,  tokenized_labels
 
 
-def build_mean_label_vector(model, labels):
-    """The function builds a vector for a label (by taking the mean of word vectors)."""
+def build_mean_label_vector(model: Word2Vec, labels: list[dict[str, str]]):
+    """
+    The function builds a vector for a label (by taking the mean of word vectors).
+
+    Args:
+        model (Word2Vec): Word2Vec model
+        labels (list[dict[str, str]]): #TODO
+
+    Returns:
+        list[dict[str, str]]): #TODO
+    """
     labels_vectors = {}
     for label in labels:
-        # np.mean([model.wv[token] for token in label["tokens"]])
         mean_vector = np.mean([model.wv[token] for token in label["tokens"]], axis=0)
         labels_vectors[label["ID"]] = mean_vector
     return labels_vectors
 
-def load_json(file):
-    with open(file, 'r') as f:
+def load_json(filepath: str) -> list[dict[str, str]]:
+    """
+    loads json file
+    """
+    with open(filepath, 'r') as f:
         data = json.load(f)
     return data
 
