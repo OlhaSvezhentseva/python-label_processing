@@ -11,6 +11,7 @@ import pandas as pd
 import label_processing.utils as utils
 from pathlib import Path
 import warnings
+import argparse
 warnings.filterwarnings('ignore')
 
 
@@ -126,7 +127,7 @@ def evaluate_text_predictions(ground_truth_file: str, predictions_file: str, out
     Args:
         ground_truth_file (str): path to groundtruth data as a CSV
         predictions_file (str): path to OCR output as a json file
-    
+
     Returns:
         wers, cers (tuple): tuple of two lists with scores
     """
@@ -136,5 +137,13 @@ def evaluate_text_predictions(ground_truth_file: str, predictions_file: str, out
     print(f"Mean CER: {round(np.mean(cers), 2)}, Mean WER: {round(np.mean(wers), 2)}")
     create_plot(cers, "CERs", f"{out_dir}/cers.png")
     create_plot(wers, "WERs", f"{out_dir}/wers.png")
-    return wers, cers
+    return
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--gt", type=str)
+    parser.add_argument("--pred", type=str)
+    parser.add_argument("--folder", nargs='?', default="result")
+    args = parser.parse_args()
+    evaluate_text_predictions(args.gt, args.pred, args.folder)
     
