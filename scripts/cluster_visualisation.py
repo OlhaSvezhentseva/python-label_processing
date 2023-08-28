@@ -1,3 +1,7 @@
+"""
+Module creating and saving a visual (scatter plot) of the clustering´s results.
+"""
+
 import gensim
 import json
 import string
@@ -32,7 +36,7 @@ def parsing_args() -> argparse.ArgumentParser:
             metavar='',
             type=str,
             default = os.getcwd(),
-            help=('Directory in which the resulting crops and the csv will be stored.\n'
+            help=('Directory in which the resulting plot will be stored.\n'
                   'Default is the user current working directory.')
             ),
     parser.add_argument(
@@ -40,14 +44,14 @@ def parsing_args() -> argparse.ArgumentParser:
             metavar='',
             type=str,
             required=True,
-            help=('path to cluster_json')
+            help=('Path to cluster_json')
             ),
     parser.add_argument(
             '-gt', '--ground_truth',
             metavar='',
             type=str,
             required=True,
-            help=('path to ground truth json')
+            help=('Path to ground truth json')
             )
     args = parser.parse_args()
 
@@ -56,7 +60,7 @@ def parsing_args() -> argparse.ArgumentParser:
 
 def is_word(token: str) -> bool:
     """
-    checks if a token (str) is a word or not
+    Checks if a token (str) is a word or not
 
     Args:
         token (str): token from word_tokenize
@@ -107,7 +111,7 @@ def build_mean_label_vector(model: Word2Vec, labels: list[dict[str, str]]):
 
 def load_json(filepath: str) -> list[dict[str, str]]:
     """
-    loads json file
+    Loads json file
     """
     with open(filepath, 'r') as f:
         data = json.load(f)

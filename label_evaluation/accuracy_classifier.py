@@ -22,7 +22,7 @@ def metrics(target: list, pred: pd.DataFrame, gt: pd.DataFrame)-> str:
         pred (pd.DataFrame): predicted classes
         gt (pd.DataFrame): ground truth classes
     
-    Return:
+    Returns:
         classification metrics (str): text report
     """
     print("Accuracy Score -> ",accuracy_score(pred, gt)*100)
@@ -40,7 +40,7 @@ def cm (target, pred: pd.DataFrame, gt: pd.DataFrame, out_dir: Path = Path(os.ge
         gt (pd.DataFrame): ground truth classes
         out_dir (Path): path to the target directory to save the confusion matrix plot.
     
-    Return:
+    Returns:
         confusion matrix (plt): confusion matrix as a heatmap
     """
     cm = confusion_matrix(gt, pred)

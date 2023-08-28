@@ -49,7 +49,7 @@ class TorchConfig():
         
 class RotationDetector(nn.Module):
     """
-    Klasse for Rotation Detection. erbt von nn.Module
+    Class for Rotation Detection. Inherits from nn.Module
     """
     def __init__(self, basenet):
         super().__init__()
@@ -70,7 +70,7 @@ def rotation(model: RotationDetector,
              image: np.ndarray,
              config: TorchConfig) -> np.ndarray:
     """
-    performs a rotation of an image
+    Performs a rotation of an image
 
     Args:
         model (RotationDetector): model wrapper

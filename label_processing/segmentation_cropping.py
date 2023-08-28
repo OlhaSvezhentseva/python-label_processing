@@ -19,6 +19,7 @@ import label_processing.utils
 
 #---------------------Image Segmentation---------------------#
 
+
 class PredictLabel():
 
     def __init__(self, path_to_model: str , classes: list,
@@ -145,6 +146,7 @@ def clean_predictions(jpg_dir: Path, dataframe: pd.DataFrame,
 
 #---------------------Image Cropping---------------------#    
     
+
 def crop_picture(img_raw: np.ndarray , path: str,
                  filename: str,pic_class: str,**coordinates) -> None:
     """

@@ -104,7 +104,7 @@ def make_file_name(label_id: str, pic_class: str, occurence: int) -> None:
 def rename_picture(img_raw: np.ndarray , path: str,
                  filename: str,pic_class: str) -> None:
     """
-    Rename the pictures using the given class and their occurence.
+    Renames the pictures using the given class and their occurence.
 
     Args:
         img_raw (numpy.matrix): input jpg converted to numpy matrix by cv2.

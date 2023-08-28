@@ -233,6 +233,7 @@ class Image():
         image = image.deskew(angle)
         return image
 
+
 #---------------------Read QR-Code---------------------#
     
 
@@ -289,7 +290,7 @@ class Image():
 
 class Threshmode(Enum):
     """
-    diferent possibilities for threholding
+    Different possibilities for threholding
 
     Args:
         Enum (int):  
@@ -308,8 +309,6 @@ class Threshmode(Enum):
             return cls.ADAPTIVE_MEAN
     
     
-
-
 #---------------------OCR Tesseract---------------------#
 
 

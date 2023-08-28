@@ -30,6 +30,7 @@ def check_dir(dir) -> None:
 
 #---------------------New Filename Preprocessed Images---------------------#
 
+
 def generate_filename(original_path: str, appendix: str,
                       extension: Optional[str] = None) -> str:
     """
@@ -66,6 +67,7 @@ def generate_filename(original_path: str, appendix: str,
 
 #---------------------Save JSON---------------------#
 
+
 def save_json(data: list[dict[str,str]], filename: str, path: str) -> None:
     """
     Saves a json file with human readable format.
@@ -82,6 +84,7 @@ def save_json(data: list[dict[str,str]], filename: str, path: str) -> None:
         
         
 #---------------------Check and correct NURIs---------------------#
+
 
 def check_text(transcript: str) -> bool:
     """
