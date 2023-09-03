@@ -4,44 +4,51 @@ set -e #Exit immediately if a command exits with a non-zero status.
 #set -x #Print commands and their arguments as they are executed.
 set -u #Treat unset variables as an error when substituting.
 
-
 if [ "$1" == "-h" ]; then
   echo "usage:"
   echo "$0 [-h] <output dir> <dirname cropped files>"
   exit 0
 fi
 
+# Check if output dir exists and if not create it
+output_dir="$1"
+mkdir -p "$output_dir"
+outlog="${output_dir}/out.log"
+errlog="${output_dir}/err.log"
 
-#check if output dir exists and if not create it
-mkdir -p "$1"
-outlog="${1}/out.log"
-errlog="${1}/err.log"
-
-
+# Function to run a command and log its output
+run_command() {
+  local command="$1"
+  local log_file="$2"
+  $command >> "$log_file" 2>> "$log_file"
+  if [ $? -ne 0 ]; then
+    echo "Error running: $command" >> "$log_file"
+  fi
+}
 echo "step 1: rotating pictures..."
-#create directory for rotated pictures
-rotated_dir="${1}/rotated"
+# Create a directory for rotated pictures
+rotated_dir="${output_dir}/rotated"
 mkdir -p "$rotated_dir"
-#acutual rotation
-rotation.py -o "$rotated_dir" -i "$2" > "$outlog" 2> "$errlog"
+# Actual rotation
+run_command "rotation.py -o '$rotated_dir' -i '$2'" "$outlog"
 #TODO check if pictures exists in this direcory 
 
 echo "step 2: performing image classification..."
-typed_dir="${1}/typed"
-image_classifier.py -o "$1" -j "$rotated_dir" > "$outlog" 2> "$errlog"
-#images are split into thre directories -> 'handwritten', 'to_crop', 'typed'
-#only proceed with the typed for now
+typed_dir="${output_dir}/typed"
+# Images are split into three directories -> 'handwritten', 'to_crop', 'typed'
+# Only proceed with 'typed' for now
+run_command "image_classifier.py -o '$output_dir' -j '$rotated_dir'" "$outlog"
 
 echo "step 3: would be to split the pictures based on background color..."
 #TODO
 
-results_ocr="${1}/ocr_preprocessed.json"
-echo "step 4 performing ocr and saving resulting json in ${results_ocr}" 
-tesseract_ocr.py -d "$typed_dir" -o "$1" > "$outlog" 2> "$errlog"
+results_ocr="${output_dir}/ocr_preprocessed.json"
+echo "step 4: performing OCR and saving resulting JSON in ${results_ocr}" 
+run_command "tesseract_ocr.py -d '$typed_dir' -o '$output_dir'" "$outlog"
 
 echo "step 5: postprocessing..."
-process_ocr.py -j "$results_ocr" -o "$1" > "$outlog" 2> "$errlog"
-postprocecessed_json=$(realpath "${1}/corrected_transcripts.json")
+run_command "process_ocr.py -j '$results_ocr' -o '$output_dir'" "$outlog"
+postprocessed_json="$(realpath "${output_dir}/corrected_transcripts.json")"
 
-printf "pipeline finished postprocecessed json in %s", "$postprocecessed_json" 
+echo "Pipeline finished. Postprocessed JSON: $postprocessed_json" 
 
