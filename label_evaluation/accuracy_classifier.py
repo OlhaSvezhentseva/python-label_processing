@@ -10,23 +10,41 @@ from pathlib import Path
 import glob, os
 
 
-
 #Accuracy Scores
-def metrics(target: list, pred: pd.DataFrame, gt: pd.DataFrame)-> str:
+def metrics(target: list, pred: pd.DataFrame, gt: pd.DataFrame, out_dir: Path = Path(os.getcwd())) -> str:
     """
     Build a text report showing the main classification metrics,
-    to measure the quality of predictions of the tensorflow classification model.
+    to measure the quality of predictions of the tensorflow classification model, and save it to a text file.
 
     Args:
         target (list): names matching the classes
         pred (pd.DataFrame): predicted classes
         gt (pd.DataFrame): ground truth classes
-    
-    Returns:
+        out_dir (Path): Directory where the report file will be saved
+
+    Return:
         classification metrics (str): text report
     """
-    print("Accuracy Score -> ",accuracy_score(pred, gt)*100)
-    print(classification_report(gt, pred, target_names=target))
+    report_file = os.path.join(out_dir, "classification_report.txt")
+    
+    accuracy = accuracy_score(pred, gt) * 100
+    report = classification_report(gt, pred, target_names=target)
+
+    # Print accuracy to console
+    print("Accuracy Score -> ", accuracy)
+
+    # Print classification report to console
+    print(report)
+
+    # Save the classification report to a text file
+    with open(report_file, 'w') as file:
+        file.write(f"Accuracy Score -> {accuracy}\n")
+        file.write(report)
+
+    print(f"\nThe Classification Report has been successfully saved in {out_dir}")
+
+    return report
+
 
 
 #Confusion Matrix
@@ -40,10 +58,11 @@ def cm (target, pred: pd.DataFrame, gt: pd.DataFrame, out_dir: Path = Path(os.ge
         gt (pd.DataFrame): ground truth classes
         out_dir (Path): path to the target directory to save the confusion matrix plot.
     
-    Returns:
+    Return:
         confusion matrix (plt): confusion matrix as a heatmap
     """
     cm = confusion_matrix(gt, pred)
+
     # Normalise
     cmn = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     fig, ax = plt.subplots(figsize=(15,10))
@@ -54,4 +73,5 @@ def cm (target, pred: pd.DataFrame, gt: pd.DataFrame, out_dir: Path = Path(os.ge
     filename = f"{Path(out_dir).stem}_cm.png"
     cm_path = f"{out_dir}/{filename}"
     figure.savefig(cm_path)
+    
     print(f"\nThe Confusion Matrix has been successfully saved in {out_dir}")
