@@ -49,7 +49,6 @@ def parsing_args() -> argparse.ArgumentParser:
 
 
 
-
 # does not execute main if the script is imported as a module
 if __name__ == '__main__': 
     args = parsing_args()
@@ -61,7 +60,7 @@ if __name__ == '__main__':
     gt = df["gt"]
 
     # 1. Accuracy Scores
-    accuracy_classifier.metrics(target, pred, gt)
+    accuracy_classifier.metrics(target, pred, gt, out_dir = out_dir)
     
     # 2. Confusion Matrix
     accuracy_classifier.cm(target, pred, gt, out_dir = out_dir)
