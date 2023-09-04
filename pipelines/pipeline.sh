@@ -25,6 +25,7 @@ run_command() {
     echo "Error running: $command" >> "$log_file"
   fi
 }
+
 echo "step 1: rotating pictures..."
 # Create a directory for rotated pictures
 rotated_dir="${output_dir}/rotated"
