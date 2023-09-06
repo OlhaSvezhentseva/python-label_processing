@@ -14,9 +14,9 @@ NON_ALPHA_NUM = re.compile("[^a-zA-Z\d\s]{2,}")
 PIPE = re.compile("[|]")
 
 
-def count_mean_token_length(tokens: list) -> int|float:
+def count_mean_token_length(tokens: list[str]) -> int|float:
     """
-    The function counts mean token length in the list of tokens
+    The function counts mean token length in the list of tokens.
 
     Args:
         tokens (list): list of tokens
@@ -89,9 +89,9 @@ def save_transcripts(transcripts: dict, file_name: str) -> None:
     data.to_csv(file_name)
 
 
-def process_ocr_output(ocr_output: str)  -> None:
+def process_ocr_output(ocr_output: str) -> str:
     """
-    The function splits the transcript in different categories.
+    The function assigns transcripts to a corresponding category and cleans it if necessary.
 
     Args:
         ocr_output (str): path to ocr output

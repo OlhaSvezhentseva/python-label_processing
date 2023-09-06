@@ -8,13 +8,13 @@ from label_postprocessing.vocabulary import extract_vocabulary
 from label_postprocessing.utils import load_json, dump_json, read_vocabulary
 
 
-def get_popular_words(vocabulary: dict, most_frequent: int):
+def get_popular_words(vocabulary: dict, most_frequent: int) -> list[str]:
     """The function extracts the first n-words with the highest occurence from vocabulary."""
     return list(vocabulary.keys())[:most_frequent]
 
 
-def fix_spelling(labels: list, vocabulary: dict, most_frequent: int, threshold: float):
-    """The function fixes words' spelling in transcripts if necessary."""
+def fix_spelling(labels: list[dict], vocabulary: dict, most_frequent: int, threshold: float) -> None:
+    """The function fixes words' spelling in the transcripts if necessary."""
     fixed_labels = []
     popular_words = get_popular_words(vocabulary, most_frequent)
     for label in labels:
