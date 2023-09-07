@@ -207,6 +207,7 @@ def create_crops(jpg_dir: Path, dataframe: str,
         out_dir (Path): path to the target directory to save the cropped jpgs.
     """
     dir_path = jpg_dir
+    out_dir = Path(out_dir)
     new_dir_name = Path(dir_path.name + "_cropped")
     path = out_dir.joinpath(new_dir_name)
     path.mkdir(parents=True, exist_ok=True)
