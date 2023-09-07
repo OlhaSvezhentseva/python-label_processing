@@ -88,12 +88,6 @@ Modules
       One for the NURIs and one of the rest of the transcription.
 
 
-   * ocr_postprocessing
-      Responsible for filtering the OCR outputs according to 4 categories:nuris, empty transcripts, 
-      plausible output, nonsense output.
-      Plausible outputs are corrected using regular expressions and are saved as corrected_transcripts.json.
-
-
 
 - label_evaluation:
    * redundancy
