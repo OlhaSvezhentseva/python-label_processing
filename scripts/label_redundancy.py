@@ -7,6 +7,7 @@ from label_evaluation import redundancy
 #Import Libraries
 import argparse
 import pandas as pd
+import json
 import re
 import warnings
 import os
@@ -56,7 +57,10 @@ if __name__ == "__main__":
     dataset_dir = args.dataset_dir
     result_dir = args.output
     
-    result = redundancy.per_redundancy(dataset_dir)
+    with open(dataset_dir, 'r') as file:
+        json_data = json.load(file)
+
+    result = redundancy.per_redundancy(json_data)
     out_dir = os.path.realpath(result_dir)
 
     #Write result in text file

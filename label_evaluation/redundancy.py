@@ -5,55 +5,63 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-def clean_data(df: pd.DataFrame) -> pd.DataFrame:
+def clean_data(data):
     '''
     Dataset preprocessing
 
     Args:
-        DataFrame(pd.DataFrame): Pandas Dataframe with labels' transcription
+        data (list of dict): List of dictionaries with labels' transcription
 
     Returns:
-        DataFrame (pd.DataFrame): Preprocessed Pandas Dataframe
+        list of dict: Preprocessed list of dictionaries
     '''
-    df['text'] = df['text'].str.lower() #remove lowercase
-    df['text'] = df['text'].str.replace('[^\w\s]','') #remove punctuation
-    df['text'] = df['text'].str.replace(' ', '') #remove whitespace
-    patternDel = "http"
-    filter = df['text'].str.contains(patternDel)
-    df = df[~filter] #remove NURIs
-    return df
+    cleaned_data = []  # Create a new list to store cleaned data
+    for item in data:
+        text = item['text']
+        cleaned_text = text.lower()  # Convert text to lowercase
+        cleaned_text = ''.join(e for e in cleaned_text if e.isalnum() or e.isspace())  # Remove punctuation
+        cleaned_text = cleaned_text.replace(' ', '')  # Remove whitespace
+        if 'http' not in cleaned_text:
+            item['text'] = cleaned_text  # Update the text field in the original dictionary
+            cleaned_data.append(item)  # Add the cleaned dictionary to the new list
+    return cleaned_data
 
-def redundancy(df: pd.DataFrame) -> pd.DataFrame:
+
+def redundancy(data):
     '''
     Calculate transcription redundancy in preprocessed dataset.
 
     Args:
-        DataFrame(pd.DataFrame): Preprocessed Pandas Dataframe with labels' transcription
+        data (list of dict): Preprocessed list of dictionaries with labels' transcription
 
     Returns:
-        DataFrame (pd.DataFrame): Preprocessed Pandas Dataframe with grouped duplicates
+        list of dict: Preprocessed list of dictionaries with grouped duplicates
     '''
-    df = clean_data(df)
-    duplicates = df["text"]
-    df[duplicates.isin(duplicates[duplicates.duplicated()])].sort_values("text") #groupby duplicates
-    df = pd.concat(g for _, g in df.groupby("text") if len(g) > 1)
-    return df
+    data = clean_data(data)
+    text_set = set()
+    duplicates = []
+    for item in data:
+        text = item['text']
+        if text in text_set:
+            duplicates.append(item)
+        text_set.add(text)
+    return duplicates
 
-def per_redundancy(df: pd.DataFrame) -> int:
+
+def per_redundancy(data):
     '''
     Calculate percentage of transcription redundancy in preprocessed dataset with grouped duplicates.
 
     Args:
-        DataFrame(pd.DataFrame): Preprocessed Pandas Dataframe with labels' transcription and grouped duplicates
+        data (list of dict): Preprocessed list of dictionaries with labels' transcription and grouped duplicates
 
     Returns:
-        String (int): Percentage redundant text
+        int: Percentage of redundant text
     '''
-    df = pd.read_csv(df, sep= ";")
-    df_clean = df
-    df = redundancy(df)
-    sum_text = df_clean["text"].value_counts().sum()
-    sum_dup = df["text"].duplicated().sum() #find sum of duplicates
-    percentage_red = round(sum_dup/sum_text*100)
+    data_clean = clean_data(data)
+    duplicates = redundancy(data_clean)
+    sum_text = len(data_clean)
+    sum_dup = len(duplicates)  # Count duplicates
+    percentage_red = round(sum_dup / sum_text * 100)
     return percentage_red
 

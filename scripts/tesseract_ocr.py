@@ -27,7 +27,7 @@ FILENAME = "ocr_preprocessed.json"
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
     usage = 'tesseract_ocr.py [-h] [-v] [-t <thresholding>] [-b <blocksize>] \
-            [-c <c_value>] -d <crop-dir> [-multi <multiprocessing>]'
+            [-c <c_value>] -d <crop-dir> [-multi <multiprocessing>] -o <outdir> [-o <out-dir>]'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
@@ -131,7 +131,7 @@ def ocr__on_file(file_path, args,  thresh_mode, tesseract, new_dir):
     if args.c_value is not None:
         image.c_value(args.c_value)
     # trying to read the qr_code
-    decoded_qr = image.read_qr_code_2()
+    decoded_qr = image.read_qr_code()
     if decoded_qr is not None:
         # verbose_print(f"Qr-Code detected in {image.filename}\n")
         transcript: dict[str, str] = {"ID": image.filename,
@@ -187,7 +187,7 @@ def ocr_on_dir(crop_dir: str,
     else:
     # Use all the cores
         with mp.Pool() as pool:
-            result = pool.starmap(ocr__on_file,  [(file, args,  thresh_mode, tesseract, new_dir) for file in files])
+            result = pool.starmap(ocr__on_file, [(file, args,  thresh_mode, tesseract, new_dir) for file in files])
             for transcript, qr, nuri in result:
                 ocr_results.append(transcript)
                 if qr == True: count_qr += 1

@@ -16,7 +16,7 @@ from label_postprocessing.ocr_postprocessing import (
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
-    usage = 'process_ocr.py [-h] -j <ocr-json>'
+    usage = 'process_ocr.py [-h] -j <ocr-json> -o <out-dir>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
