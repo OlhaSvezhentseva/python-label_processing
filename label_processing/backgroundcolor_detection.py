@@ -2,21 +2,28 @@
 import cv2     
 from collections import Counter                 
 
-class BackgroundColorDetector():
-    def __init__(self, image_path, thresh = None):
+
+class BackgroundColorDetector:
+    def __init__(self, image_path, thresh=None):
+        """
+        Initialize the BackgroundColorDetector.
+
+        Args:
+            image_path (str): The path to the image file.
+            thresh (int, optional): The threshold for deciding if an image is dark or light. Defaults to 160 if not provided.
+        """
         self.img = cv2.imread(image_path)
         self.manual_count = {}
         self.w, self.h, self.channels = self.img.shape
-        self.total_pixels = self.w*self.h
+        self.total_pixels = self.w * self.h
         if thresh is None:
             self.thresh = 160
         else:
             self.thresh = thresh
 
-    #NOTE This can be very slow because it iterates through all pixels of a picture
     def count(self) -> None:
         """
-        Iterates through all pixels in a picture and retrieves their RGB VALUE
+        Iterates through all pixels in the image and retrieves their RGB values.
         """
         for y in range(0, self.h):
             for x in range(0, self.w):
@@ -27,6 +34,12 @@ class BackgroundColorDetector():
                     self.manual_count[rgb] = 1
 
     def average_colour(self) -> tuple[int, int, int]:
+        """
+        Calculate the average RGB color in the image.
+
+        Returns:
+            tuple[int, int, int]: The average RGB color as a tuple of integers.
+        """
         red = 0
         green = 0
         blue = 0
@@ -42,29 +55,42 @@ class BackgroundColorDetector():
         return round(average_red), round(average_green), round(average_blue)
 
     def twenty_most_common(self):
+        """
+        Get the 20 most common RGB values in the image.
+        """
         self.count()
-        #get most common 20 rgb values
         self.number_counter = Counter(self.manual_count).most_common(20)
-        #for rgb, value in self.number_counter:
-            #print(rgb, value, ((float(value)/self.total_pixels)*100))
 
     def detect(self):
+        """
+        Detect the background color of the image.
+
+        Returns:
+            tuple[int, int, int]: The detected background color as an RGB tuple.
+        """
         self.twenty_most_common()
-        self.percentage_of_first = (
-            float(self.number_counter[0][1])/self.total_pixels)
-        #print(self.percentage_of_first)
+        self.percentage_of_first = (float(self.number_counter[0][1]) / self.total_pixels)
         if self.percentage_of_first > 0.5:
             return self.number_counter[0][0]
         else:
             return self.average_colour()
-    
+
     def get_graytone(self):
+        """
+        Get the greyscale value of the detected background color.
+
+        Returns:
+            float: The greyscale value.
+        """
         red, green, blue = self.detect()
-        graytone: float = (0.299* red) + (0.587* green) + (0.114* blue)
-        print(graytone)
+        graytone = (0.299 * red) + (0.587 * green) + (0.114 * blue)
         return graytone
-    
+
     def decide(self) -> bool:
-        #convert to greyscale using the linear luminence formula
+        """
+        Decide if the image has a light or dark background based on the threshold.
+
+        Returns:
+            bool: True if the image has a light background, False if it has a dark background.
+        """
         return True if self.get_graytone() > self.thresh else False
-         

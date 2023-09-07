@@ -19,11 +19,11 @@ def get_predicted_transcriptions(filename: str) -> str:
     """
     Loads predictions from the OCR outputs as a json file.
 
-        Args:
-            filename (str): path to the json file
+    Args:
+        filename (str): path to the json file
 
-        Returns:
-            transcriptions (str): loaded json file
+    Returns:
+        transcriptions (str): loaded json file
     """
     with open(filename) as f:
         transcriptions = json.load(f)

@@ -186,7 +186,7 @@ def create_dirs(dataframe: pd.DataFrame, path: str) -> None:
     Creates for every class a seperate directory.
     In image preprocessing, erosion and dilation are often
     combined in the presented order to remove noise.
-scrop.
+
     Args:
         dataframe (pd.Dataframe): dataframe containig the classes as a column
         path (str): path of chosen directory

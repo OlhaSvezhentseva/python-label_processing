@@ -28,29 +28,37 @@ warnings.filterwarnings('ignore')
 
 ROTATIONS: tuple[int, int, int, int] = (0, 90, 180, 270)
 
-class TorchConfig():
+class TorchConfig:
     """
-    Configuration for PyTorch
+    Configuration for PyTorch.
     """
-    def __init__(self, model_path = None):
+
+    def __init__(self, model_path=None):
+        """
+        Initialize TorchConfig.
+
+        Args:
+            model_path (str, optional): Path to the model file. Defaults to None.
+        """
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         path: str = Path(__file__).parent.joinpath("../models/mfn_rot_classifier.pth")
-        self.model_path =  path if model_path == None else model_path
+        self.model_path = path if model_path is None else model_path
         if torch.cuda.is_available():
             self.map_location = lambda storage, loc: storage.cuda()
         else:
             self.map_location = 'cpu'
         self.transform = torch.nn.Sequential(
             transforms.ConvertImageDtype(dtype=torch.float32),
-            transforms.Resize(size=(224,224), antialias=True),
+            transforms.Resize(size=(224, 224), antialias=True),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
-            )
-    
-        
+        )
+
+
 class RotationDetector(nn.Module):
     """
-    Class for Rotation Detection. Inherits from nn.Module
+    Class for Rotation Detection. Inherits from nn.Module.
     """
+
     def __init__(self, basenet):
         super().__init__()
         self.basenet = basenet
@@ -65,20 +73,21 @@ class RotationDetector(nn.Module):
         y = self.basenet(x)
         y = self.SM(y)
         return y
-        
+
+
 def rotation(model: RotationDetector,
              image: np.ndarray,
              config: TorchConfig) -> np.ndarray:
     """
-    Performs a rotation of an image
+    Perform a rotation of an image.
 
     Args:
-        model (RotationDetector): model wrapper
-        image (np.ndarray): image that needs to be rotated
-        config (TorchConfig): pytorch configurations
+        model (RotationDetector): Model wrapper.
+        image (np.ndarray): Image that needs to be rotated.
+        config (TorchConfig): PyTorch configurations.
 
     Returns:
-        np.ndarray: rotated image
+        np.ndarray: Rotated image.
     """
     tr = transforms.ToTensor()
     image = tr(image)
@@ -89,7 +98,6 @@ def rotation(model: RotationDetector,
 
     pred = output.argmax(dim=1)[0]
     rotation_deg = ROTATIONS[pred]
+    # Rotate the image in the opposite direction of detected rotation.
     image = transforms.functional.rotate(image, -rotation_deg, expand=True)
     return image
-
-

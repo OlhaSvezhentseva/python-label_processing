@@ -17,7 +17,7 @@ FILENAME_TXT = "percentage_red.txt"
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
-    usage = 'redundancy.py [-h] -d <dataset-dir> -o <output>'
+    usage = 'label_redundancy.py [-h] -d <dataset-dir> -o <output>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage

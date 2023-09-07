@@ -110,6 +110,19 @@ def parsing_args() -> argparse.ArgumentParser:
 
 
 def ocr__on_file(file_path, args,  thresh_mode, tesseract, new_dir):
+    """
+    Perform OCR on an image file, including preprocessing and reading QR codes if present.
+
+    Args:
+        file_path (str): The path to the input image file.
+        args (argparse.Namespace): Command-line arguments.
+        thresh_mode (Threshmode): The thresholding mode to use during preprocessing.
+        tesseract (Tesseract): An instance of the Tesseract OCR processor.
+        new_dir (str): The directory where the preprocessed image will be saved.
+
+    Returns:
+        Tuple[dict, bool, bool]: A tuple containing the transcript dictionary, a boolean indicating QR code detection, and a boolean indicating Nuri detection.
+    """
     image = Image.read_image(file_path)
     qr = False
     nuri = False

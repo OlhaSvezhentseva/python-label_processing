@@ -22,7 +22,15 @@ def contains_only_letters(token: str) -> bool:
 
 
 def is_punctuation(token: str) -> bool:
-    """The function checks if a token is a punctuation mark."""
+    """
+    Check if a token is a punctuation mark.
+
+    Args:
+        token (str): The token to check for punctuation.
+
+    Returns:
+        bool: True if the token is a punctuation mark, False otherwise.
+    """
     if token in string.punctuation:
         return True
     return False
@@ -33,7 +41,7 @@ def extract_vocabulary(ocr_output: str) -> None:
     The function extracts unique words from the transcripts.
     These words must solely contain letters and be at least 3 characters long.
     
-        Args:
+    Args:
         ocr_output (str): ocr output
     """
     

@@ -56,6 +56,16 @@ def parsing_args() -> argparse.ArgumentParser:
     return args
 
 def vision_caller(filename: str, credentials: str) -> dict[str, str]:
+    """
+    Perform OCR using Google Cloud Vision API on an image file.
+
+    Args:
+        filename (str): The path to the input image file.
+        credentials (str): The path to the Google Cloud Vision API credentials.
+
+    Returns:
+        dict[str, str]: A dictionary containing the OCR results.
+    """
     vision_image = vision.VisionApi.read_image(filename, credentials)
     ocr_result: dict = vision_image.vision_ocr()
     return ocr_result

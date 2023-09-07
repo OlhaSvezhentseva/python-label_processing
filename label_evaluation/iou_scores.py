@@ -137,6 +137,7 @@ def class_pred(df_concat: pd.DataFrame) -> go.Figure():
 
     Args:
         df_concat (pd.DataFrame): concatenated dataframe
+        
     Returns:
         pio.Figure: plotly.io graph object
     """

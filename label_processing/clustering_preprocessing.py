@@ -32,7 +32,8 @@ def df_to_json(json: str, cluster_json: str) -> str:
 
     Args:
         json (str): path to the OCR json file.
-        cluster_json (str): path to where we want to save the preprocessed json file.                           
+        cluster_json (str): path to where we want to save the preprocessed json file.   
+                                
     Returns:
         json (str): preprocessed json file.
     """

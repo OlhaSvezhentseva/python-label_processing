@@ -43,10 +43,13 @@ class Image():
     def __init__(self, image: np.ndarray, path: str, blocksize: int = None,
                  c_value: int = None):
         """
+        Initialize an instance of Image class.
 
         Args:
-            image (_type_): _description_
-            path (_type_): _description_
+            image (np.ndarray): The image data as a NumPy array.
+            path (str): The path to the image file.
+            blocksize (int, optional): The blocksize for thresholding. Defaults to None.
+            c_value (int, optional): The c_value for thresholding. Defaults to None.
         """
         self.image = image
         self.path = path
@@ -92,24 +95,35 @@ class Image():
         self._path = path
     
     def copy_this(self) -> Image:
+        """
+        Create a copy of the current Image instance.
+
+        Returns:
+            Image: A copy of the current Image instance.
+        """
         return copy.copy(self)
     
     @staticmethod
     def read_image(path: str) -> Image:
         """
-        Returns instance of preprocessing of a picture.
+        Read an image from the specified path and return an instance of the Image class.
 
         Args:
-            path (str): path to a jpg file
+            path (str): The path to a JPG file.
 
         Returns:
-            Preprocessing: instance of preprocessing
-        """
-        
+            Image: An instance of the Image class.
+        """ 
         return Image(cv2.imread(path), path)
         
     
     def get_grayscale(self) -> Image:
+        """
+        Convert the image to grayscale.
+
+        Returns:
+            Image: An instance of the Image class representing the grayscale image.
+        """
         image = cv2.cvtColor(self.image, cv2.COLOR_RGB2GRAY)
         image_instance = self.copy_this()
         image_instance.image = image
@@ -117,6 +131,15 @@ class Image():
 
     
     def blur(self, ksize: tuple[int, int] = (5,5)) -> Image:
+        """
+        Apply Gaussian blur to the image.
+
+        Args:
+            ksize (Tuple[int, int], optional): The kernel size for blurring. Defaults to (5, 5).
+
+        Returns:
+            Image: An instance of the Image class representing the blurred image.
+        """
         image = cv2.GaussianBlur(self.image, ksize, 0)
         image_instance = self.copy_this()
         image_instance.image = image
@@ -124,6 +147,12 @@ class Image():
 
     
     def remove_noise(self) -> Image:
+        """
+        Remove noise from the image using median blur.
+
+        Returns:
+            Image: An instance of the Image class representing the noise-reduced image.
+        """
         image = cv2.medianBlur(self.image,5)
         image_instance = self.copy_this()
         image_instance.image = image
@@ -131,15 +160,13 @@ class Image():
     
     def thresholding(self, thresh_mode: Enum) -> Image:
         """
-        Method for thresholding: can perform three different kinds of 
-        thresholding: otsu's global thresholding, adaptive mean local
-        thresholding and adaptive gaussian local thresholding
+        Perform thresholding on the image.
 
         Args:
-            thresh_mode (Enum): Thresholding mode
+            thresh_mode (Threshmode): The thresholding mode to use (OTSU, ADAPTIVE_MEAN, or ADAPTIVE_GAUSSIAN).
 
         Returns:
-            Image: Instance of this class
+            Image: An instance of the Image class representing the thresholded image.
         """
         
         if thresh_mode == Threshmode.OTSU:
@@ -167,6 +194,12 @@ class Image():
     
 
     def dilate(self) -> Image:
+        """
+        Dilate the image using a 5x5 kernel.
+
+        Returns:
+            Image: An instance of the Image class representing the dilated image.
+        """
         kernel = np.ones((5,5),np.uint8)
         image =  cv2.dilate(self.image, kernel, iterations = 1)
         image_instance = self.copy_this()
@@ -174,6 +207,12 @@ class Image():
         return image_instance
 
     def erode(self) -> Image:
+        """
+        Erode the image using a 5x5 kernel.
+
+        Returns:
+            Image: An instance of the Image class representing the eroded image.
+        """
         kernel = np.ones((5,5),np.uint8)
         image = cv2.erode(self.image, kernel, iterations = 1)
         image_instance = self.copy_this()
@@ -199,7 +238,13 @@ class Image():
                                                int(round(width))),
                               borderValue=background)
 
-    def get_skew_angle(self) -> Optional[np.float64]: #returns either float or None 
+    def get_skew_angle(self) -> Optional[np.float64]: #returns either float or None
+        """
+        Calculate and return the skew angle of the image.
+
+        Returns:
+            Optional[np.float64]: The skew angle in degrees or None if it couldn't be determined.
+        """ 
         grayscale = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         #print(f"Calculating skew angle for {self.filename}")
         angle = determine_skew(grayscale, max_angle = MAX_SKEW_ANGLE,
@@ -207,6 +252,15 @@ class Image():
         return angle
         
     def deskew(self, angle: Optional[np.float64]) -> Image:
+        """
+        Rotate the image to deskew it.
+
+        Args:
+            angle (Optional[np.float64]): The skew angle to use for deskewing.
+
+        Returns:
+            Image: An instance of the Image class representing the deskewed image.
+        """
         #print(f"Rotating {self.filename}")
         image = self._rotate(self.image, angle, (255, 255, 255))
         image_instance = self.copy_this()
@@ -214,14 +268,14 @@ class Image():
         return image_instance
 
     def preprocessing(self, thresh_mode: Enum) -> Image:
-        """
-        Performs preprocessing -> grayscaling, binarization,
-        blurring, noise removal, deskewing
+         """
+        Perform a series of preprocessing steps on the image, including grayscaling, blurring, thresholding, noise removal, and deskewing.
 
         Args:
-            thresh_mode: threshmode. Defaults to "otsu".
+            thresh_mode (Threshmode): The thresholding mode to use (OTSU, ADAPTIVE_MEAN, or ADAPTIVE_GAUSSIAN).
+
         Returns:
-            Image: Image object
+            Image: An instance of the Image class representing the preprocessed image.
         """
         #skewangle has to be calculated before processing
         angle = self.get_skew_angle()
@@ -251,7 +305,7 @@ class Image():
     
     def read_qr_code_2(self) -> Optional[str]:
         """
-        tries to identify if picture has a qr-code and then reads and returns it
+        Tries to identify if picture has a qr-code and then reads and returns it
 
         Returns:
             Optional[str]: decoded qr-code text as a str or none if there is no
@@ -279,6 +333,13 @@ class Image():
     #     return decoded_text[0] if decoded_text else None
     
     def save_image(self, dir_path: str, appendix: Optional[str] = None) -> None:
+        """
+        Save the image to a specified directory with an optional appendix.
+
+        Args:
+            dir_path (str): The directory path where the image will be saved.
+            appendix (str, optional): An optional string to append to the image filename. Defaults to None.
+        """
         if appendix:
             filename = utils.generate_filename(self.filename, appendix,
                                                extension = "jpg")
@@ -290,7 +351,7 @@ class Image():
 
 class Threshmode(Enum):
     """
-    Different possibilities for threholding
+    Different possibilities for thresholding.
 
     Args:
         Enum (int):  
@@ -312,52 +373,50 @@ class Threshmode(Enum):
 #---------------------OCR Tesseract---------------------#
 
 
-class Tesseract():
-    
-    def __init__(self, languages = LANGUAGES, config = CONFIG,
-                 image: Optional[Image] = None):
+class Tesseract:
+    def __init__(self, languages=LANGUAGES, config=CONFIG, image: Optional[Image] = None):
+        """
+        Initialize the Tesseract OCR processor.
+
+        Args:
+            languages (str, optional): OCR available languages. Defaults to LANGUAGES.
+            config (str, optional): Additional custom configuration flags not available via the pytesseract function. Defaults to CONFIG.
+            image (Image, optional): An instance of the Image class representing the image to process. Defaults to None.
+        """
         self.config = config
         self.languages = languages
         self.image = image if image else None
-        
+
     @property
     def image(self) -> Image:
         return self._image
-    
+
     @image.setter
     def image(self, img: Image) -> None:
         self._image = img
-    
+
     @staticmethod
     def _process_string(result_raw: str) -> str:
         """
-        Processes the ocr_output by replacing \n with spaces and encoding it to
-        ascii and decoding it again to utf-8.
+        Processes the OCR output by replacing '\n' with spaces and encoding it to ASCII and decoding it again to UTF-8.
 
         Args:
-            result_raw (str): raw string from pytesseract output
+            result_raw (str): Raw string from pytesseract output.
 
         Returns:
-            str: processed string
+            str: Processed string.
         """
         processed = result_raw.replace('\n', ' ')
         return processed
-    
+
     def image_to_string(self) -> dict[str, str]:
         """
-        Apply OCR and Image parameters on jpg images.
-        
-        Args:
-            img (str): path to jpgs
-            languages (str): OCR available languages
-            config (str): any additional custom configuration flags
-            that are not available via the pytesseract function.
-            
+        Apply OCR and image parameters on JPG images.
+
         Returns:
-            str: output as string from Tesseract OCR processing.
+            dict[str, str]: A dictionary containing the image ID (filename) and the OCR-processed text.
         """
-        transcript = py.image_to_string(self.image.image, self.languages,
-                                        self.config)
+        transcript = py.image_to_string(self.image.image, self.languages, self.config)
         transcript = self._process_string(transcript)
         return {"ID": self.image.filename, "text": transcript}
 

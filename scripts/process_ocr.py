@@ -50,6 +50,13 @@ def parsing_args() -> argparse.ArgumentParser:
     return args
 
 def main(ocr_output: str, outdir: str) -> None:
+    """
+    Process OCR output and perform various tasks like identifying Nuri labels, empty labels, and correcting plausible labels.
+
+    Args:
+        ocr_output (str): The path to the OCR output JSON file.
+        outdir (str): The directory where the output files will be saved.
+    """
     nuri_labels = {}
     empty_labels = {}
     plausible_labels = []

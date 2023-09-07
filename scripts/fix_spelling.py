@@ -9,12 +9,31 @@ from label_postprocessing.utils import load_json, dump_json, read_vocabulary
 
 
 def get_popular_words(vocabulary: dict, most_frequent: int) -> list[str]:
-    """The function extracts the first n-words with the highest occurence from vocabulary."""
+    """
+    Extract the first n words with the highest occurrence from a vocabulary.
+
+    Args:
+        vocabulary (dict): A dictionary containing word frequencies.
+        most_frequent (int): The number of most frequent words to extract.
+
+    Returns:
+        list[str]: A list of the most frequent words.
+    """
     return list(vocabulary.keys())[:most_frequent]
 
-
 def fix_spelling(labels: list[dict], vocabulary: dict, most_frequent: int, threshold: float) -> None:
-    """The function fixes words' spelling in the transcripts if necessary."""
+    """
+    Fix words' spelling in transcripts if necessary and save the corrected transcripts to a JSON file.
+
+    Args:
+        labels (list[dict]): A list of transcript labels.
+        vocabulary (dict): A dictionary containing word frequencies for spelling suggestions.
+        most_frequent (int): The number of most frequent words to consider for spelling correction.
+        threshold (float): The threshold for character error rate (CER) to apply the correction.
+
+    Returns:
+        None
+    """
     fixed_labels = []
     popular_words = get_popular_words(vocabulary, most_frequent)
     for label in labels:
@@ -24,10 +43,7 @@ def fix_spelling(labels: list[dict], vocabulary: dict, most_frequent: int, thres
             if token.lower() in vocabulary.keys():
                 if vocabulary[token.lower()] <= 2:
                     for word in popular_words:
-                        cer = jiwer.cer(
-                                token.lower(),
-                                word
-                            )
+                        cer = jiwer.cer(token.lower(), word)
                         if 0 < cer < threshold:
                             text = re.sub(token, word, text)
         fixed_label = {"ID": label["ID"], "text": text}

@@ -72,6 +72,13 @@ def parsing_args() -> argparse.ArgumentParser:
 
 
 def main(input_image_dir, output_image_dir) -> None:
+    """
+    Perform image rotation using a pre-trained rotation detection model and save the rotated images.
+
+    Args:
+        input_image_dir (str): The directory containing input images to be rotated.
+        output_image_dir (str): The directory where the rotated images will be saved.
+    """
     efficientnet = torchvision.models.efficientnet_b0()
     model = rotator.RotationDetector(efficientnet)
     config = rotator.TorchConfig()

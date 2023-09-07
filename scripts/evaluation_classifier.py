@@ -14,7 +14,7 @@ warnings.filterwarnings('ignore')
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
-    usage = 'accuracy_classifier.py [-h] [-c N] -d </path/to/gt_dataframe> -o </path/to/outputs> '
+    usage = 'evaluation_classifier.py [-h] [-c N] -d </path/to/gt_dataframe> -o </path/to/outputs> '
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage

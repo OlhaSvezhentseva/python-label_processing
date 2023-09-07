@@ -70,21 +70,41 @@ def correct_transcript(transcript: str) -> str:
 
 
 def is_nuri(transcript: str) -> bool:
-    """The function checks if the transcript is a nuri."""
+    """
+    Check if the transcript is a URL starting with "http".
+
+    Args:
+        transcript (str): The transcript to check.
+
+    Returns:
+        bool: True if the transcript is a URL, False otherwise.
+    """
     if transcript.startswith("http"):
         return True
     return False
 
-
 def is_empty(transcript: str) -> bool:
-    """The function checks if the transcript is empty."""
+    """
+    Check if the transcript is empty (has zero length).
+
+    Args:
+        transcript (str): The transcript to check.
+
+    Returns:
+        bool: True if the transcript is empty, False otherwise.
+    """
     if len(transcript) == 0:
         return True
     return False
 
-
 def save_transcripts(transcripts: dict, file_name: str) -> None:
-    """The function saves transcripts as a csv-file."""
+    """
+    Save transcripts as a CSV file.
+
+    Args:
+        transcripts (dict): A dictionary containing transcripts.
+        file_name (str): The name of the CSV file to save.
+    """
     data = pd.DataFrame.from_dict(transcripts, orient="index")
     data.to_csv(file_name)
 
