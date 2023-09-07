@@ -106,21 +106,33 @@ def replace_nuri(transcript: dict[str, str]) -> dict[str, str]:
     Correct NURIs' format in OCR transcription json file outputs "text.
 
     Args:
-        data (list[dict[str,str]]): output of the ocr
-        
+        transcript (dict[str,str]): JSON transcript with "ID" and "text" fields.
+
     Returns:
-        str: correct NURI formats in "text" in json file ocr output
+        dict[str,str]: JSON transcript with corrected NURI formats in "text" field.
     """
-    #search for NURI number in "ID"
-    reg = re.compile(r"_u_[A-Za-z0-9]+")
+    # Compile both patterns for NURI
+    reg_nuri = re.compile(r"_u_[A-Za-z0-9]+")
+    reg_picturae_nuri = re.compile(r"_u_([0-9a-fA-F]+)\.jpg")
+    
     try:
-        nuri = reg.search(transcript["ID"]).group()
-        replace_string = "http://coll.mfn-berlin.de/u/"+ nuri[3:]
-        #replace "text" with NURI patterns formatted "ID"
-        transcript["text"] = replace_string
+        # Search for both NURI patterns in "ID"
+        nuri = reg_nuri.search(transcript["ID"])
+        picturae_nuri = reg_picturae_nuri.search(transcript["ID"])
+        
+        if nuri:
+            # If the first pattern is found, replace it
+            replace_string = "http://coll.mfn-berlin.de/u/" + nuri.group()[3:]
+            transcript["text"] = replace_string
+        elif picturae_nuri:
+            # If the second pattern is found, replace it
+            replace_string = "http://coll.mfn-berlin.de/u/" + picturae_nuri.group(1)
+            transcript["text"] = replace_string
     except AttributeError:
         pass
+
     return transcript
+
 
 def load_dataframe(filepath_csv: str) -> pd.DataFrame:
     """

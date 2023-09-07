@@ -31,6 +31,7 @@ setup(
              "scripts/image_classifier.py", 
              "scripts/evaluation_classifier.py",
              "scripts/cluster_visualisation.py",
+             "scripts/rotation_evaluation.py"
              "pipelines/pipeline.sh"],
     #include_package_data=True, #include the static data specified in the MANIFEST.in
     long_description=long_description,
@@ -59,6 +60,7 @@ setup(
         "regex",
         "nltk",
         "tensorflow",
-        "scikit-learn"
+        "scikit-learn",
+        "plotly-express"
     ],
 )
