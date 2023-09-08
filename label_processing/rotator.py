@@ -41,7 +41,7 @@ class TorchConfig:
             model_path (str, optional): Path to the model file. Defaults to None.
         """
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        path: str = Path(__file__).parent.joinpath("../models/mfn_rot_classifier.pth")
+        path: str = Path(__file__).parent.joinpath("../models/mfn_rot_classifier.pth").resolve()
         self.model_path = path if model_path is None else model_path
         if torch.cuda.is_available():
             self.map_location = lambda storage, loc: storage.cuda()

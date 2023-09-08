@@ -7,7 +7,6 @@ import shutil
 import math
 import pytesseract as py
 import numpy as np
-
 from pyzbar.pyzbar import decode
 from typing import  Union, Tuple, Optional
 from deskew import determine_skew
@@ -304,34 +303,6 @@ class Image():
         value = detect.detectAndDecode(self.image)[0]
         return value if value else None
     
-    def read_qr_code_2(self) -> Optional[str]:
-        """
-        Tries to identify if picture has a qr-code and then reads and returns it
-
-        Returns:
-            Optional[str]: decoded qr-code text as a str or none if there is no
-            qr-code found
-        """
-        #decode function imported from pyzbar
-        value = decode(self.image)
-        if value:
-            value = value[0][0].decode("utf8")
-        return value if value else None
-    
-    # def read_qr_code_3(self) -> Optional[str]:
-    #     """
-    #     tries to identify if picture has a qr-code and then reads and returns it
-
-    #     Returns:
-    #         Optional[str]: decoded qr-code text as a str or none if there is no
-    #         qr-code found
-    #     """
-    #     #decode function imported from pyzbar
-    #     with utils.HiddenPrints():
-    #         qread = qreader.QReader()
-    #         image = image = cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
-    #         decoded_text = qread.detect_and_decode(image=image)
-    #     return decoded_text[0] if decoded_text else None
     
     def save_image(self, dir_path: str, appendix: Optional[str] = None) -> None:
         """
@@ -369,8 +340,6 @@ class Threshmode(Enum):
             return cls.ADAPTIVE_GAUSSIAN
         if threshmode == 3:
             return cls.ADAPTIVE_MEAN
-
-
     
     
 #---------------------OCR Tesseract---------------------#
