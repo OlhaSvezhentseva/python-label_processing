@@ -25,23 +25,25 @@ mkdir -p "$rotated_dir"
 #acutual rotation
 rotation.py -o "$rotated_dir" -i "$2" > "$outlog" 2> "$errlog"
 #TODO check if pictures exists in this direcory 
-
+spd-say 'pictures are rotated'
 echo "step 2: performing image classification..."
 typed_dir="${1}/typed"
 image_classifier.py -o "$1" -j "$rotated_dir" > "$outlog" 2> "$errlog"
 #images are split into thre directories -> 'handwritten', 'to_crop', 'typed'
 #only proceed with the typed for now
-
+spd-say 'image classification done'
 echo "step 3: would be to split the pictures based on background color..."
 #TODO
 
 results_ocr="${1}/ocr_preprocessed.json"
 echo "step 4 performing ocr and saving resulting json in ${results_ocr}" 
 tesseract_ocr.py -d "$typed_dir" -o "$1" > "$outlog" 2> "$errlog"
-
+spd-say 'ocr finished'
 echo "step 5: postprocessing..."
-filter.py -j "$results_ocr" -o "$1" > "$outlog" 2> "$errlog"
+process_ocr.py -j "$results_ocr" -o "$1" > "$outlog" 2> "$errlog"
 postprocecessed_json=$(realpath "${1}/corrected_transcripts.json")
-
+spd-say 'post processing done'
 printf "pipeline finished postprocecessed json in %s", "$postprocecessed_json" 
-
+sleep 2; 
+spd-say -t female1 -w 'Great job! The pipeline is ready'
+spd-say -t -w 'Nice'
