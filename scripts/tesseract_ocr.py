@@ -131,7 +131,7 @@ def ocr__on_file(file_path, args,  thresh_mode, tesseract, new_dir):
     if args.c_value is not None:
         image.c_value(args.c_value)
     # trying to read the qr_code
-    decoded_qr = image.read_qr_code()
+    decoded_qr = image.read_qr_code_2()
     if decoded_qr is not None:
         # verbose_print(f"Qr-Code detected in {image.filename}\n")
         transcript: dict[str, str] = {"ID": image.filename,

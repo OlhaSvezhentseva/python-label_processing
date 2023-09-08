@@ -7,6 +7,7 @@ import shutil
 import math
 import pytesseract as py
 import numpy as np
+
 from pyzbar.pyzbar import decode
 from typing import  Union, Tuple, Optional
 from deskew import determine_skew
@@ -368,6 +369,8 @@ class Threshmode(Enum):
             return cls.ADAPTIVE_GAUSSIAN
         if threshmode == 3:
             return cls.ADAPTIVE_MEAN
+
+
     
     
 #---------------------OCR Tesseract---------------------#
