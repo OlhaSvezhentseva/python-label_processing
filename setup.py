@@ -24,7 +24,6 @@ setup(
              "scripts/cluster_id.py",
              "scripts/postprocessing_nuri.py",
              "scripts/background_color.py",
-             "scripts/background_color.py",
              "scripts/rotation.py",
              "scripts/process_ocr.py",
              "scripts/filter.py",
