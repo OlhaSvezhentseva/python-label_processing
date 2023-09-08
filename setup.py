@@ -24,7 +24,7 @@ setup(
              "scripts/cluster_id.py",
              "scripts/postprocessing_nuri.py",
              "scripts/background_color.py",
-             scripts/background_color.py",
+             "scripts/background_color.py",
              "scripts/rotation.py",
              "scripts/process_ocr.py",
              "scripts/filter.py",
@@ -33,8 +33,7 @@ setup(
              "scripts/ocr_postprocessing.py",
              "scripts/cluster_visualisation.py",
              "scripts/rotation_evaluation.py",
-             "pipelines/pipeline.sh",
-             "pipelines/pipeline1.sh"],
+             "pipelines/pipeline.sh"],
     #include_package_data=True, #include the static data specified in the MANIFEST.in
     long_description=long_description,
     long_description_content_type="text/markdown",

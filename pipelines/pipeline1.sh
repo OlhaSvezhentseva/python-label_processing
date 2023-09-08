@@ -1,7 +1,7 @@
 #!/bin/bash
 #shell script as a first try to connect the components of the pipeline
 set -e #Exit immediately if a command exits with a non-zero status.
-set -x #Print commands and their arguments as they are executed.
+#set -x #Print commands and their arguments as they are executed.
 set -u #Treat unset variables as an error when substituting.
 
 
@@ -40,7 +40,7 @@ echo "step 4 performing ocr and saving resulting json in ${results_ocr}"
 tesseract_ocr.py -d "$typed_dir" -o "$1" > "$outlog" 2> "$errlog"
 
 echo "step 5: postprocessing..."
-process_ocr.py -j "$results_ocr" -o "$1" > "$outlog" 2> "$errlog"
+filter.py -j "$results_ocr" -o "$1" > "$outlog" 2> "$errlog"
 postprocecessed_json=$(realpath "${1}/corrected_transcripts.json")
 
 printf "pipeline finished postprocecessed json in %s", "$postprocecessed_json" 

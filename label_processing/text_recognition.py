@@ -25,7 +25,7 @@ def find_tesseract() -> None:
     """
     Searches for the tesseract executable and raises an error if it is not found.
     """
-    tesseract_path = shutil.which("pytesseract")
+    tesseract_path = shutil.which("tesseract")
     if not tesseract_path:
         raise FileNotFoundError(("Could not find tesseract on your machine!"
                                  "Please read the README for instructions!"))
