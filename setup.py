@@ -32,7 +32,8 @@ setup(
              "scripts/evaluation_classifier.py",
              "scripts/cluster_visualisation.py",
              "scripts/rotation_evaluation.py",
-             "pipelines/pipeline.sh"],
+             "pipelines/pipeline.sh",
+             "pipelines/pipeline1.sh"],
     #include_package_data=True, #include the static data specified in the MANIFEST.in
     long_description=long_description,
     long_description_content_type="text/markdown",
