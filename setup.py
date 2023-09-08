@@ -53,7 +53,6 @@ setup(
         "cer",
         "plotly",
         "kaleido",
-        "pyzbar",
         "torchvision",
         "regex",
         "nltk",
