@@ -6,9 +6,9 @@ import numpy as np
 import os
 
 def rotation_evaluation(input_csv_path, output_folder):
-	"""
+    """
     Create a comparison plot and save it to a given output folder.
-    
+
     Args:
         input_csv_path (str): Path to the input CSV file containing data.
         output_folder (str): Path to the folder where the plot and value counts will be saved.

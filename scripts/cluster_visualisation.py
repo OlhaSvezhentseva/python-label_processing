@@ -8,7 +8,6 @@ import string
 import argparse
 import os
 
-from gensim.models import Word2Vec
 from nltk import word_tokenize
 from sklearn.manifold import TSNE
 
@@ -145,6 +144,7 @@ def main(ground_truth_json: str, cluster_json: str, out_dir: str):
     clusters_sorted = [clusters[file_id][0] for file_id in label_vectors]
     data = np.array(list(label_vectors.values()))
     tsne = TSNE(n_components=2, verbose=1, perplexity=40, n_iter=300)
+    print(data)
     tsne_results = tsne.fit_transform(data)
     
     df = pd.DataFrame()

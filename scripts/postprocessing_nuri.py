@@ -7,9 +7,13 @@ One for the NURIs and one of the rest of the transcription.
 import argparse
 import os
 import warnings
+import json
+import ast
+import os
+#from this package
+from label_processing import utils
 warnings.filterwarnings('ignore')
-#Import module from this package
-from label_postprocessing import nuri_postprocessing
+
 
 
 def parsing_args() -> argparse.ArgumentParser:
@@ -47,17 +51,54 @@ def parsing_args() -> argparse.ArgumentParser:
 
     return args
 
+def json_load(f: str) -> list:
+    """
+    Loads predictions from the OCR outputs as a json file.
+
+    Args:
+        f (str): path to the json file
+
+    Returns:
+        python_dict (list): list of dictionaries
+    """
+
+    with open(f, 'r') as f:
+        data = json.load(f)
+        data = json.dumps(data)
+        python_dict = ast.literal_eval(data)
+    return python_dict
+
+
+def cut_nuris(json: list) -> list:
+    """
+    Filters items in the list of dictionaries that are not starting with http.
+
+    Args:
+        f (list): list of dictionaries
+
+    Returns:
+        a (list): filtered list of dictionaries
+    """
+    data = json_load(json)
+    result = []
+    prefix = 'http'
+    for item in data:
+        if item['text'].startswith(prefix) is False:
+            result.append(item)
+    a = result
+    return a
 
 
 #does not execute main if the script is imported as a module
 if __name__ == '__main__': 
     args = parsing_args()
-    json = args.json_file
+    json_file = args.json_file
     out_dir = args.saving_directory
     
     #filter and write new json files
-    nuri_postprocessing.write_json_with(json, filepath = out_dir)
-    nuri_postprocessing.write_json_without(json, filepath = out_dir)
+    json_data = cut_nuris(json_file)
+    new_filename = utils.generate_filename(json_file,"_no_nuris" ,".json")
+    utils.save_json(json_data, new_filename, out_dir)
 
     print(f"The json files have been successfully saved in {out_dir}")
 

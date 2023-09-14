@@ -18,6 +18,7 @@ from label_processing import vision, utils
 #CREDENTIALS = '/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/total-contact-297417-48ed6585325e.json'
 #DIR = '/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/results_ocr/test'
 RESULTS_JSON = "ocr_google_vision.json"
+BACKUP_TSV = "ocr_google_vision_backup.tsv"
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
@@ -55,7 +56,7 @@ def parsing_args() -> argparse.ArgumentParser:
 
     return args
 
-def vision_caller(filename: str, credentials: str) -> dict[str, str]:
+def vision_caller(filename: str, credentials: str, backup_file: str) -> dict[str, str]:
     """
     Perform OCR using Google Cloud Vision API on an image file.
 
@@ -68,6 +69,8 @@ def vision_caller(filename: str, credentials: str) -> dict[str, str]:
     """
     vision_image = vision.VisionApi.read_image(filename, credentials)
     ocr_result: dict = vision_image.vision_ocr()
+    with open(backup_file, "w", encoding="utf8") as bf:
+        bf.write(ocr_result)
     return ocr_result
 
 
@@ -100,4 +103,4 @@ def main(crop_dir: str, credentials: str,
 
 if __name__ == '__main__':
     args = parsing_args()
-    main(args.dir, args.credentials)
+    exit(main(args.dir, args.credentials))

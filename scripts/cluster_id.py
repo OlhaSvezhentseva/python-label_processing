@@ -10,10 +10,10 @@ import os
 import warnings
 warnings.filterwarnings('ignore')
 #Import module from this package
-import label_processing.clustering_preprocessing
+import label_processing.clustering_preprocessing as clustering_preprocessing
 
 
-def parsing_args() ©:
+def parsing_args():
     '''generate the command line arguments using argparse'''
     usage = 'cluster_id.py [-h] -j <json_file> -p <clu_json>'
     parser =  argparse.ArgumentParser(description=__doc__,
