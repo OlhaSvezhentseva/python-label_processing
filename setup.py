@@ -29,6 +29,7 @@ setup(
              "scripts/fix_spelling.py",
              "scripts/image_classifier.py",
              "scripts/cluster_visualisation.py",
+             "scripts/cluster_visualisation_no_gt.py",
              "scripts/rotation_evaluation.py",
              "pipelines/pipeline.sh"],
     #include_package_data=True, #include the static data specified in the MANIFEST.in

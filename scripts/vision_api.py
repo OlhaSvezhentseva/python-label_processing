@@ -18,6 +18,7 @@ from label_processing import vision, utils
 #CREDENTIALS = '/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/total-contact-297417-48ed6585325e.json'
 #DIR = '/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/results_ocr/test'
 RESULTS_JSON = "ocr_google_vision.json"
+RESULTS_JSON_BOUNDING = "ocr_google_vision_wbounding.json"
 BACKUP_TSV = "ocr_google_vision_backup.tsv"
 
 def parsing_args() -> argparse.ArgumentParser:
@@ -70,8 +71,8 @@ def vision_caller(filename: str, credentials: str, backup_file: str) -> dict[str
     vision_image = vision.VisionApi.read_image(filename, credentials)
     ocr_result: dict = vision_image.vision_ocr()
     with open(backup_file, "w", encoding="utf8") as bf:
-        bf.write(ocr_result)
-    return ocr_result
+        bf.write(f"{ocr_result['ID']}\t{ocr_result['text']}")
+    return ocr_result 
 
 
 def main(crop_dir: str, credentials: str,
@@ -92,13 +93,22 @@ def main(crop_dir: str, credentials: str,
     with concurrent.futures.ThreadPoolExecutor() as executor:
         results: Iterator[dict[str, str]] = executor.map(vision_caller,
                                                          filenames,
-                                                         [credentials]* len(filenames))
+                                                         [credentials]* len(filenames),
+                                                         [BACKUP_TSV]*len(filenames))
     
     results_json = list(results)
     
     parent_dir = os.path.join(crop_dir, os.pardir) #Get the parent_directory
     #Select wheteher it should be saved as utf-8 or ascii
-    utils.save_json(results_json, RESULTS_JSON, parent_dir)
+    utils.save_json(results_json, RESULTS_JSON_BOUNDING, parent_dir)
+    #without bounding boxes
+    json_no_bounding = []
+    for entry in results_json:
+        entry.pop("bounding_boxes")
+        json_no_bounding.append(entry)
+    utils.save_json(json_no_bounding, RESULTS_JSON, parent_dir)
+        
+    
 
 
 if __name__ == '__main__':

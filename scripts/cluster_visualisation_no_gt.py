@@ -136,9 +136,10 @@ def main(cluster_json: str, out_dir: str):
     labels = load_json(labels_file)
     model1, tokens = build_word_vectors(labels)
     label_vectors = build_mean_label_vector(model1, tokens)
+    
     clusters_sorted = [labels[file_id][0] for file_id in label_vectors]
-    # data = np.array(list(label_vectors.values()))
-    data = list(label_vectors.values())
+    data = np.array(list(label_vectors.values()))
+    #data = list(label_vectors.values())
     tsne = TSNE(n_components=2, verbose=1, perplexity=40, n_iter=300)
     tsne_results = tsne.fit_transform(data)
     

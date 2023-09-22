@@ -161,3 +161,30 @@ def load_jpg(filepath: str) -> np.ndarray:
     """
     jpg = cv2.imread(filepath)
     return jpg
+
+def load_json(file: str):
+    """
+    Load JSON data from a file and deserialize it.
+
+    Args:
+        file (str): The name of the file containing JSON data.
+
+    Returns:
+        Any: The JSON data.
+    """
+    with open(file, 'r') as f:
+        data = json.load(f)
+    return data
+
+def read_vocabulary(file: str) -> dict:
+    """
+    Read a CSV file containing vocabulary and convert it to a dictionary.
+
+    Args:
+        file (str): The name of the CSV file containing vocabulary data.
+
+    Returns:
+        dict: A dictionary where keys and values are taken from the CSV data.
+    """
+    voc = pd.read_csv(file)
+    return dict(voc.values)

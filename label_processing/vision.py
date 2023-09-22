@@ -4,6 +4,7 @@ import io
 import os
 from google.cloud import vision
 import label_processing.utils
+import sys
 
 class VisionApi():
     """
@@ -83,6 +84,14 @@ class VisionApi():
         single_transcripts = response.text_annotations #get the ocr results
         #list of transcripts
         transcripts = [str(transcript.description) for transcript in single_transcripts]
+        
+        bounding_boxes = []
+        for transcript in single_transcripts: 
+            vertices = [
+            {word: f"({vertex.x},{vertex.y})"} for vertex, word in 
+            zip(transcript.bounding_poly.vertices, transcripts)
+            ]
+            bounding_boxes.append(vertices)
         #create string of transcripts
         if transcripts: #check if transcripts is not empty
             transcript = self.process_string(transcripts[0])
@@ -94,7 +103,8 @@ class VisionApi():
             raise Exception(
                 f'{response.error.message}\nFor more info on error messages, '
                 'check:  https://cloud.google.com/apis/design/errors')
-        entry = {'ID' : filename, 'text': transcript}
+        entry = {'ID' : filename, 'text': transcript,
+                 'bounding_boxes': bounding_boxes}
         if label_processing.utils.check_text(entry["text"]): 
             entry = label_processing.utils.replace_nuri(entry)
         return entry
