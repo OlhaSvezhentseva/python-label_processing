@@ -8,6 +8,8 @@ import string
 import argparse
 import os
 
+import plotly.express as px  #import plotly express
+
 from gensim.models import Word2Vec
 from nltk import word_tokenize
 from sklearn.manifold import TSNE
@@ -22,8 +24,8 @@ warnings.filterwarnings('ignore')
 
 def parsing_args() -> argparse.ArgumentParser:
     '''generate the command line arguments using argparse'''
-    usage = 'cluster_visualisation.py [-h] [-c N] \
-    -gt <ground truth ocr output> -c <cluster output>  -o <path to output directory>'
+    usage = 'cluster_visualisation_no_gt.py [-h] [-c N] \
+     -c <cluster output>  -o <path to output directory>'
     parser =  argparse.ArgumentParser(description=__doc__,
             add_help = False,
             usage = usage
@@ -136,9 +138,28 @@ def main(cluster_json: str, out_dir: str):
     labels = load_json(labels_file)
     model1, tokens = build_word_vectors(labels)
     label_vectors = build_mean_label_vector(model1, tokens)
-    
     clusters_sorted = [labels[file_id][0] for file_id in label_vectors]
     data = np.array(list(label_vectors.values()))
+    #clusters_sorted = [labels[file_id][0] for file_id in label_vectors]
+    #count the number of labels in each cluster
+    cluster_counts = {}
+    for file_id in label_vectors:
+        cluster = labels[file_id][0]
+        if cluster in cluster_counts:
+            cluster_counts[cluster] += 1
+        else:
+            cluster_counts[cluster] = 1
+
+    #filter clusters with more than 10 labels
+    clusters_to_plot = [cluster for cluster, count in cluster_counts.items() if count > 10]
+
+    #filter label vectors based on clusters to plot
+    filtered_label_vectors = {file_id: vector for file_id, vector in label_vectors.items() if labels[file_id][0] in      clusters_to_plot}
+    clusters_sorted = [labels[file_id][0] for file_id in filtered_label_vectors]
+    label_ids = [file_id for file_id in filtered_label_vectors]  #extract label IDs
+    tokens_list = [labels[file_id][1] for file_id in filtered_label_vectors]  #extract tokens
+    data = np.array(list(filtered_label_vectors.values()))
+    #data = np.array(list(label_vectors.values()))
     #data = list(label_vectors.values())
     tsne = TSNE(n_components=2, verbose=1, perplexity=40, n_iter=300)
     tsne_results = tsne.fit_transform(data)
@@ -147,7 +168,28 @@ def main(cluster_json: str, out_dir: str):
     df['tsne-2d-one'] = tsne_results[:,0]
     df['tsne-2d-two'] = tsne_results[:,1]
     df['y'] = clusters_sorted 
-    
+    df['label_id'] = label_ids  #add label IDs to df
+    df['tokens'] = tokens_list  #add tokens to df
+
+    #create an interactive scatter plot using plotly express
+    fig = px.scatter(
+        df, x="tsne-2d-one", y="tsne-2d-two", color="y",
+        hover_name="label_id",  
+        hover_data=["tokens"],
+    )
+
+    fig.update_layout(
+        title="Label Data T-SNE projection",
+        legend=dict(x=1.15, y=1.5),
+    )
+
+    if not os.path.exists(args.out_dir):
+        os.makedirs(args.out_dir)
+
+    fig.write_html(os.path.join(out_dir, "cluster_plot.html"))
+    return print(f"\nThe interactive scatter plot has been successfully saved in {out_dir}")
+
+    '''
     plt.figure(figsize=(20, 12))  # Increase the figure size
     sns.scatterplot(
         x="tsne-2d-one", y="tsne-2d-two",
@@ -162,8 +204,10 @@ def main(cluster_json: str, out_dir: str):
     plt.tight_layout()  # Adjust margins
     plt.savefig(os.path.join(out_dir, "cluster_plot.png"), bbox_inches='tight')  # Save with bbox_inches='tight'
     return print(f"\nThe image has been successfully saved in {out_dir}")
-
+    '''
     
 if __name__ == "__main__":
     args = parsing_args()
+    cluster_json = args.cluster_json
+    out_dir = args.out_dir
     exit(main(args.cluster_json, args.out_dir))
