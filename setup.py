@@ -1,5 +1,5 @@
 from setuptools import setup
-
+import glob
 
 with open ("README.rst", "r") as fh:
     long_description = fh.read()
@@ -15,23 +15,24 @@ setup(
         "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
         "operatzing System :: OS Independent",
     ],
-    scripts=["scripts/crop_seg.py",
-             "scripts/tesseract_ocr.py",
-             "scripts/vision_api.py",
-             "scripts/label_redundancy.py",
-             "scripts/ocr_accuracy.py",
-             "scripts/segmentation_accuracy.py",
-             "scripts/cluster_id.py",
-             "scripts/postprocessing_nuri.py",
-             "scripts/background_color.py",
-             "scripts/rotation.py",
-             "scripts/process_ocr.py",
-             "scripts/fix_spelling.py",
-             "scripts/image_classifier.py",
-             "scripts/cluster_visualisation.py",
-             "scripts/cluster_visualisation_no_gt.py",
-             "scripts/rotation_evaluation.py",
-             "pipelines/pipeline.sh"],
+    scripts=glob.glob("scripts/*/*.py"),
+    # scripts=["scripts/processing/crop_seg.py",
+    #          "scripts/processing/tesseract_ocr.py",
+    #          "scripts/processing/vision_api.py",
+    #          "scripts/label_redundancy.py",
+    #          "scripts/ocr_accuracy.py",
+    #          "scripts/segmentation_accuracy.py",
+    #          "scripts/cluster_id.py",
+    #          "scripts/postprocessing_nuri.py",
+    #          "scripts/processing/background_color.py",
+    #          "scripts/processing/rotation.py",
+    #          "scripts/process_ocr.py",
+    #          "scripts/fix_spelling.py",
+    #          "scripts/processing/image_classifier.py",
+    #          "scripts/cluster_visualisation.py",
+    #          "scripts/cluster_visualisation_no_gt.py",
+    #          "scripts/rotation_evaluation.py",
+    #          "pipelines/pipeline.sh"],
     #include_package_data=True, #include the static data specified in the MANIFEST.in
     long_description=long_description,
     long_description_content_type="text/markdown",
