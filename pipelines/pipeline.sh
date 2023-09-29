@@ -9,7 +9,13 @@ if [ "$1" == "-h" ]; then
   echo "usage:"
   echo "$0 [-h] <output dir> <dirname cropped files>"
   exit 0
+elif [ ! -d "$2" ]; then
+  echo "dir with cropped files does not exist"
+elif [ -z "$(ls -A "$2" | grep -iE "[.]jpe?g$")" ]; then
+  echo "dir with cropped files is empty"  
 fi
+
+#check if jpg files exist in picture repository
 
 
 #check if output dir exists and if not create it
