@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Callable
 #Import module from this package
 from label_processing.text_recognition import (Tesseract, 
-                                               Image,
+                                               ImageProcessor,
                                                Threshmode,
                                                find_tesseract,
                                                )
@@ -123,7 +123,7 @@ def ocr__on_file(file_path, args,  thresh_mode, tesseract, new_dir):
     Returns:
         Tuple[dict, bool, bool]: A tuple containing the transcript dictionary, a boolean indicating QR code detection, and a boolean indicating Nuri detection.
     """
-    image = Image.read_image(file_path)
+    image = ImageProcessor.read_image(file_path)
     qr = False
     nuri = False
     if args.blocksize is not None:

@@ -35,7 +35,7 @@ def find_tesseract() -> None:
 #---------------------Image Preprocessing---------------------#
 
 
-class Image():
+class ImageProcessor():
     """
     A class for image preprocessing and other image actions.
     """
@@ -93,7 +93,7 @@ class Image():
     def path(self, path: str) -> None:
         self._path = path
     
-    def copy_this(self) -> Image:
+    def copy_this(self) -> ImageProcessor:
         """
         Create a copy of the current Image instance.
 
@@ -103,7 +103,7 @@ class Image():
         return copy.copy(self)
     
     @staticmethod
-    def read_image(path: str) -> Image:
+    def read_image(path: str) -> ImageProcessor:
         """
         Read an image from the specified path and return an instance of the Image class.
 
@@ -113,10 +113,10 @@ class Image():
         Returns:
             Image: An instance of the Image class.
         """ 
-        return Image(cv2.imread(path), path)
+        return ImageProcessor(cv2.imread(path), path)
         
     
-    def get_grayscale(self) -> Image:
+    def get_grayscale(self) -> ImageProcessor:
         """
         Convert the image to grayscale.
 
@@ -129,7 +129,7 @@ class Image():
         return image_instance
 
     
-    def blur(self, ksize: tuple[int, int] = (5,5)) -> Image:
+    def blur(self, ksize: tuple[int, int] = (5,5)) -> ImageProcessor:
         """
         Apply Gaussian blur to the image.
 
@@ -145,7 +145,7 @@ class Image():
         return image_instance
 
     
-    def remove_noise(self) -> Image:
+    def remove_noise(self) -> ImageProcessor:
         """
         Remove noise from the image using median blur.
 
@@ -157,7 +157,7 @@ class Image():
         image_instance.image = image
         return image_instance
     
-    def thresholding(self, thresh_mode: Enum) -> Image:
+    def thresholding(self, thresh_mode: Enum) -> ImageProcessor:
         """
         Perform thresholding on the image.
 
@@ -192,7 +192,7 @@ class Image():
         return image_instance
     
 
-    def dilate(self) -> Image:
+    def dilate(self) -> ImageProcessor:
         """
         Dilate the image using a 5x5 kernel.
 
@@ -205,7 +205,7 @@ class Image():
         image_instance.image = image
         return image_instance
 
-    def erode(self) -> Image:
+    def erode(self) -> ImageProcessor:
         """
         Erode the image using a 5x5 kernel.
 
@@ -250,7 +250,7 @@ class Image():
                                min_angle=MIN_SKEW_ANGLE)
         return angle
         
-    def deskew(self, angle: Optional[np.float64]) -> Image:
+    def deskew(self, angle: Optional[np.float64]) -> ImageProcessor:
         """
         Rotate the image to deskew it.
 
@@ -266,7 +266,7 @@ class Image():
         image_instance.image = image
         return image_instance
 
-    def preprocessing(self, thresh_mode: Enum) -> Image:
+    def preprocessing(self, thresh_mode: Enum) -> ImageProcessor:
         """
         Perform a series of preprocessing steps on the image, including grayscaling, blurring, thresholding, noise removal, and deskewing.
 
@@ -345,7 +345,7 @@ class Threshmode(Enum):
 
 
 class Tesseract:
-    def __init__(self, languages=LANGUAGES, config=CONFIG, image: Optional[Image] = None):
+    def __init__(self, languages=LANGUAGES, config=CONFIG, image: Optional[ImageProcessor] = None):
         """
         Initialize the Tesseract OCR processor.
 
@@ -359,11 +359,11 @@ class Tesseract:
         self.image = image if image else None
 
     @property
-    def image(self) -> Image:
+    def image(self) -> ImageProcessor:
         return self._image
 
     @image.setter
-    def image(self, img: Image) -> None:
+    def image(self, img: ImageProcessor) -> None:
         self._image = img
 
     @staticmethod
