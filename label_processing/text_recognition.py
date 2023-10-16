@@ -10,6 +10,7 @@ import numpy as np
 from typing import  Union, Tuple, Optional
 from deskew import determine_skew
 from enum import Enum
+from pathlib import Path
 
 from label_processing import utils
 
@@ -51,8 +52,8 @@ class ImageProcessor():
             c_value (int, optional): The c_value for thresholding. Defaults to None.
         """
         self.image = image
-        self.path = path
-        self.filename = os.path.basename(self.path)
+        self.path = Path(path)
+        self.filename = self.path.name
         self.blocksize: Optional[int] = blocksize
         self.c_value: Optional[int] = c_value
         #preprocessing parameters
@@ -103,7 +104,7 @@ class ImageProcessor():
         return copy.copy(self)
     
     @staticmethod
-    def read_image(path: str) -> ImageProcessor:
+    def read_image(path: str|Path) -> ImageProcessor:
         """
         Read an image from the specified path and return an instance of the Image class.
 
@@ -113,7 +114,7 @@ class ImageProcessor():
         Returns:
             Image: An instance of the Image class.
         """ 
-        return ImageProcessor(cv2.imread(path), path)
+        return ImageProcessor(cv2.imread(str(path)), path)
         
     
     def get_grayscale(self) -> ImageProcessor:
@@ -266,7 +267,7 @@ class ImageProcessor():
         image_instance.image = image
         return image_instance
 
-    def preprocessing(self, thresh_mode: Enum) -> ImageProcessor:
+    def preprocessing(self, thresh_mode: Threshmode) -> ImageProcessor:
         """
         Perform a series of preprocessing steps on the image, including grayscaling, blurring, thresholding, noise removal, and deskewing.
 
@@ -303,7 +304,7 @@ class ImageProcessor():
         return value if value else None
     
     
-    def save_image(self, dir_path: str, appendix: Optional[str] = None) -> None:
+    def save_image(self, dir_path: str|Path, appendix: Optional[str] = None) -> None:
         """
         Save the image to a specified directory with an optional appendix.
 
@@ -352,11 +353,11 @@ class Tesseract:
         Args:
             languages (str, optional): OCR available languages. Defaults to LANGUAGES.
             config (str, optional): Additional custom configuration flags not available via the pytesseract function. Defaults to CONFIG.
-            image (Image, optional): An instance of the Image class representing the image to process. Defaults to None.
+            image (ImageProcessor, optional): An instance of the Image class representing the image to process. Defaults to None.
         """
         self.config = config
         self.languages = languages
-        self.image = image if image else None
+        self.image = image 
 
     @property
     def image(self) -> ImageProcessor:

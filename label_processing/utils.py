@@ -49,13 +49,14 @@ def generate_filename(original_path: str, appendix: str,
     #check if file is a dir and add apendix
     
     #remove extension if it has one
-    new_filename, _ = os.path.splitext(original_path)
+    new_filename, _ = os.path.splitext(os.path.basename(original_path))
     
+    appendix = appendix.strip("_")
     if original_path[-1] == "/" :
         new_filename = (f"{os.path.basename(os.path.dirname(new_filename))}"
                         f"_{appendix}")
     else:
-        new_filename = f"{os.path.basename(original_path)}_{appendix}"
+        new_filename = f"{new_filename}_{appendix}"
     
     if extension is not None:
         if extension[0] != ".":
