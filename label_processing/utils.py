@@ -7,6 +7,7 @@ import cv2
 from typing import Optional
 import numpy as np
 
+#TODO these patterns are too generic
 PATTERN = r"/u/|http|u/|coll|mfn|/u|URI"
 
 

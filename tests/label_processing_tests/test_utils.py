@@ -22,5 +22,9 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(filename_file, "CASENT0179609_L_label_typed_1_test.jpg")
         self.assertEqual(filename_dir, "output_test.jpg")
 
-    
+    def test_check_text(self):
+        pattern_1 = "http:/hello/world"
+        pattern_2 = "collection "
+        self.assertTrue(check_text(pattern_1))
+        self.assertFalse(check_text(pattern_2))
     
