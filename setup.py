@@ -5,7 +5,7 @@ with open ("README.rst", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name='label_processing',
+    name='OCR2Data',
     version='1.1',
     description='Package for specimen label information extraction and processing',
     packages=["label_processing", "label_evaluation", "label_postprocessing"],
