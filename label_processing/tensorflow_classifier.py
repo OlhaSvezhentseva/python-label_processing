@@ -10,7 +10,7 @@ import re
 import tensorflow as tf
 from tensorflow import keras
 
-import label_processing.utils
+from label_processing import utils
 
 
 #--------------------------------Predict Classes--------------------------------#
@@ -45,6 +45,7 @@ def class_prediction(model: tf.keras.Sequential, class_names: list, jpg_dir: str
     Returns:
         DataFrame (pd.DataFrame): Pandas Dataframe with the predicted results.
     """
+    utils.check_dir(jpg_dir)
     print("\nPredicting classes")
     all_predictions =[]
     img_width = 180
@@ -85,8 +86,8 @@ def create_dirs(dataframe: pd.DataFrame, path: str) -> None:
     for uni_class in uniques:
         Path(f"{path}/{uni_class}").mkdir(parents=True, exist_ok=True)
 
-
-def make_file_name(label_id: str, pic_class: str, occurence: int) -> None:
+#TODO why call this label_id?
+def make_file_name(label_id: str, pic_class: str, occurence: int) -> str:
     """
     Creates a fitting filename.
 
@@ -133,7 +134,7 @@ def filter_pictures(jpg_dir: Path, dataframe: str,
     for filepath in glob.glob(os.path.join(dir_path, '*.jpg')):
             filename = os.path.basename(filepath)
             match = dataframe[dataframe.filename == filename]
-            image_raw = label_processing.utils.load_jpg(filepath) # image_raw = utils.load_jpg(filepath)
+            image_raw = utils.load_jpg(filepath) # image_raw = utils.load_jpg(filepath)
             label_id = Path(filename).stem
             classes = []
             for _,row in match.iterrows():

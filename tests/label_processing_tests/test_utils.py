@@ -27,4 +27,6 @@ class TestUtils(unittest.TestCase):
         pattern_2 = "collection "
         self.assertTrue(check_text(pattern_1))
         self.assertFalse(check_text(pattern_2))
+        
+    #TODO check_nuri removal?
     
