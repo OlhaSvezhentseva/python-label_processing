@@ -7,9 +7,13 @@ Collection Mining - Entomological Label Information Extraction
 
 Introduction
 ------------
-This package contains AI models and functions to handle
-segmenting, classifying, rotating, performing OCRs and clustering entomology specimen labels. Its installation also includes 
-scripts designed for classifying the labels during segmentation, preprocessing the images before applying the Pytesseract or Google Vision OCRs, as well as postprocessing the OCR outputs before clustering.
+This package is a comprehensive solution that seamlessly integrates a range of AI models and functional components, meticulously designed to facilitate the segmentation, classification, rotation, OCR, and clustering of entomology specimen labels. It serves as the foundational framework for the initial steps of information extraction, working in conjunction with the python-mfnb clustering package, which handles clustering in subsequent stages.
+
+Moreover, the installation package includes three specialized TensorFlow classifiers, each thoughtfully adapted to accommodate the distinct styles of input labels. This additional functionality enhances the versatility of the package.
+
+In addition to these core features, our package offers a set of carefully crafted scripts, designed to streamline label classification during the segmentation process, optimize image preprocessing before the application of Pytesseract or Google Vision OCR, and refine the postprocessing of OCR outputs to augment the clustering phase.
+
+This comprehensive package allows to efficiently navigate the intricate landscape of entomology label processing while conserving valuable time and resources. It combines precision with versatility, making it an invaluable asset for data processing in the field of entomology.
 
 
 Installation
@@ -67,7 +71,22 @@ Modules
 
 
    * tensorflow_classifier
-      Classifier to detect and classify images of label specimens into three categories: handwritten, typed and to_crop.
+      This module offers tools for image classification and organization.
+      It involves loading a pre-trained image classifier model and using it to predict classes for images. 
+      Subsequently, it facilitates the organization of these images into separate directories based on their predicted classes. 
+      The module is designed to streamline the process of image classification and management.
+      
+      **Key Features:**
+      1. **Loading a Trained Model:** The module provides a function to load a pre-trained Keras Sequential image classifier model from a specified file.
+
+      2. **Predicting Classes:** Another function is available to predict the classes of images in a directory using the loaded model and generate a Pandas DataFrame containing the results.
+
+      3. **Creating Separate Directories:** To organize the images, the module includes functionality to create separate directories for each class of images based on the predictions.
+
+      4. **Renaming Images:** Images are renamed based on their predicted classes and saved in the corresponding directories.
+
+      5. **Efficient Workflow:** The module streamlines the image classification and organization process, saving time and resources.
+
 
    * accuracy_classifier
       Evaluate the performance of the tensorflow classifier.
