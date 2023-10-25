@@ -343,7 +343,7 @@ For usage information, run any of these scripts with the option --help.
 
       .. code:: bash
 
-         evaluation_classifier.py -o <path_to_output_directory> -d <path_to_your_data.csv>
+         evaluation_classifier.py [-h] -o <path_to_output_directory> -d <path_to_your_data.csv>
 
 
 
