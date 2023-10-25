@@ -130,17 +130,17 @@ Modules
 
 
    * accuracy_classifier
-      This module is focused on evaluating and visualizing the performance of the tensorflow classifier.
+      This module is focused on evaluating and visualizing the performance of the TensorFlow classifier.
       It calculates accuracy scores, generates classification reports, and creates visual representations of confusion matrices. 
       Users can provide the model's predictions and ground truth data as input to these functions, and the results are both displayed in the console and saved to files for further analysis and reporting.
 
-   **Key Features:**
+      **Key Features:**
 
-         1. **Accuracy Score Calculation:** The module includes a function (metrics) for calculating the accuracy score of a classification model. This feature is useful for assessing how well the model's predictions match the ground truth data.
+            1. **Accuracy Score Calculation:** The module includes a function (metrics) for calculating the accuracy score of a classification model. This feature is useful for assessing how well the model's predictions match the ground truth data.
 
-         2. **Classification Report Generation:** In addition the module generates a comprehensive classification report that includes metrics such as precision, recall, F1-score, and support for each class. This report provides a detailed breakdown of the model's performance for different classes.
+            2. **Classification Report Generation:** In addition the module generates a comprehensive classification report that includes metrics such as precision, recall, F1-score, and support for each class. This report provides a detailed breakdown of the model's performance for different classes.
 
-         3. **Confusion Matrix:** The confusion matrix is a valuable tool for understanding the model's performance by showing how many true positives, true negatives, false positives, and false negatives occur for each class. The confusion matrix is visualized as a heatmap, making it easier to interpret.
+            3. **Confusion Matrix:** The confusion matrix is a valuable tool for understanding the model's performance by showing how many true positives, true negatives, false positives, and false negatives occur for each class. The confusion matrix is visualized as a heatmap, making it easier to interpret.
 
 
 
@@ -319,7 +319,7 @@ For usage information, run any of these scripts with the option --help.
 - evaluation:
 
    * evaluation_classifier.py
-      This script is designed for evaluating the accuracy of of the Tensorflow classifier.
+      This script is designed for evaluating the accuracy of of the TensorFlow classifier.
       It performs accuracy assessment and generates confusion matrices for a set of predictions. The script reads an input CSV file containing both predicted (pred) and ground truth (gt) labels, calculates accuracy scores, and produces confusion matrices. 
       It allows for customizable output directory specification and provides a concise help message for command-line usage.
       Executes the `accuracy_classifier.py` module.
@@ -343,7 +343,7 @@ For usage information, run any of these scripts with the option --help.
 
       .. code:: bash
 
-         python evaluation_classifier.py -o /path/to/output_directory -d /path/to/your/data.csv
+         python evaluation_classifier.py -o <path_to_output_directory> -d <path_to_your_data.csv>
 
 
 
