@@ -330,7 +330,7 @@ For usage information, run any of these scripts with the option --help.
 * image_classifier.py
    The `image_classifier.py` script is designed to simplify the process of image classification using pre-trained TensorFlow classifier models. 
    This script is particularly useful for tasks that involve predicting classes for images and efficiently organizing them based on these predictions.
-   Executes the tensorflow_classifier.py module.
+   Executes the `tensorflow_classifier.py`` module.
 
    **Key Features:**
 
