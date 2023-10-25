@@ -349,9 +349,8 @@ For usage information, run any of these scripts with the option --help.
    To utilize the script, execute it from the command line as follows:
 
    ```bash
-
    python image_classifier.py -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
-
+   ```
 
 
 * evaluation_classifier.py
