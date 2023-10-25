@@ -1,4 +1,4 @@
-Collection Mining - OCR to Data
+Collection Mining - Entomological Label Information Extraction
 ===================================================================
 
 *A Python package for the Berlin Natural History Museum*
