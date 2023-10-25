@@ -335,6 +335,7 @@ For usage information, run any of these scripts with the option --help.
    **Key Features:**
 
       1. **Command-Line Usage:** Users can execute the script from the command line with options to specify the classifier model, input image directory, and output directory for saving results.
+      The command `-h`or `--help` displays a usage message and a list of available command-line options, along with brief explanations for each option.
 
       2. **Model Selection:** The script supports three pre-defined classifier models, each tailored to a specific classification task. Users can choose the appropriate model for their image classification needs (e.g., distinguishing between 'nuri' and 'not_nuri' (1), 'handwritten' and 'printed' (2), or 'multi' and 'single' labels (3)).
 
@@ -350,7 +351,7 @@ For usage information, run any of these scripts with the option --help.
 
    .. code:: bash
 
-      python image_classifier.py -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
+      python image_classifier.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
 
 
 
