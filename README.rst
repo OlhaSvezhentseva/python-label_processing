@@ -241,7 +241,7 @@ For usage information, run any of these scripts with the option --help.
 
       .. code:: bash
 
-         python image_classifier.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
+         image_classifier.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
 
 
 - postprocessing:
@@ -343,7 +343,7 @@ For usage information, run any of these scripts with the option --help.
 
       .. code:: bash
 
-         python evaluation_classifier.py -o <path_to_output_directory> -d <path_to_your_data.csv>
+         evaluation_classifier.py -o <path_to_output_directory> -d <path_to_your_data.csv>
 
 
 
