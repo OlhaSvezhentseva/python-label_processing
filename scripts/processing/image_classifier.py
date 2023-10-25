@@ -10,7 +10,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-def parse_arguments():
+def parse_arguments() -> argparse.Namespace:
     """
     Parse command-line arguments using argparse.
 
@@ -106,13 +106,13 @@ def main():
     out_dir = args.out_dir
 
     # Call the Model
-    model = tensorflow_classifier.get_model(model_path)
+    model = label_processing.tensorflow_classifier.get_model(model_path)
 
     # Model Predictions and save CSV
-    df = tensorflow_classifier.class_prediction(model, class_names, jpeg_dir, out_dir=out_dir)
+    df = label_processing.tensorflow_classifier.class_prediction(model, class_names, jpeg_dir, out_dir=out_dir)
 
     # Save classified pictures
-    tensorflow_classifier.filter_pictures(jpeg_dir, df, out_dir=out_dir)
+    label_processing.tensorflow_classifier.filter_pictures(jpeg_dir, df, out_dir=out_dir)
 
 if __name__ == '__main__':
     main()

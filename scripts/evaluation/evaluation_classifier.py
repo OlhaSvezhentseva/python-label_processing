@@ -1,66 +1,68 @@
-'''
-Execute the accuracy_classifier.py module.
-'''
-
-#Import module from this package
+# Import the necessary module from the 'label_evaluation' module package
 from label_evaluation import accuracy_classifier
-#Import third party libraries
+
+# Import third-party libraries
 import argparse
 import os
 import warnings
 import pandas as pd
+
+# Suppress warning messages during execution
 warnings.filterwarnings('ignore')
 
 
-def parsing_args() -> argparse.ArgumentParser:
-    '''generate the command line arguments using argparse'''
-    usage = 'evaluation_classifier.py [-h] [-c N] -d </path/to/gt_dataframe> -o </path/to/outputs> '
-    parser =  argparse.ArgumentParser(description=__doc__,
-            add_help = False,
-            usage = usage
-            )
+def parse_arguments() -> argparse.Namespace:
+    """
+    Parse command-line arguments and return the parsed arguments.
 
-    parser.add_argument(
-            '-h','--help',
-            action='help',
-            help='Open this help text.'
-            )
+    Returns:
+        argparse.Namespace: Parsed command-line arguments.
+    """
+    usage = 'evaluation_classifier.py [-h] -o </path/to/outputs> -d </path/to/gt_dataframe>'
 
-    parser.add_argument(
-            '-o', '--out_dir',
-            metavar='',
-            type=str,
-            default = os.getcwd(),
-            help=('Directory in which the accuracy scores and plot will be stored.\n'
-                'Default is the user current working directory.')
-            )
-    
-    parser.add_argument(
-            '-d', '--df',
-            metavar='',
-            type=str,
-            required = True,
-            help=('Directory where the csv is stored.')
-            )
-    
-    args = parser.parse_args()
+    # Define command-line arguments and their descriptions
+    parser = argparse.ArgumentParser(
+        description="Execute the accuracy_classifier.py module.",
+        add_help = False,
+        usage = usage)
 
-    return args
+    parser.add_argument('-h','--help',
+                        action='help',
+                        help='Description of the command-line arguments.')
 
+    parser.add_argument('-o', '--out_dir',
+                        metavar='',
+                        type=str,
+                        default=os.getcwd(),
+                        help=('Directory in which the accuracy scores and plots will be stored. '
+                              'Default is the current working directory.'))
+
+    parser.add_argument('-d', '--df',
+                        metavar='',
+                        type=str,
+                        required=True,
+                        help=('Path to the input CSV file.'))
+
+    return parser.parse_args()
 
 
-# does not execute main if the script is imported as a module
 if __name__ == '__main__': 
-    args = parsing_args()
-    target = ['typed', 'to_crop', 'handwritten']
+    # Parse command-line arguments
+    args = parse_arguments()
     out_dir = args.out_dir
+
+    # Read the CSV file into a DataFrame
     df = pd.read_csv(args.df, sep=';')
 
+    # Extract 'pred' and 'gt' columns
     pred = df["pred"]
     gt = df["gt"]
 
+    # Get unique classes from the 'gt' column
+    target = df["gt"].unique().tolist()
+
     # 1. Accuracy Scores
-    accuracy_classifier.metrics(target, pred, gt, out_dir = out_dir)
+    accuracy_classifier.metrics(target, pred, gt, out_dir=out_dir)
     
     # 2. Confusion Matrix
-    accuracy_classifier.cm(target, pred, gt, out_dir = out_dir)
+    accuracy_classifier.cm(target, pred, gt, out_dir=out_dir)
