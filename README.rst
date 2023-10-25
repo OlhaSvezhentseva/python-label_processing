@@ -95,12 +95,6 @@ Modules
 
 
 
-   * accuracy_classifier
-      Evaluate the performance of the tensorflow classifier.
-
-
-
-
 - label_postprocessing:
    * utils
       Creates json files of the postprocessing modules' outputs.
@@ -135,158 +129,67 @@ Modules
       Calculates CER and WER by comparing the predicted and groundtruth transcriptions.
 
 
+   * accuracy_classifier
+      This module is focused on evaluating and visualizing the performance of the tensorflow classifier.
+      It calculates accuracy scores, generates classification reports, and creates visual representations of confusion matrices. 
+      Users can provide the model's predictions and ground truth data as input to these functions, and the results are both displayed in the console and saved to files for further analysis and reporting.
+
+   **Key Features:**
+
+         1. **Accuracy Score Calculation:** The module includes a function (metrics) for calculating the accuracy score of a classification model. This feature is useful for assessing how well the model's predictions match the ground truth data.
+
+         2. **Classification Report Generation:** In addition the module generates a comprehensive classification report that includes metrics such as precision, recall, F1-score, and support for each class. This report provides a detailed breakdown of the model's performance for different classes.
+
+         3. **Confusion Matrix:** The confusion matrix is a valuable tool for understanding the model's performance by showing how many true positives, true negatives, false positives, and false negatives occur for each class. The confusion matrix is visualized as a heatmap, making it easier to interpret.
+
 
 
 Scripts
 -------
 For usage information, run any of these scripts with the option --help.
 
-* crop_seg.py
-   Uses a segmentation-model to perform segmentation on jpg images, crop and classify them.
 
-   **Inputs:**
-      - the path to the directory of the input jpgs
-      - the model used for the segmentation
-      - the path to the directory in which the resulting crops and the csv will be stored
+- processing:
 
-   **Outputs:**
-      - the labels in the pictures are segmented and cropped out of the picture, becoming their own file named after 
-        their jpg of origin and assigned class
-      - the predicted segmentation outputs are also saved as a csv (filename, class, prediction score, coordinates)
+   * crop_seg.py
+      Uses a segmentation-model to perform segmentation on jpg images, crop and classify them.
 
+      **Inputs:**
+         - the path to the directory of the input jpgs
+         - the model used for the segmentation
+         - the path to the directory in which the resulting crops and the csv will be stored
 
-
-* vision_api.py
-   Performs the Google Vision OCR on the segmented labels by calling the API and returns it as a json file. 
-   
-   **Inputs:**
-      - the path to the google credentials json file
-      - the path to the directory of the input jpgs
-
-   **Output:**
-      - ocr results as a json file
+      **Outputs:**
+         - the labels in the pictures are segmented and cropped out of the picture, becoming their own file named after 
+         their jpg of origin and assigned class
+         - the predicted segmentation outputs are also saved as a csv (filename, class, prediction score, coordinates)
 
 
 
-* label_redundancy.py
-   Module calculating labels' redundancy of a given text transcription (groundtruth or OCR generated).
-   
-   **Input:**
-      - the path to the transcription dataset
-
-   **Output:**
-      - redundancy percentage of the dataset
-
-
-
-* background_color.py
-   Tries to recognize the background color of a picture before running the ocr. 
-   
-   **Input:**
-      - directory which contains the cropped jpgs on which the ocr is supposed to be applied
-
-   **Output:**
-      - new directory with the pictures that exceed the given color threshold
-
-
-
-* cluster_id.py
-   Add unique identifiers to the pictures before clustering.
-   
-   **Inputs:**
-      - path to the OCR output json file
-      - path to where we want to save the preprocessed json file. Default is the user current working directory
-
-   **Output:**
-      - unique identifiers are added to the json file
-
-
-
-* filter.py
-   Responsible for filtering the ocr ouput according to 4 categories:
-   nuris, empty transcripts, plausible output, nonsense output.
-   Plausible output is corrected using regular expressions and is saveda as corrected_transcripts.json
-
-   **Inputs:**
-      - path to the OCR output json file
-
-   **Output:**
-      - one json file per category
-
-
-
-* fix_spelling.py
-   Checks if there are any spelling mistakes and fixes them.
-   This is achieved by calculating Edit distance between words that appear fewer than 2 times with the 20 most frequent 
-   words in the transcript. 
-   If the Edit distance is lower/equal than a particular threshold, the word is substituted with a frequent word under 
-   the assumption that this is the same word spelled correctly.
-
-   **Inputs:**
-      - path to json file
-      - word frequency
-      - distance
-      - `vocabulary.csv`
-
-   **Output:**
-      - json file 
-
-   1. Run `fix_spelling.py` to extract vocabulary (optionally) of the transcripts and correct spelling mistakes. Example:
-         `python fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34`
-
-      transcripts: is the file you want correct transcripts from. It makes sense to use  
-      `corrected_transcripts.json` that was created in the previous step (filter.py).
-
-      freq: is the number of the most frequent words that low-frequence words will be compared to.
-
-      dist: threshold for Edit distance. Distance less/equal than this value will be considered to be a small one, 
-      so that the low-frequence word can be changed.
+   * vision_api.py
+      Performs the Google Vision OCR on the segmented labels by calling the API and returns it as a json file. 
       
-   2. If you already have `vocabulary.csv` file, then it should not be generated again, you may specify it:
-          `python fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34 --voc vocabulary.csv`
+      **Inputs:**
+         - the path to the google credentials json file
+         - the path to the directory of the input jpgs
+
+      **Output:**
+         - ocr results as a json file
 
 
 
-* ocr_accuracy.py
-   Module containing the accuracy evaluation parameters of the OCR outputs.
+   * background_color.py
+      Tries to recognize the background color of a picture before running the ocr. 
+      
+      **Input:**
+         - directory which contains the cropped jpgs on which the ocr is supposed to be applied
 
-   **Inputs:**
-      - path to the ground truth dataset
-      - path json file OCR output
-      - target folder where the accuracy results are saved. Default is the user current working directory
-
-   **Output:**
-      - ocr accuracy scores (json file, plots)
+      **Output:**
+         - new directory with the pictures that exceed the given color threshold
 
 
 
-* postprocessing_nuri.py
-   Creates two separated json files from the OCR output json file.
-   One for the NURIs and one of the rest of the transcription.
-
-   **Inputs:**
-      - path to the json file - OCR output
-      - directory in which the json files will be saved. Default is the user current working directory
-      - target folder where the accuracy results are saved. Default is the user current working directory
-
-   **Output:**
-      - json file - postprocessed ocr outputs
-
-
-
-* process_ocr.py
-   Filter the OCR ouputs according to 4 categories:nuris, empty transcripts, plausible output, nonsense output.
-   Plausible outputs are corrected using regular expressions and is saved as corrected_transcripts.json.
-
-   **Input:**
-      - path to the json file - OCR output
-
-   **Output:**
-      - one json file per categories
-
-
-
-* rotation.py
+   * rotation.py
    Classifier to detect orientation of image (0°, 90°, 180°, 270°) and to correct orientation.
 
    **Inputs:**
@@ -295,77 +198,189 @@ For usage information, run any of these scripts with the option --help.
 
    **Output:**
       - rotated images in new directory
-
-
-
-* segmentation_accuracy.py
-   Evaluate segmentation model.
-
-   **Inputs:**
-      - path to the ground truth coordinates csv
-      - path to the predicted coordinates csv
-      - target folder where the iou accuracy results and plots are saved. Default is the user current working directory
-
-   **Output:**
-      - csv and box plots with accuracy scores
    
 
 
-* tesseract_ocr.py
-   Module containing the Pytesseract OCR parameters to be performed on the cropped jpg outputs.
+   * tesseract_ocr.py
+      Module containing the Pytesseract OCR parameters to be performed on the cropped jpg outputs.
 
-   **Inputs:**
-      - select whether verbose or quiet mode
-      - optional argument: select thresholding 
-      - optional argument: blocksize parameter for adaptive thresholding
-      - optional argument: c_value parameter for adaptive thesholding
-      - directory which contains the cropped jpgs on which the ocr is supposed to be applied
+      **Inputs:**
+         - select whether verbose or quiet mode
+         - optional argument: select thresholding 
+         - optional argument: blocksize parameter for adaptive thresholding
+         - optional argument: c_value parameter for adaptive thesholding
+         - directory which contains the cropped jpgs on which the ocr is supposed to be applied
 
-   **Outputs:**
-      - preprocessed pictures
-      - json file - OCR transcriptions
-
-
-
-* image_classifier.py
-   The `image_classifier.py` script is designed to simplify the process of image classification using pre-trained TensorFlow classifier models. 
-   This script is particularly useful for tasks that involve predicting classes for images and efficiently organizing them based on these predictions.
-   Executes the `tensorflow_classifier.py` module.
-
-   **Key Features:**
-
-      1. **Command-Line Usage:** Users can execute the script from the command line with options to specify the classifier model, input image directory, and output directory for saving results.
-         The command `-h` or `--help` displays a usage message and a list of available command-line options, along with brief explanations for each option.
-
-      2. **Model Selection:** The script supports three pre-defined classifier models, each tailored to a specific classification task. Users can choose the appropriate model for their image classification needs (e.g., distinguishing between 'nuri' and 'not_nuri' (1), 'handwritten' and 'printed' (2), or 'multi' and 'single' labels (3)).
-
-      3. **Automatic Class Selection:** Based on the chosen model, the script automatically selects the class labels associated with that model. This simplifies the process of predicting image classes, as users don't need to manually specify class names.
-
-      4. **Predictions and Organization:** After parsing command-line arguments and selecting the model and class names, the script proceeds to load the selected model, predict classes for the images in the provided directory, and organize the images into separate directories according to their predicted classes.
-
-      5. **Customizable Output Directory:** Users have the option to specify an output directory for saving both the results (in CSV format) and the classified images. The default output directory is set to the current working directory.
-   
-   **Usage:**
-
-   To utilize the script, execute it from the command line as follows:
-
-   .. code:: bash
-
-      python image_classifier.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
+      **Outputs:**
+         - preprocessed pictures
+         - json file - OCR transcriptions
 
 
 
-* evaluation_classifier.py
-   Execute the accuracy_classifier.py module. Evaluate the performance of the classification model.
+   * image_classifier.py
+      This script is designed to simplify the process of image classification using pre-trained TensorFlow classifier models. 
+      This script is particularly useful for tasks that involve predicting classes for images and efficiently organizing them based on these predictions.
+      Executes the `tensorflow_classifier.py` module.
 
-   **Inputs:**
-      - path to the ground truth dataframe
-      - path to the target directory where the confusion matrix should be saved
+      **Key Features:**
 
-   **Outputs:**
-      - accuracy metrics
-      - confusion matrix
+         1. **Command-Line Usage:** Users can execute the script from the command line with options to specify the classifier model, input image directory, and output directory for saving results.
+            The command `-h` or `--help` displays a usage message and a list of available command-line options, along with brief explanations for each option.
 
+         2. **Model Selection:** The script supports three pre-defined classifier models, each tailored to a specific classification task. Users can choose the appropriate model for their image classification needs (e.g., distinguishing between 'nuri' and 'not_nuri' (1), 'handwritten' and 'printed' (2), or 'multi' and 'single' labels (3)).
+
+         3. **Automatic Class Selection:** Based on the chosen model, the script automatically selects the class labels associated with that model. This simplifies the process of predicting image classes, as users don't need to manually specify class names.
+
+         4. **Predictions and Organization:** After parsing command-line arguments and selecting the model and class names, the script proceeds to load the selected model, predict classes for the images in the provided directory, and organize the images into separate directories according to their predicted classes.
+
+         5. **Customizable Output Directory:** Users have the option to specify an output directory for saving both the results (in CSV format) and the classified images. The default output directory is set to the current working directory.
+      
+      **Usage:**
+
+      To utilize the script, execute it from the command line as follows:
+
+      .. code:: bash
+
+         python image_classifier.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
+
+
+- postprocessing:
+
+   * cluster_id.py
+      Add unique identifiers to the pictures before clustering.
+      
+      **Inputs:**
+         - path to the OCR output json file
+         - path to where we want to save the preprocessed json file. Default is the user current working directory
+
+      **Output:**
+         - unique identifiers are added to the json file
+
+
+
+   * fix_spelling.py
+      Checks if there are any spelling mistakes and fixes them.
+      This is achieved by calculating Edit distance between words that appear fewer than 2 times with the 20 most frequent 
+      words in the transcript. 
+      If the Edit distance is lower/equal than a particular threshold, the word is substituted with a frequent word under 
+      the assumption that this is the same word spelled correctly.
+
+      **Inputs:**
+         - path to json file
+         - word frequency
+         - distance
+         - `vocabulary.csv`
+
+      **Output:**
+         - json file 
+
+      1. Run `fix_spelling.py` to extract vocabulary (optionally) of the transcripts and correct spelling mistakes. Example:
+            `python fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34`
+
+         transcripts: is the file you want correct transcripts from. It makes sense to use  
+         `corrected_transcripts.json` that was created in the previous step (filter.py).
+
+         freq: is the number of the most frequent words that low-frequence words will be compared to.
+
+         dist: threshold for Edit distance. Distance less/equal than this value will be considered to be a small one, 
+         so that the low-frequence word can be changed.
+         
+      2. If you already have `vocabulary.csv` file, then it should not be generated again, you may specify it:
+            `python fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34 --voc vocabulary.csv`
+
+
+
+   * postprocessing_nuri.py
+      Creates two separated json files from the OCR output json file.
+      One for the NURIs and one of the rest of the transcription.
+
+      **Inputs:**
+         - path to the json file - OCR output
+         - directory in which the json files will be saved. Default is the user current working directory
+         - target folder where the accuracy results are saved. Default is the user current working directory
+
+      **Output:**
+         - json file - postprocessed ocr outputs
+
+
+
+   * process_ocr.py
+      Filter the OCR ouputs according to 4 categories:nuris, empty transcripts, plausible output, nonsense output.
+      Plausible outputs are corrected using regular expressions and is saved as corrected_transcripts.json.
+
+      **Input:**
+         - path to the json file - OCR output
+
+      **Output:**
+         - one json file per categories
+
+
+
+- evaluation:
+
+   * evaluation_classifier.py
+      This script is designed for evaluating the accuracy of of the Tensorflow classifier.
+      It performs accuracy assessment and generates confusion matrices for a set of predictions. The script reads an input CSV file containing both predicted (pred) and ground truth (gt) labels, calculates accuracy scores, and produces confusion matrices. 
+      It allows for customizable output directory specification and provides a concise help message for command-line usage.
+      Executes the `accuracy_classifier.py` module.
+
+      **Key Features:**
+
+         1. **Command-Line Usage:** Users can execute the script from the command line with options to specify the output directory where accuracy scores and confusion matrices will be stored. It defaults to the current working directory.
+            As input, it requires the path to an input CSV file containing predicted (pred) and ground truth (gt) labels' classes.
+            The command `-h` or `--help` displays a usage message and a list of available command-line options, along with brief explanations for each option.
+
+         2. **Unique Class Extraction:** The script extracts unique classes from the ground truth (gt) column in the input CSV file. This is essential for accurate labeling in the confusion matrices.
+
+         3. **Accuracy Score Calculation:** The script invokes the metrics function from the `accuracy_classifier.py` module to calculate accuracy scores based on the provided predicted and ground truth labels. The results are saved in the output directory if specified.
+
+         4. **Confusion Matrix Generation:** The script invokes the cm function from the `accuracy_classifier.py` module to create confusion matrices. These matrices are generated as heatmaps and can also be saved in the output directory if desired.
+
+
+      **Usage:**
+
+      To utilize the script, execute it from the command line as follows:
+
+      .. code:: bash
+
+         python evaluation_classifier.py -o /path/to/output_directory -d /path/to/your/data.csv
+
+
+
+   * label_redundancy.py
+      Module calculating labels' redundancy of a given text transcription (groundtruth or OCR generated).
+      
+      **Input:**
+         - the path to the transcription dataset
+
+      **Output:**
+         - redundancy percentage of the dataset
+
+
+
+   * ocr_accuracy.py
+      Module containing the accuracy evaluation parameters of the OCR outputs.
+
+      **Inputs:**
+         - path to the ground truth dataset
+         - path json file OCR output
+         - target folder where the accuracy results are saved. Default is the user current working directory
+
+      **Output:**
+         - ocr accuracy scores (json file, plots)
+
+
+
+   * segmentation_accuracy.py
+      Evaluate segmentation model.
+
+      **Inputs:**
+         - path to the ground truth coordinates csv
+         - path to the predicted coordinates csv
+         - target folder where the iou accuracy results and plots are saved. Default is the user current working directory
+
+      **Output:**
+         - csv and box plots with accuracy scores
 
 
 
