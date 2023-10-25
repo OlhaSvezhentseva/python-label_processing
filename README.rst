@@ -77,6 +77,7 @@ Modules
       The module is designed to streamline the process of image classification and management.
       
       **Key Features:**
+      
       1. **Loading a Trained Model:** The module provides a function to load a pre-trained Keras Sequential image classifier model from a specified file.
 
       2. **Predicting Classes:** Another function is available to predict the classes of images in a directory using the loaded model and generate a Pandas DataFrame containing the results.
@@ -84,8 +85,6 @@ Modules
       3. **Creating Separate Directories:** To organize the images, the module includes functionality to create separate directories for each class of images based on the predictions.
 
       4. **Renaming Images:** Images are renamed based on their predicted classes and saved in the corresponding directories.
-
-      5. **Efficient Workflow:** The module streamlines the image classification and organization process, saving time and resources.
 
 
    * accuracy_classifier
