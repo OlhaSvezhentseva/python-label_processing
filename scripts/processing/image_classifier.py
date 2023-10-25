@@ -1,5 +1,5 @@
 # Import the necessary module from the 'label_processing' module package
-from label_processing import tensorflow_classifier
+import label_processing.tensorflow_classifier
 
 # Import third-party libraries
 import argparse
@@ -17,12 +17,20 @@ def parse_arguments():
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'python image_classifier.py -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>'
+    usage = 'python image_classifier.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>'
     
     # Define command-line arguments and their descriptions
     parser = argparse.ArgumentParser(
-        description="Execute the tensorflow_classifier.py module."
-    )
+        description="Execute the tensorflow_classifier.py module.",
+        add_help = False,
+        usage = usage)
+
+    parser.add_argument(
+            '-h','--help',
+            action='help',
+            help='Open this help text.'
+            )
+
     parser.add_argument(
         '-m', '--model',
         type=int,
@@ -32,18 +40,21 @@ def parse_arguments():
              '2: handwritten or printed\n'
              '3: multi label image or single label image')
     )
+
     parser.add_argument(
         '-o', '--out_dir',
         type=str,
         default=os.getcwd(),
         help=('Directory to store outputs: classified pictures and CSV (default: current working directory).')
     )
+
     parser.add_argument(
         '-j', '--jpg_dir',
         type=str,
         required=True,
         help=('Directory where the inputs (JPEG images) are stored.')
     )
+
     return parser.parse_args()
 
 def get_model_path(model_int):
