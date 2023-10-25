@@ -28,7 +28,7 @@ def parse_arguments():
     parser.add_argument(
             '-h','--help',
             action='help',
-            help='Open this help text.'
+            help='Description of the command-line arguments.'
             )
 
     parser.add_argument(
