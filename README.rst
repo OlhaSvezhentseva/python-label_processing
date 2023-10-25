@@ -85,13 +85,13 @@ Modules
       
       **Key Features:**
 
-      1. **Loading a Trained Model:** The module provides a function to load a pre-trained Keras Sequential image classifier model from a specified file.
+         1. **Loading a Trained Model:** The module provides a function to load a pre-trained Keras Sequential image classifier model from a specified file.
 
-      2. **Predicting Classes:** Another function is available to predict the classes of images in a directory using the loaded model and generate a Pandas DataFrame containing the results.
+         2. **Predicting Classes:** Another function is available to predict the classes of images in a directory using the loaded model and generate a Pandas DataFrame containing the results.
 
-      3. **Creating Separate Directories:** To organize the images, the module includes functionality to create separate directories for each class of images based on the predictions.
+         3. **Creating Separate Directories:** To organize the images, the module includes functionality to create separate directories for each class of images based on the predictions.
 
-      4. **Renaming Images:** Images are renamed based on their predicted classes and saved in the corresponding directories.
+         4. **Renaming Images:** Images are renamed based on their predicted classes and saved in the corresponding directories.
 
 
 
@@ -349,6 +349,7 @@ For usage information, run any of these scripts with the option --help.
    To utilize the script, execute it from the command line as follows:
 
    ```bash
+
    python image_classifier.py -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
 
 
