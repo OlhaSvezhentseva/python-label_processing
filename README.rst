@@ -39,14 +39,17 @@ Modules
       models, the classification of the cropped labels and the use of the predicted coordinates for cropping the labels.  
 
 
+
    * text_recognition
       Module containing the Pytesseract OCR parameters and image preprocessing to be performed on the _cropped jpg outputs from
       the segmentation_cropping.py module.
 
 
+
    * vision
       Module to call the Google Vision OCR API to be performed on the _cropped jpg outputs from
       the segmentation_cropping.py module.
+
 
 
    * utils
@@ -56,9 +59,11 @@ Modules
       check and correct the NURI transcriptions in the json files to have a clean output.
 
 
+
    * backgroundcolor_detection
       Tries to recognise the background color of a picture and checks if it exceeds a given threshold. 
       If it exceeds the threshold it moves the corresponding pictures into a newly created directory.
+
 
 
    * clustering_preprocessing
@@ -66,8 +71,10 @@ Modules
       It adds a specific identifier to each text outputs coming from the same picture.
 
 
+
    * rotator
       Classifier to detect orientation of image (0°, 90°, 180°, 270°) and to correct orientation.
+
 
 
    * tensorflow_classifier
@@ -77,7 +84,7 @@ Modules
       The module is designed to streamline the process of image classification and management.
       
       **Key Features:**
-      
+
       1. **Loading a Trained Model:** The module provides a function to load a pre-trained Keras Sequential image classifier model from a specified file.
 
       2. **Predicting Classes:** Another function is available to predict the classes of images in a directory using the loaded model and generate a Pandas DataFrame containing the results.
@@ -87,8 +94,10 @@ Modules
       4. **Renaming Images:** Images are renamed based on their predicted classes and saved in the corresponding directories.
 
 
+
    * accuracy_classifier
       Evaluate the performance of the tensorflow classifier.
+
 
 
 
@@ -97,8 +106,10 @@ Modules
       Creates json files of the postprocessing modules' outputs.
 
 
+
    * vocabulary
       Extracts unique words from the transcripts and counts their occurrences.
+
 
 
    * nuri_postprocessing
@@ -111,15 +122,18 @@ Modules
    * redundancy
       Check the redundancy of a given transcription (groundtruth or OCR generated).
 
+
    
    * iou_scores
       Module containing the accuracy evaluation parameters of the segmentation model.
       Calculates IOU scores by comparing the ground truth and predicted segmentation coordinates.
 
 
+
    * evaluate_text
       Module containing the accuracy evaluation parameters of the OCR outputs.
       Calculates CER and WER by comparing the predicted and groundtruth transcriptions.
+
 
 
 
@@ -141,6 +155,7 @@ For usage information, run any of these scripts with the option --help.
       - the predicted segmentation outputs are also saved as a csv (filename, class, prediction score, coordinates)
 
 
+
 * vision_api.py
    Performs the Google Vision OCR on the segmented labels by calling the API and returns it as a json file. 
    
@@ -150,6 +165,7 @@ For usage information, run any of these scripts with the option --help.
 
    **Output:**
       - ocr results as a json file
+
 
 
 * label_redundancy.py
@@ -162,6 +178,7 @@ For usage information, run any of these scripts with the option --help.
       - redundancy percentage of the dataset
 
 
+
 * background_color.py
    Tries to recognize the background color of a picture before running the ocr. 
    
@@ -170,6 +187,7 @@ For usage information, run any of these scripts with the option --help.
 
    **Output:**
       - new directory with the pictures that exceed the given color threshold
+
 
 
 * cluster_id.py
@@ -183,6 +201,7 @@ For usage information, run any of these scripts with the option --help.
       - unique identifiers are added to the json file
 
 
+
 * filter.py
    Responsible for filtering the ocr ouput according to 4 categories:
    nuris, empty transcripts, plausible output, nonsense output.
@@ -193,6 +212,7 @@ For usage information, run any of these scripts with the option --help.
 
    **Output:**
       - one json file per category
+
 
 
 * fix_spelling.py
@@ -226,6 +246,7 @@ For usage information, run any of these scripts with the option --help.
           `python fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34 --voc vocabulary.csv`
 
 
+
 * ocr_accuracy.py
    Module containing the accuracy evaluation parameters of the OCR outputs.
 
@@ -236,6 +257,7 @@ For usage information, run any of these scripts with the option --help.
 
    **Output:**
       - ocr accuracy scores (json file, plots)
+
 
 
 * postprocessing_nuri.py
@@ -251,6 +273,7 @@ For usage information, run any of these scripts with the option --help.
       - json file - postprocessed ocr outputs
 
 
+
 * process_ocr.py
    Filter the OCR ouputs according to 4 categories:nuris, empty transcripts, plausible output, nonsense output.
    Plausible outputs are corrected using regular expressions and is saved as corrected_transcripts.json.
@@ -260,6 +283,7 @@ For usage information, run any of these scripts with the option --help.
 
    **Output:**
       - one json file per categories
+
 
 
 * rotation.py
@@ -273,6 +297,7 @@ For usage information, run any of these scripts with the option --help.
       - rotated images in new directory
 
 
+
 * segmentation_accuracy.py
    Evaluate segmentation model.
 
@@ -284,6 +309,7 @@ For usage information, run any of these scripts with the option --help.
    **Output:**
       - csv and box plots with accuracy scores
    
+
 
 * tesseract_ocr.py
    Module containing the Pytesseract OCR parameters to be performed on the cropped jpg outputs.
@@ -300,15 +326,31 @@ For usage information, run any of these scripts with the option --help.
       - json file - OCR transcriptions
 
 
+
 * image_classifier.py
-   Execute the tensorflow_classifier.py module. Classify images into three categories: handwritten, typed and to_crop.
+   The `image_classifier.py` script is designed to simplify the process of image classification using pre-trained TensorFlow classifier models. 
+   This script is particularly useful for tasks that involve predicting classes for images and efficiently organizing them based on these predictions.
+   Executes the tensorflow_classifier.py module.
 
-   **Inputs:**
-      - path to the jpg images
-      - path to the target directory where the classifed images should be saved
+   **Key Features:**
 
-   **Output:**
-      - classified images into new target directories
+      1. **Command-Line Usage:** Users can execute the script from the command line with options to specify the classifier model, input image directory, and output directory for saving results.
+
+      2. **Model Selection:** The script supports three pre-defined classifier models, each tailored to a specific classification task. Users can choose the appropriate model for their image classification needs (e.g., distinguishing between 'nuri' and 'not_nuri' (1), 'handwritten' and 'printed' (2), or 'multi' and 'single' labels (3)).
+
+      3. **Automatic Class Selection:** Based on the chosen model, the script automatically selects the class labels associated with that model. This simplifies the process of predicting image classes, as users don't need to manually specify class names.
+
+      4. **Predictions and Organization:** After parsing command-line arguments and selecting the model and class names, the script proceeds to load the selected model, predict classes for the images in the provided directory, and organize the images into separate directories according to their predicted classes.
+
+      5. **Customizable Output Directory:** Users have the option to specify an output directory for saving both the results (in CSV format) and the classified images. The default output directory is set to the current working directory.
+   
+   **Usage:**
+
+   To utilize the script, execute it from the command line as follows:
+
+   ```bash
+   python image_classifier.py -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
+
 
 
 * evaluation_classifier.py
@@ -321,6 +363,7 @@ For usage information, run any of these scripts with the option --help.
    **Outputs:**
       - accuracy metrics
       - confusion matrix
+
 
 
 
