@@ -350,7 +350,7 @@ For usage information, run any of these scripts with the option --help.
 
    .. code:: bash
 
-   python image_classifier.py -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
+      python image_classifier.py -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
 
 
 
