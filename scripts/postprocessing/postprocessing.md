@@ -23,10 +23,12 @@ and the transcripts are saved as `corrected_transcripts.json`.
 
 
 To run the file make sure you are in the folder "postprocessing" and use the following command:
+
     `python process_ocr.py -j transcripts.json -o postprocessed_transcripts`
  
  Parameters:
  -j (json): is path to the json file  with transcripts (OCR output)
+ 
  -o (out_dir): is  the path to the output folder
  
 At the end one json file per category is saved in the output folder.
@@ -57,3 +59,5 @@ so that the low-frequence word can be changed.
 voc: (optional, per default False): path to the vocabulary
 When not specified, the script creates a vocabulary with each unique word and its count 
 and saves it as vocabulary.csv. If there is a vocabulary already, you may pass it to save time. 
+
+The corrected transcripts are saved as "spell_checked_transcripts.json"
