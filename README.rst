@@ -11,7 +11,7 @@ This package is a comprehensive solution that seamlessly integrates a range of A
 
 Moreover, the installation package includes three specialized TensorFlow classifiers, each thoughtfully adapted to accommodate the distinct styles of input labels. This additional functionality enhances the versatility of the package.
 
-In addition to these core features, our package offers a set of carefully crafted scripts, designed to streamline label classification during the segmentation process, optimize image preprocessing before the application of Pytesseract or Google Vision OCR, and refine the postprocessing of OCR outputs to augment the clustering phase.
+In addition to these core features, our package offers a set of scripts, designed to streamline label classification during the segmentation process, optimize image preprocessing before the application of Pytesseract or Google Vision OCR, and refine the postprocessing of OCR outputs to augment the clustering phase.
 
 This comprehensive package allows to efficiently navigate the intricate landscape of entomology label processing while conserving valuable time and resources. It combines precision with versatility, making it an invaluable asset for data processing in the field of entomology.
 
@@ -334,7 +334,7 @@ For usage information, run any of these scripts with the option --help.
 
          3. **Accuracy Score Calculation:** The script invokes the metrics function from the `accuracy_classifier.py` module to calculate accuracy scores based on the provided predicted and ground truth labels. The results are saved in the output directory if specified.
 
-         4. **Confusion Matrix Generation:** The script invokes the cm function from the `accuracy_classifier.py` module to create confusion matrices. These matrices are generated as heatmaps and can also be saved in the output directory if desired.
+         4. **Confusion Matrix Generation:** The script runs the cm function from the `accuracy_classifier.py` module to create confusion matrices. These matrices are generated as heatmaps and can also be saved in the output directory if desired.
 
 
       **Usage:**
