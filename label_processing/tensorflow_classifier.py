@@ -115,25 +115,22 @@ def rename_picture(img_raw: np.ndarray , path: str, filename: str, pic_class: st
     filepath = f"{path}/{pic_class}/{filename}"
     cv2.imwrite(filepath, img_raw)
 
-def filter_pictures(jpg_dir: Path, dataframe: str, out_dir: Path = Path(os.getcwd())) -> None:
+def filter_pictures(jpg_dir: Path, dataframe: pd.DataFrame, out_dir: Path = Path(os.getcwd())) -> None:
     """
     Create new folders for each class of the newly named classified pictures.
 
     Args:
         jpg_dir (str): Path to directory with jpgs.
-        dataframe (str): Path to CSV file.
-        out_dir (str): Path to the target directory to save the cropped jpgs.
+        dataframe (pd.DataFrame): Pandas DataFrame with class predictions.
+        out_dir (Path): Path to the target directory to save the cropped jpgs.
     """
-    dir_path = jpg_dir
-    out_dir = out_dir
-    create_dirs(dataframe, out_dir) # Create directories for every class
+    create_dirs(dataframe, out_dir)  # Create directories for every class
 
-    for filepath in glob.glob(os.path.join(dir_path, '*.jpg')):
+    for filepath in glob.glob(os.path.join(jpg_dir, '*.jpg')):
         filename = os.path.basename(filepath)
         match = dataframe[dataframe.filename == filename]
         image_raw = utils.load_jpg(filepath)
         label_id = Path(filename).stem
-        classes = []
         for _, row in match.iterrows():
             pic_class = row['class']
             filename = make_file_name(label_id, pic_class)
