@@ -199,7 +199,6 @@ def ocr_on_dir(crop_dir: str,
 
 if __name__ == "__main__":
     args = parsing_args()
-    t1 = time()
     #New function verbose print
     verbose_print: Callable = print if args.verbose else lambda *a, **k: None    
     #Find path to tesseract
@@ -223,6 +222,4 @@ if __name__ == "__main__":
     
     verbose_print(f"Saving results in {os.path.abspath(outdir)} .")
     utils.save_json(result_data, FILENAME, outdir)
-    t2 = time()
-    print(t2 - t1)
 

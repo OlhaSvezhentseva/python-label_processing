@@ -1,3 +1,8 @@
+"""
+Module for OCR and preprocessing of the Images. Only used when performing the OCR
+with tesseract 
+"""
+
 #Import Librairies
 from __future__ import annotations
 import os
@@ -221,8 +226,20 @@ class ImageProcessor():
     
     @staticmethod
     def _rotate(
-        image: np.ndarray, angle: float, background: Union[int, Tuple[int, int, int]]
+        image: np.ndarray, angle: float|np.float, background: Union[int, Tuple[int, int, int]]
         ) -> np.ndarray:
+        """
+        performs a rotation of an image given an angle. When rotation is happening 
+        a background is added to keep the original dimensions of the picture
+
+        Args:
+            image (np.ndarray): image loaded in with opencv
+            angle (float): angle with which the picture should be rotated
+            background (Union[int, Tuple[int, int, int]]): rgb values for background colours
+
+        Returns:
+            np.ndarray: _description_
+        """
         old_width, old_height = image.shape[:2]
         angle_radian = math.radians(angle)
         width = (abs(np.sin(angle_radian) * old_height) 

@@ -1,3 +1,7 @@
+"""
+Contains useful functions that are used on multiple occasions throughout the package
+"""
+
 # Import Librairies
 import os
 import re

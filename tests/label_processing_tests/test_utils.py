@@ -4,6 +4,9 @@ from pathlib import Path
 from label_processing.utils import * 
 
 class TestUtils(unittest.TestCase):
+    nuri_transcript = {"ID": "coll.mfn-berlin.de_u_43acfb_label_box_2.jpg", "text": "http   : //cl. \n mfn-berli.de\n /43acfb"}
+    link = "http://coll.mfn-berlin.de/u/43acfb"
+    
     
     def test_check_dir(self):
         dir_with_jpgs = Path("../testdata/cropped_pictures")
@@ -27,6 +30,15 @@ class TestUtils(unittest.TestCase):
         pattern_2 = "collection "
         self.assertTrue(check_text(pattern_1))
         self.assertFalse(check_text(pattern_2))
+    
+    def test_replace_nuri_actual(self):
+        replaced = replace_nuri(self.nuri_transcript)
+        self.assertEqual(replaced["text"], self.link)
+    
+    def test_replace_nuri_no_nuri(self):
+        no_nuri_transcript = {"ID": "coll.mfn-berlin.de_u_43acfb_label_box_2.jpg",
+                           "text": "Somewhere in Kasachstan"}
+        replaced = replace_nuri(no_nuri_transcript)
+        self.assertEqual(replaced["text"], no_nuri_transcript["text"])
         
-    #TODO check_nuri removal?
     

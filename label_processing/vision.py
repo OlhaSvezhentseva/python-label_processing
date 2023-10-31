@@ -4,7 +4,6 @@ import io
 import os
 from google.cloud import vision
 import label_processing.utils
-import sys
 
 class VisionApi():
     """
