@@ -14,18 +14,31 @@ scripts designed for classifying the labels during segmentation, preprocessing t
 
 Installation
 ------------
-1. Clone python-mfnb from https://code.naturkundemuseum.berlin/collection-mining/label_processing.git .
+1. Create a python environment with python 3.10 (e.g. with conda). On newer python versions some of the dependencies might not work
+   This can be done with conda like this:
+
+   `conda create --name mfnb python=3.10`
+
+2. Clone python-mfnb from https://code.naturkundemuseum.berlin/collection-mining/label_processing.git .
 
    `git clone https://code.naturkundemuseum.berlin/collection-mining/label_processing.git`
 
-2. cd in label_processing-main
+3. cd in label_processing-main
 
    `cd <path to python-label_processing-main>`
    
-3. Install with pip, which will automatically fetch the requirements.
+4. Install with pip, which will automatically fetch the requirements.
 
    `pip install .`
 
+5. If it is intended to use tesseract tesseract needs to be installed. This can be done via a package manager:
+   
+   on ubuntu/debian:
+
+   `sudo apt install tesseract-ocr`
+   or on mac:
+   
+   `brew install tesseract`
 
 Modules
 -------
