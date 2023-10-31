@@ -56,7 +56,7 @@ class TorchConfig:
 
 class RotationDetector(nn.Module):
     """
-    Class for Rotation Detection. Inherits from nn.Module.
+    Class for Rotation Detection. 
     """
 
     def __init__(self, basenet):

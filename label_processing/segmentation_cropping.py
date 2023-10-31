@@ -31,8 +31,7 @@ class PredictLabel():
         Args:
             path_to_model (str): string that contains the path to the model.
             classes (list): list that contains the classes that should be used.
-            jpg_dir (str): string with path to the directory containing the
-                           original jpgs.
+            jpg_path (str): string with path to jpg file that has to be cropped
             threshold (float, optional): threshold value for scores.
                                          Defaults to 0.8.
         """
@@ -45,7 +44,7 @@ class PredictLabel():
         
     @property
     def jpg_path(self):
-        return self._jpeg_path
+        return self._jpg_path
     
     @jpg_path.setter
     def jpg_path(self, jpg_path: str|Path):
@@ -56,7 +55,7 @@ class PredictLabel():
         elif (isinstance(jpg_path,Path)):
             self._jpg_path = jpg_path
             
-    def retrieve_model(self) -> None:
+    def retrieve_model(self) -> detecto.core.Model:
         """
         Call trained object detection model, for example *model_labels_class.pth*.
         The model was trained with the Detecto python package which is built on top
@@ -91,6 +90,7 @@ class PredictLabel():
         image = detecto.utils.read_image(str(jpg_path))
         predictions = self.model.predict(image)
         labels, boxes, scores = predictions
+        entries = []
         for i, labelname in enumerate(labels):
             entry = {}
             entry['filename'] = jpg_path.name
@@ -100,15 +100,34 @@ class PredictLabel():
             entry['ymin'] = boxes[i][1]
             entry['xmax'] = boxes[i][2]
             entry['ymax'] = boxes[i][3]
-        return entry
+            entries.append(entry)
+        return entries
     
-def prediction_parallel(jpg_dir: Path, predictor: PredictLabel, n_processes: int):
+def prediction_parallel(jpg_dir: Path | str, predictor: PredictLabel,
+                        n_processes: int) -> pd.DataFrame:
+    """
+    performs the prediction for all jpg files in a directory. can run with parallel
+    processing. With the n_processes parameter one can specify the amount of cores used 
+
+    Args:
+        jpg_dir (Path|str): Path to jpg files on which the prediction should be performed  
+        predictor (PredictLabel): Prediction instance
+        n_processes (int): amount of processes that should be run in parallel. 
+
+    Returns:
+        pd.Dataframe: pandas Dataframe containing the predictions
+    """
+    if not isinstance(jpg_dir, Path):
+        jpg_dir = Path(jpg_dir)
+    
     file_names: list[Path] = list(jpg_dir.glob("*.jpg"))
 
-    
     with concurrent.futures.ProcessPoolExecutor(max_workers=n_processes) as executor:
         results = executor.map(predictor.class_prediction, file_names)
     
+    final_results =  []
+    #merge list of lists to single list
+    map(final_results.extend, results)
     return pd.DataFrame(list(results))
 
 
