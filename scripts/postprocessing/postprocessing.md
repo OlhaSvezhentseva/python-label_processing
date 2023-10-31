@@ -48,15 +48,15 @@ To run the file make sure you are in the folder "postprocessing" and use the fol
 
 Parameters:
 
-transcripts: is the file you want correct transcripts from. It makes sense to use
+--transcripts: is the file you want correct transcripts from. It makes sense to use
 corrected_transcripts.json that was created in the previous step (filter.py).
 
-freq: is the number of the most frequent words that low-frequent words will be compared to.
+--freq: is the number of the most frequent words that low-frequent words will be compared to.
 
-dist: threshold for Edit distance. Distance less/equal than this value will be considered to be a small one,
+--dist: threshold for Edit distance. Distance less/equal than this value will be considered to be a small one,
 so that the low-frequence word can be changed.
 
-voc: (optional, per default False): path to the vocabulary
+--voc: (optional, per default False): path to the vocabulary
 When not specified, the script creates a vocabulary with each unique word and its count 
 and saves it as vocabulary.csv. If there is a vocabulary already, you may pass it to save time. 
 
