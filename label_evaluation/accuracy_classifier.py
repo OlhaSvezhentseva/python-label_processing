@@ -1,4 +1,4 @@
-#Import Librairies
+# Import third-party libraries
 import pandas as pd
 from sklearn import metrics
 from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
@@ -10,7 +10,7 @@ from pathlib import Path
 import glob, os
 
 
-#Accuracy Scores
+# Accuracy Scores
 def metrics(target: list, pred: pd.DataFrame, gt: pd.DataFrame, out_dir: Path = Path(os.getcwd())) -> str:
     """
     Build a text report showing the main classification metrics,
@@ -47,7 +47,7 @@ def metrics(target: list, pred: pd.DataFrame, gt: pd.DataFrame, out_dir: Path = 
 
 
 
-#Confusion Matrix
+# Confusion Matrix
 def cm (target, pred: pd.DataFrame, gt: pd.DataFrame, out_dir: Path = Path(os.getcwd()))-> plt:
     """
     Compute confusion matrix to evaluate the performance of the classification.
