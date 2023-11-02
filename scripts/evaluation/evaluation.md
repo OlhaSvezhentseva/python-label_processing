@@ -7,7 +7,8 @@ This module aims at evaluation of separate modules of the pipeline.
 
 
 ## Structure
-File `ocr_accuracy.py` performs evaluation of the OCR output by comparing it to the ground truth. 
+# File `ocr_accuracy.py`
+ performs evaluation of the OCR output by comparing it to the ground truth. 
 For each transcript Levenshtein distance is calculated between its prediction and reference text.
 It is calculated both on character and word level, resulting in 2 scores: CER (Character Error Rate) and 
 WER (Word Error Rate).  
@@ -43,7 +44,8 @@ Besides, 2 violine plots representing the distribution of scores are saved in th
 
 
 
-File `cluster_visualisation.py` plots clusters using word embeddings and 
+# File `cluster_visualisation.py`
+plots clusters using word embeddings and 
 saves the plot as an HTML-link.
 
 Word embeddings can be built either using the ground truth data, or the predicted transcripts.
@@ -57,11 +59,11 @@ currently 100-dimensional space is used. With the help of tsne
 Besides, each dot has a colour representing the cluster it was assigned to. So, 
 dots with the same colour refer to one cluster. 
 
-In that way we can see if word embedding's predictions of label follow the same direction
+In that way we can see if word embedding's predictions of labels follow the same direction
 as the results of clustering algorithms. 
 
 HTML plot enables hovering over the dots and seeing the transcript of the label.
-This makes possible to check at once if neighbouring labels (dots)
+This makes it possible to check at once if neighbouring labels (dots)
 have similar texts. As there are often too many clusters to be represented clearly on the plot, 
 it is possible to pass a parameter representing the minimal size of cluster that will be plotted,
 that is the number of labels that a cluster must have in order to be plotted.
@@ -78,8 +80,38 @@ Parameters:
 
 -gt (ground_truth, default = None): path to the ground truth file
 
--o (ouptut_dir, default = user's working directory): path to the target folder where plot will be saved
+-o (ouptut_dir, default = user's working directory): path to the target folder where the plot will be saved
 
 -s (cluster_size, default = 1): the number of labels a cluster must have in order to be plotted,
 per default all clusters are plotted.
+
+
+# File `evaluation_classifier.py`
+
+This script is designed for evaluating the accuracy of of the TensorFlow classifier.
+It performs accuracy assessment and generates confusion matrices for a set of predictions. The script reads an input CSV file containing both predicted (pred) and ground truth (gt) labels, calculates accuracy scores, and produces confusion matrices. 
+It allows for customizable output directory specification and provides a concise help message for command-line usage.
+Executes the `accuracy_classifier.py` module.
+
+
+Key Features:
+      
+1. Command-Line Usage: Users can execute the script from the command line with options to specify the output directory where accuracy scores and confusion matrices will be stored. It defaults to the current working directory.
+As input, it requires the path to an input CSV file containing predicted (pred) and ground truth (gt) labels' classes.
+The command `-h` or `--help` displays a usage message and a list of available command-line options, along with brief explanations for each option.
+
+2. Unique Class Extraction: The script extracts unique classes from the ground truth (gt) column in the input CSV file. This is essential for accurate labeling in the confusion matrices.
+
+3. Accuracy Score Calculation: The script invokes the metrics function from the `accuracy_classifier.py` module to calculate accuracy scores based on the provided predicted and ground truth labels. The results are saved in the output directory if specified.
+
+4. Confusion Matrix Generation: The script runs the cm function from the `accuracy_classifier.py` module to create confusion matrices. These matrices are generated as heatmaps and can also be saved in the output directory if desired.
+
+
+
+
+
+
+To run the script, execute it from the command line as follows:
+
+    `evaluation_classifier.py [-h] -o <path_to_output_directory> -d <path_to_your_data.csv>`
 
