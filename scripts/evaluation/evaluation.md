@@ -7,7 +7,7 @@ This module aims at evaluation of separate modules of the pipeline.
 
 
 ## Structure
-# File `ocr_accuracy.py`
+# `ocr_accuracy.py`
  performs evaluation of the OCR output by comparing it to the ground truth. 
 For each transcript Levenshtein distance is calculated between its prediction and reference text.
 It is calculated both on character and word level, resulting in 2 scores: CER (Character Error Rate) and 
@@ -44,7 +44,7 @@ Besides, 2 violine plots representing the distribution of scores are saved in th
 
 
 
-# File `cluster_visualisation.py`
+# `cluster_visualisation.py`
 plots clusters using word embeddings and 
 saves the plot as an HTML-link.
 
@@ -86,7 +86,7 @@ Parameters:
 per default all clusters are plotted.
 
 
-# File `evaluation_classifier.py`
+# `evaluation_classifier.py`
 
 This script is designed for evaluating the accuracy of of the TensorFlow classifier.
 It performs accuracy assessment and generates confusion matrices for a set of predictions. The script reads an input CSV file containing both predicted (pred) and ground truth (gt) labels, calculates accuracy scores, and produces confusion matrices. 
