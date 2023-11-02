@@ -38,3 +38,48 @@ Parameters:
 As a result `ocr_evaluation.csv` is saved in the desired directory, 
 it contains an overwiew of each transcript (reference text and predicted one) as well as corresponding scores.
 Besides, 2 violine plots representing the distribution of scores are saved in the folder.
+
+
+
+
+
+File `cluster_visualisation.py` plots clusters using word embeddings and 
+saves the plot as an HTML-link.
+
+Word embeddings can be built either using the ground truth data, or the predicted transcripts.
+With the help of a pretrained gensim model (https://radimrehurek.com/gensim/models/word2vec.html) each word in the label gets represented by a vector.
+Then, the vectors are normalized, so that each label is represented only by one vector.
+It is possible to pass vector dimensions to a gensim model, 
+currently 100-dimensional space is used. With the help of tsne 
+(a tool to visualize high-dimensional data, https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html
+) each label is plotted on a 2-dimensional space. 
+
+Besides, each dot has a colour representing the cluster it was assigned to. So, 
+dots with the same colour refer to one cluster. 
+
+In that way we can see if word embedding's predictions of label follow the same direction
+as the results of clustering algorithms. 
+
+HTML plot enables hovering over the dots and seeing the transcript of the label.
+This makes possible to check at once if neighbouring labels (dots)
+have similar texts. As there are often too many clusters to be represented clearly on the plot, 
+it is possible to pass a parameter representing the minimal size of cluster that will be plotted,
+that is the number of labels that a cluster must have in order to be plotted.
+It allows us to look at the bigger clusters and study them. 
+
+
+To run the file use the following command:
+
+    `python visualisation_new.py -c clusters.json -s 10`
+
+Parameters:
+
+-c (cluster_json): path to the clustering output file
+
+-gt (ground_truth, default = None): path to the ground truth file
+
+-o (ouptut_dir, default = user's working directory): path to the target folder where plot will be saved
+
+-s (cluster_size, default = 1): the number of labels a cluster must have in order to be plotted,
+per default all clusters are plotted.
+
