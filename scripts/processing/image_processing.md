@@ -16,6 +16,24 @@ Possible pre-processing steps include:
 
 ## Structure
 
+
+File `crop_seg.py` is responsible for .
+
+
+
+To run the file use the following command:
+
+    `python rotation.py -i input_images -o rotated_images`
+ 
+ Parameters:
+ 
+ -i (input_image_dir): path to the folder with the images
+ 
+ -o (output_image_dir, default = user's current working directory):
+  the path to the output folder, where rotated images are saved
+  
+  
+
 File `rotation.py` is responsible for rotating the images.
 
 The angle, the image must be rotated to, is predicted by a pretrained PyTorch model. 
@@ -27,8 +45,10 @@ To run the file use the following command:
     `python rotation.py -i input_images -o rotated_images`
  
  Parameters:
+ 
  -i (input_image_dir): path to the folder with the images
  
  -o (output_image_dir, default = user's current working directory):
   the path to the output folder, where rotated images are saved
+  
  
