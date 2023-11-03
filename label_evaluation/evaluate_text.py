@@ -14,6 +14,11 @@ import warnings
 import argparse
 warnings.filterwarnings('ignore')
 
+class EmptyReferenceError(Exception):
+    def __init__(self, message=None):
+        self.message = message
+        super().__init__(message)
+
 
 def get_predicted_transcriptions(filename: str) -> str:
     """
@@ -62,7 +67,10 @@ def calculate_scores(gold_text: str, predicted_text: str) -> tuple:
     Returns:
         wer, cer (tuple): tuple of the two scores/None
     """
-    print('hallo')
+    gold_text = gold_text.lower()
+    if gold_text.isspace() or len(gold_text) ==0:
+        raise EmptyReferenceError("The reference string is empty.")
+    predicted_text = predicted_text.lower()
     if not gold_text.startswith("http") and not gold_text.startswith("MfN URI"):
         all_scores = jiwer.compute_measures(gold_text, predicted_text)
         wer = all_scores['wer']
@@ -149,4 +157,3 @@ if __name__ == "__main__":
     parser.add_argument("--folder", nargs='?', default="result")
     args = parser.parse_args()
     evaluate_text_predictions(args.gt, args.pred, args.folder)
-    
