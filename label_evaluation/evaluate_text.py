@@ -62,11 +62,13 @@ def calculate_scores(gold_text: str, predicted_text: str) -> tuple:
     Returns:
         wer, cer (tuple): tuple of the two scores/None
     """
+    print('hallo')
     if not gold_text.startswith("http") and not gold_text.startswith("MfN URI"):
         all_scores = jiwer.compute_measures(gold_text, predicted_text)
+        wer = all_scores['wer']
         # Calculate normalized WER
-        wer = ((all_scores["insertions"] + all_scores["deletions"] +
-            all_scores["substitutions"])/len(gold_text))
+        # wer = ((all_scores["insertions"] + all_scores["deletions"] +
+        #     all_scores["substitutions"])/len(gold_text))
         # Calculate normalized CER
         cer = calculate_cer([gold_text], [predicted_text])
         wer = round(wer, 2)
@@ -138,6 +140,7 @@ def evaluate_text_predictions(ground_truth_file: str, predictions_file: str, out
     create_plot(cers, "CERs", f"{out_dir}/cers.png")
     create_plot(wers, "WERs", f"{out_dir}/wers.png")
     return
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
