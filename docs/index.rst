@@ -8,6 +8,12 @@ Welcome to EIEE's documentation!
 
 .. toctree::
    :maxdepth: 2
+   :caption: Introduction:
+
+   readme
+
+.. toctree::
+   :maxdepth: 2
    :caption: Contents:
 
    modules

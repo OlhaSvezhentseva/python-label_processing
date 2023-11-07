@@ -1,5 +1,5 @@
-scripts package
-===============
+scripts
+=======
 
 Subpackages
 -----------
@@ -7,14 +7,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   scripts.evaluation
-   scripts.postprocessing
-   scripts.processing
+   script_docs/postprocessing
+   script_docs/evaluation
+   script_docs/image_processing
 
-Module contents
----------------
-
-.. automodule:: scripts
-   :members:
-   :undoc-members:
-   :show-inheritance:

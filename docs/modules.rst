@@ -1,5 +1,5 @@
-python-label_processing_private
-===============================
+Entomological_label_Information_extraction
+==========================================
 
 .. toctree::
    :maxdepth: 4

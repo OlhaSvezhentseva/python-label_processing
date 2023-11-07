@@ -193,8 +193,8 @@ def make_file_name(label_id: str, pic_class: str, occurence: int) -> None:
     Args:
         label_id (str): string containing the label id.
         pic_class (str): class of the label.
-        occurence (int): counts how many times the label class already
-                         occured in the picture.
+        occurence (int): counts how many times the label class already occured 
+        in the picture.
     """
     label_id = re.sub(r"_+label", "", label_id) 
     filename = f"{label_id}_label_{pic_class}_{occurence}.jpg"

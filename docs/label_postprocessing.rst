@@ -1,5 +1,5 @@
-label\_postprocessing package
-=============================
+label\_postprocessing
+=====================
 
 Submodules
 ----------

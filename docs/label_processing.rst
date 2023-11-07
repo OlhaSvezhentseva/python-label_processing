@@ -1,5 +1,5 @@
-label\_processing package
-=========================
+label\_processing
+=================
 
 Submodules
 ----------
