@@ -17,11 +17,7 @@ In no event shall Licensor be liable for any indirect, incidental, special, or c
 This Agreement shall be governed by and construed in accordance with the laws of Austria, without regard to its conflict of laws principles.
 '''
 
-'''
-Classifier to detect orientation of image (0°, 90°, 180°, 270°) and to correct orientation.
-'''
-
-#Import Libraries
+# Import third-party libraries
 import torch
 import torchvision
 import os
@@ -30,23 +26,33 @@ import argparse
 import warnings
 from torchvision.utils import save_image
 from pathlib import Path
-#import from this package
+
+# Import the necessary module from the 'label_processing' module package
 import label_processing.rotator as rotator
+
+# Suppress warning messages during execution
 warnings.filterwarnings('ignore')
 
 
-def parsing_args() -> argparse.ArgumentParser:
-    '''generate the command line arguments using argparse'''
+def parse_arguments() -> argparse.Namespace:
+    """
+    Parse command-line arguments using argparse.
+
+    Returns:
+        argparse.Namespace: Parsed command-line arguments.
+    """
     usage = 'rotation.py [-h] -o <output_image_dir> -i <input_image_dir>'
-    parser =  argparse.ArgumentParser(description=__doc__,
+
+    # Define command-line arguments and their descriptions
+    parser =  argparse.ArgumentParser(
+            description="Execute the rotator.py module.",
             add_help = False,
-            usage = usage
-            )
+            usage = usage)
 
     parser.add_argument(
             '-h','--help',
             action='help',
-            help='Open this help text.'
+            help='Description of the command-line arguments.'
             )
             
     parser.add_argument(
@@ -63,15 +69,13 @@ def parsing_args() -> argparse.ArgumentParser:
             metavar='',
             type=str,
             required = True,
-            help=('Directory where the jpgs are stored.')
+            help=('Directory where the input jpgs are stored.')
             )
     
-    args = parser.parse_args()
-
-    return args
+    return parser.parse_args()
 
 
-def main(input_image_dir, output_image_dir) -> None:
+def main(input_image_dir: str, output_image_dir: str) -> None:
     """
     Perform image rotation using a pre-trained rotation detection model and save the rotated images.
 
@@ -82,23 +86,34 @@ def main(input_image_dir, output_image_dir) -> None:
     efficientnet = torchvision.models.efficientnet_b0()
     model = rotator.RotationDetector(efficientnet)
     config = rotator.TorchConfig()
-    # model.load_state_dict(torch.load(f"{model_path}"))
-    model.load_state_dict(torch.load(f"{config.model_path}",
-                                     map_location=config.map_location))
     model.to(config.device)
     model.eval()
-    img_files = [f for f in os.listdir(input_image_dir) if \
-        os.path.isfile(input_image_dir + os.sep + f) and f.endswith('.jpg')]
+
+    try:
+         model.load_state_dict(torch.load(f"{config.model_path}",
+                                     map_location=config.map_location))
+    except FileNotFoundError:
+        print(f"Error: Model file not found.")
+        return
+    except Exception as e:
+        print(f"Error loading model: {e}")
+        return
+    
+    img_files = [f for f in os.listdir(input_image_dir) if f.endswith('.jpg')]
 
     for img_file in img_files:
-        image_in = Image.open(Path(input_image_dir).joinpath(img_file))
-        image_out = rotator.rotation(model,image_in,config)
-        save_image(image_out, output_image_dir + os.sep + img_file)
+        try:
+            image_in = Image.open(Path(input_image_dir) / img_file)
+            image_out = rotator.rotation(model, image_in, config)
+            save_image(image_out, os.path.join(output_image_dir, img_file))
+        except Exception as e:
+            print(f"Error processing image {img_file}: {e}")
+
 
 if __name__ == "__main__":
-    args = parsing_args()
+    args = parse_arguments()
     input_image_dir = args.input_image_dir
     output_image_dir = args.output_image_dir
-    #output_image_dir = os.path.join(output_image_dir, "rotated")
+
     main(input_image_dir, output_image_dir)
     print(f"\nThe images have been successfully saved in {output_image_dir}")

@@ -17,13 +17,15 @@ In no event shall Licensor be liable for any indirect, incidental, special, or c
 This Agreement shall be governed by and construed in accordance with the laws of Austria, without regard to its conflict of laws principles.
 '''
 
-#Import Libraries
+# Import third-party libraries
 import torch
 import torch.nn as nn
 from pathlib import Path
 import numpy as np
 from torchvision import transforms
 import warnings
+
+# Suppress warning messages during execution
 warnings.filterwarnings('ignore')
 
 ROTATIONS: tuple[int, int, int, int] = (0, 90, 180, 270)
@@ -60,6 +62,12 @@ class RotationDetector(nn.Module):
     """
 
     def __init__(self, basenet):
+        """
+        Initialize RotationDetector.
+
+        Args:
+            basenet: Base neural network model for rotation detection.
+        """
         super().__init__()
         self.basenet = basenet
 
@@ -70,6 +78,15 @@ class RotationDetector(nn.Module):
         self.SM = nn.Softmax(dim=-1)
 
     def forward(self, x):
+        """
+        Forward pass through the RotationDetector.
+
+        Args:
+            x: Input tensor.
+
+        Returns:
+            Tensor: Softmax output.
+        """
         y = self.basenet(x)
         y = self.SM(y)
         return y
