@@ -1,19 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-'''
-Performs the Google Vision OCR on the segmented labels by calling the API and returns it as a json file. 
-'''
-
-#Import Librairies
+# Import third-party libraries
 from __future__ import annotations
 import argparse
 import glob
 import os
 import concurrent.futures
 from typing import Iterator
-##Import module from this package
+import warnings
+
+# Import the necessary module from the 'label_processing' module package
 from label_processing import vision, utils
+
+# Suppress warning messages during execution
+warnings.filterwarnings('ignore')
 
 #CREDENTIALS = '/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/total-contact-297417-48ed6585325e.json'
 #DIR = '/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/results_ocr/test'
@@ -21,18 +22,26 @@ RESULTS_JSON = "ocr_google_vision.json"
 RESULTS_JSON_BOUNDING = "ocr_google_vision_wbounding.json"
 BACKUP_TSV = "ocr_google_vision_backup.tsv"
 
-def parsing_args() -> argparse.ArgumentParser:
-    '''generate the command line arguments using argparse'''
+
+def parse_arguments() -> argparse.Namespace:
+    """
+    Parse command-line arguments using argparse.
+
+    Returns:
+        argparse.Namespace: Parsed command-line arguments.
+    """
     usage = 'vision_api.py [-h] [-np] -d <crop-dir> -c <credentials>'
-    parser =  argparse.ArgumentParser(description=__doc__,
-            add_help = False,
-            usage = usage
-            )
+
+    # Define command-line arguments and their descriptions
+    parser = argparse.ArgumentParser(
+        description="Execute the vision.py module.",
+        add_help = False,
+        usage = usage)
 
     parser.add_argument(
             '-h','--help',
             action='help',
-            help='Open this help text.'
+            help='Description of the command-line arguments.'
             )
     
     parser.add_argument(
@@ -40,7 +49,7 @@ def parsing_args() -> argparse.ArgumentParser:
             metavar='',
             type=str,
             required = True,
-            help=('Path to the google credentials json file')
+            help=('Path to the google credentials json file.')
             )
     
     parser.add_argument(
@@ -52,10 +61,8 @@ def parsing_args() -> argparse.ArgumentParser:
                   'ocr is supposed to be applied')
             )
 
-    
-    args = parser.parse_args()
+    return parser.parse_args()
 
-    return args
 
 def vision_caller(filename: str, credentials: str, backup_file: str) -> dict[str, str]:
     """
@@ -64,6 +71,7 @@ def vision_caller(filename: str, credentials: str, backup_file: str) -> dict[str
     Args:
         filename (str): The path to the input image file.
         credentials (str): The path to the Google Cloud Vision API credentials.
+        backup_file (str): The path to save the backup TSV file.
 
     Returns:
         dict[str, str]: A dictionary containing the OCR results.
@@ -75,21 +83,23 @@ def vision_caller(filename: str, credentials: str, backup_file: str) -> dict[str
     return ocr_result 
 
 
-def main(crop_dir: str, credentials: str,
-                       encoding: str = 'utf8') -> None:
+def main(crop_dir: str, credentials: str, encoding: str = 'utf8') -> None:
     """
-    Performs the ocr on a dir containing jpgs
+    Perform OCR on a directory containing JPEG images using Google Cloud Vision API.
 
     Args:
-        crop_dir (str): _description_
-        credentials (str): _description_
-        encoding (str, optional): _description_. Defaults to 'utf8'.
+        crop_dir (str): The path to the directory containing JPEG images.
+        credentials (str): The path to the Google Cloud Vision API credentials.
+        encoding (str, optional): The encoding for saving files. Defaults to 'utf8'.
     """
-    
     results_json = []
-    utils.check_dir(crop_dir) #Check if jpegs exist
+    # Check if JPEGs exist in the specified directory
+    utils.check_dir(crop_dir)
+    
+    # Get the list of JPEG filenames
     filenames = [file for file in glob.glob(os.path.join(f"{crop_dir}/*.jpg"))]
-    #run api calls on multiple threads
+
+    # Run API calls on multiple threads
     with concurrent.futures.ThreadPoolExecutor() as executor:
         results: Iterator[dict[str, str]] = executor.map(vision_caller,
                                                          filenames,
@@ -98,19 +108,20 @@ def main(crop_dir: str, credentials: str,
     
     results_json = list(results)
     
-    parent_dir = os.path.join(crop_dir, os.pardir) #Get the parent_directory
-    #Select wheteher it should be saved as utf-8 or ascii
+    # Get the parent_directory
+    parent_dir = os.path.join(crop_dir, os.pardir)
+
+    # Select wheteher it should be saved as utf-8 or ascii
     utils.save_json(results_json, RESULTS_JSON_BOUNDING, parent_dir)
-    #without bounding boxes
+
+    # Without bounding boxes
     json_no_bounding = []
     for entry in results_json:
         entry.pop("bounding_boxes")
         json_no_bounding.append(entry)
     utils.save_json(json_no_bounding, RESULTS_JSON, parent_dir)
-        
-    
 
 
 if __name__ == '__main__':
-    args = parsing_args()
+    args = parse_arguments()
     exit(main(args.dir, args.credentials))

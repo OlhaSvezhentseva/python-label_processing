@@ -1,17 +1,31 @@
-#Import Librairies
+# Import third-party libraries
 from __future__ import annotations
 import io
 import os
 from google.cloud import vision
+import warnings
+
+# Import the necessary module from the 'label_processing' module package
 import label_processing.utils
+
+# Suppress warning messages during execution
+warnings.filterwarnings('ignore')
 
 class VisionApi():
     """
-    Class concerning the Google Vision API performed on a directory.
+    Class for interacting with the Google Cloud Vision API for OCR tasks on images.
     """
 
-    def __init__(self, path: str, image: bytes, credentials: str,
-                 encoding: str) -> None:
+    def __init__(self, path: str, image: bytes, credentials: str, encoding: str) -> None:
+        """
+        Initialize the VisionApi instance.
+
+        Args:
+            path (str): Path to the image file.
+            image (bytes): Image content in bytes.
+            credentials (str): Path to the credentials JSON file.
+            encoding (str): Encoding for the result ('ascii' or 'utf8').
+        """
         VisionApi.export(credentials) #check credententials
         self.image = image
         self.path = path
@@ -20,28 +34,25 @@ class VisionApi():
     @staticmethod            
     def export(credentials: str) -> None:
         """
-        Exports the credentials json, by adding it as an environment variable
-        in your shell.
+        Export the credentials JSON by setting it as an environment variable.
 
         Args:
-            credentials (str): path to the credentials json file
+            credentials (str): Path to the credentials JSON file.
         """
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials
 
     @staticmethod
     def read_image(path: str, credentials: str, encoding: str = 'utf8') -> VisionApi:
         """
-        Reads an image with io and returns it as an instance of the VisionApi
-        class.
+        Read an image file and return an instance of the VisionApi class.
 
         Args:
-            path (str): path to image
-            credentials (str): path to the credentials json file
-            encoding (str, optional): choose in which encoding th result will 
-            be saved (ascii or utf-8). defaults to 'utf8'
+            path (str): Path to the image file.
+            credentials (str): Path to the credentials JSON file.
+            encoding (str, optional): Encoding for the result ('ascii' or 'utf8'). Defaults to 'utf8'.
 
         Returns:
-            VisionApi: Instance of the VisionApi class
+            VisionApi: Instance of the VisionApi class.
         """
         with io.open(path, 'rb') as image_file:
             image = image_file.read()
@@ -49,14 +60,13 @@ class VisionApi():
     
     def process_string(self, result_raw: str) -> str:
         """
-        Processes the google vision ocr output and replaces newlines by spaces
-        and if specified turns string from unicode into ascii encoding.
+        Process the Google Vision OCR output, replacing newlines with spaces and encoding as specified.
 
         Args:
-            result_raw (str): the raw output string directly from google_vision
+            result_raw (str): Raw output string directly from Google Vision.
 
         Returns:
-            str: processed string
+            str: Processed string.
         """
         processed = result_raw.replace('\n', ' ')
         if self.encoding == "ascii":
@@ -68,14 +78,13 @@ class VisionApi():
         
     def vision_ocr(self) -> dict[str, str]:
         """
-        Performs the actual API call, does error handling and returns the 
-        transcription already processed.
+        Perform the actual API call, handle errors, and return the processed transcription.
 
         Raises:
-            Exception: raises exception if API does not respond
+            Exception: Raises an exception if the API does not respond.
 
         Returns:
-            dict[str, str]: dictionary with the filename and the transcript
+            Dict[str, str]: Dictionary with the filename and the transcript.
         """
         client = vision.ImageAnnotatorClient()
         vision_image = vision.Image(content=self.image)
