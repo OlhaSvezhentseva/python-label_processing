@@ -49,6 +49,7 @@ Installation
 Input preparation
 -----------------
 **The modules are best to be performed on jpg images of labels from entomology databases such as:**
+   
    - `AntWeb`_
    - `Bees&Bytes`_
    - LEP_PHIL - pictures of specimens from the Philippines (by Théo Leger)
@@ -56,6 +57,7 @@ Input preparation
 
 
 **In terms of data acquisition, the following standards are recommended to optimize the outputs:**
+
 - The pictures quality should be standardized and uniform as much as possible, preferably using macro photography, the .jpg format and 300 DPI resolution.
 - If there are multiple labels in one picture, they should be clearly separated from one another without overlapping. The text in the label should be aligned horizontally.
 - If possible, the specimen shouldn't be present in the picture with the labels.
