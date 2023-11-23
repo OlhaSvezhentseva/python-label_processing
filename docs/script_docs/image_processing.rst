@@ -99,7 +99,7 @@ This script is particularly useful for tasks that involve predicting classes for
 
     .. code:: bash
 
-    image_classifier.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
+     image_classifier.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
 
 
 tesseract_ocr.py
@@ -131,7 +131,7 @@ It performs OCR on a directory containing cropped images in JPG format, applies 
 
     .. code:: bash
 
-    tesseract_ocr.py [-h] [-v] [-t <thresholding>] [-b <blocksize>] [-c <c_value>] -d <crop-dir> [-multi <multiprocessing>] -o <outdir> [-o <out-dir>]
+     tesseract_ocr.py [-h] [-v] [-t <thresholding>] [-b <blocksize>] [-c <c_value>] -d <crop-dir> [-multi <multiprocessing>] -o <outdir> [-o <out-dir>]
 
 
 vision_api.py
@@ -162,7 +162,7 @@ Please note that this service incurs costs, as it relies on the Google Cloud API
 
     .. code:: bash
 
-    vision_api.py [-h] [-np] -d <crop-dir> -c <credentials>
+     vision_api.py [-h] [-np] -d <crop-dir> -c <credentials>
 
 .. _Google Cloud credentials JSON: https://developers.google.com/workspace/guides/create-credentials
 .. _documentation repository: https://detecto.readthedocs.io/en/latest/
