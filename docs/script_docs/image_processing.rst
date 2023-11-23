@@ -40,7 +40,7 @@ To utilize this script, a model must be trained in advance using the detecto obj
 
     3. **File Management:** Generates fitting filenames (with class) and organizes results in a structured manner.
 
-    **Usage:**
+  **Usage:**
 
     To utilize the script, execute it from the command line as follows:
 
@@ -79,7 +79,6 @@ image_classifier
 ~~~~~~~~~~~~~~~~
 This script is designed to simplify the process of image classification using pre-trained TensorFlow classifier models. 
 This script is particularly useful for tasks that involve predicting classes for images and efficiently organizing them based on these predictions.
-Executes the `tensorflow_classifier.py` module.
 
   **Key Features:**
 
