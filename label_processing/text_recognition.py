@@ -1,9 +1,4 @@
-"""
-Module for OCR and preprocessing of the Images. Only used when performing the OCR
-with tesseract 
-"""
-
-#Import Librairies
+# Import third-party libraries
 from __future__ import annotations
 import os
 import copy
@@ -16,13 +11,17 @@ from typing import  Union, Tuple, Optional
 from deskew import determine_skew
 from enum import Enum
 from pathlib import Path
+import warnings
 
+# Import the necessary module from the 'label_processing' module package
 from label_processing import utils
 
+# Suppress warning messages during execution
+warnings.filterwarnings('ignore')
 
-#Configuarations
-CONFIG = r'--psm 6 --oem 3' #configuration for ocr
-LANGUAGES = 'eng+deu+fra+ita+spa+por' #specifying languages used for ocr
+#Configurations
+CONFIG = r'--psm 6 --oem 3' #configuration for OCR
+LANGUAGES = 'eng+deu+fra+ita+spa+por' #specifying languages used for OCR
 MIN_SKEW_ANGLE = -10
 MAX_SKEW_ANGLE = 10
 
@@ -45,8 +44,7 @@ class ImageProcessor():
     """
     A class for image preprocessing and other image actions.
     """
-    def __init__(self, image: np.ndarray, path: str, blocksize: int = None,
-                 c_value: int = None):
+    def __init__(self, image: np.ndarray, path: str, blocksize: int = None, c_value: int = None):
         """
         Initialize an instance of Image class.
 
@@ -71,7 +69,7 @@ class ImageProcessor():
     def blocksize(self, value: int|None) -> None:
         if value is not None:
             if (value <= 1 or value % 2 == 0):
-                raise ValueError("value for blocksize has to be atleast 3 and needs\
+                raise ValueError("Value for blocksize has to be at least 3 and needs\
                     to be odd")
         self._blocksize = value
     
@@ -101,10 +99,10 @@ class ImageProcessor():
     
     def copy_this(self) -> ImageProcessor:
         """
-        Create a copy of the current Image instance.
+        Creates a copy of the current Image instance.
 
         Returns:
-            Image: A copy of the current Image instance.
+            ImageProcessor: A copy of the current Image instance.
         """
         return copy.copy(self)
     
@@ -226,19 +224,18 @@ class ImageProcessor():
     
     @staticmethod
     def _rotate(
-        image: np.ndarray, angle: float|np.float, background: Union[int, Tuple[int, int, int]]
-        ) -> np.ndarray:
+        image: np.ndarray, angle: float | np.float, background: Union[int, Tuple[int, int, int]]
+    ) -> np.ndarray:
         """
-        performs a rotation of an image given an angle. When rotation is happening 
-        a background is added to keep the original dimensions of the picture
+        Performs a rotation of an image given an angle.
 
         Args:
-            image (np.ndarray): image loaded in with opencv
-            angle (float): angle with which the picture should be rotated
-            background (Union[int, Tuple[int, int, int]]): rgb values for background colours
+            image (np.ndarray): Image loaded in with OpenCV.
+            angle (float): Angle with which the picture should be rotated.
+            background (Union[int, Tuple[int, int, int]]): RGB values for the background color.
 
         Returns:
-            np.ndarray: _description_
+            np.ndarray: Rotated image.
         """
         old_width, old_height = image.shape[:2]
         angle_radian = math.radians(angle)
@@ -286,13 +283,13 @@ class ImageProcessor():
 
     def preprocessing(self, thresh_mode: Threshmode) -> ImageProcessor:
         """
-        Perform a series of preprocessing steps on the image, including grayscaling, blurring, thresholding, noise removal, and deskewing.
+        Perform a series of preprocessing steps on the image.
 
         Args:
             thresh_mode (Threshmode): The thresholding mode to use (OTSU, ADAPTIVE_MEAN, or ADAPTIVE_GAUSSIAN).
 
         Returns:
-            Image: An instance of the Image class representing the preprocessed image.
+            ImageProcessor: An instance of the Image class representing the preprocessed image.
         """
         #skewangle has to be calculated before processing
         angle = self.get_skew_angle()
@@ -310,23 +307,22 @@ class ImageProcessor():
 
     def read_qr_code(self) -> Optional[str]:
         """
-        Tries to identify if picture has a qr-code and then reads and returns it.
+        Tries to identify if a picture has a QR-code and then reads and returns it.
 
         Returns:
-            Optional[str]: decoded qr-code text as a str or none if there is no
-            qr-code found
+            Optional[str]: Decoded QR-code text as a str or None if there is no QR-code found.
         """
         detect = cv2.QRCodeDetector()
         value = detect.detectAndDecode(self.image)[0]
         return value if value else None
     
     
-    def save_image(self, dir_path: str|Path, appendix: Optional[str] = None) -> None:
+    def save_image(self, dir_path: str | Path, appendix: Optional[str] = None) -> None:
         """
         Save the image to a specified directory with an optional appendix.
 
         Args:
-            dir_path (str): The directory path where the image will be saved.
+            dir_path (str | Path): The directory path where the image will be saved.
             appendix (str, optional): An optional string to append to the image filename. Defaults to None.
         """
         if appendix:

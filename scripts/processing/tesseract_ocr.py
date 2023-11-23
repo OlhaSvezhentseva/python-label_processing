@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Module containing the Pytesseract OCR parameters to be performed on the cropped
-jpg outputs.
-"""
-
-#Import Libraries
+# Import third-party libraries
 import argparse
 import os
 import glob
@@ -14,7 +9,9 @@ import multiprocessing as mp
 from enum import Enum
 from pathlib import Path
 from typing import Callable
-#Import module from this package
+import warnings
+
+# Import the necessary module from the 'label_processing' module package
 from label_processing.text_recognition import (Tesseract, 
                                                ImageProcessor,
                                                Threshmode,
@@ -22,16 +19,27 @@ from label_processing.text_recognition import (Tesseract,
                                                )
 from label_processing import utils
 
+# Suppress warning messages during execution
+warnings.filterwarnings('ignore')
+
+
 FILENAME = "ocr_preprocessed.json"
 
-def parsing_args() -> argparse.ArgumentParser:
-    '''generate the command line arguments using argparse'''
+def parse_arguments() -> argparse.Namespace:
+    """
+    Parse command-line arguments using argparse.
+
+    Returns:
+        argparse.Namespace: Parsed command-line arguments.
+    """
     usage = 'tesseract_ocr.py [-h] [-v] [-t <thresholding>] [-b <blocksize>] \
             [-c <c_value>] -d <crop-dir> [-multi <multiprocessing>] -o <outdir> [-o <out-dir>]'
-    parser =  argparse.ArgumentParser(description=__doc__,
-            add_help = False,
-            usage = usage
-            )
+    
+    # Define command-line arguments and their descriptions
+    parser = argparse.ArgumentParser(
+        description="Execute the text_recognition.py module.",
+        add_help = False,
+        usage = usage)
 
     parser.add_argument(
             '-h','--help',
@@ -40,11 +48,9 @@ def parsing_args() -> argparse.ArgumentParser:
             )
     
     parser.add_argument(
-            '-v', '--verbose',
-            metavar='',
-            action=argparse.BooleanOptionalAction,
-            default = False,
-            help=('Select whether verbose or quiet mode')
+            '-h','--help',
+            action='help',
+            help='Description of the command-line arguments.'
             )
     
     parser.add_argument(
@@ -56,9 +62,9 @@ def parsing_args() -> argparse.ArgumentParser:
             action='store',
             help=('Optional argument: select which thrsholding should be used primarily.\n'
                  '1 : Otsu\'s thresholding.\n'
-                 '2 : adaptive mean thresholding.\n'
-                 '3 : gaussian adaptive thrsholding.\n'
-                 'Default is otsus')
+                 '2 : Adaptive mean thresholding.\n'
+                 '3 : Gaussian adaptive thresholding.\n'
+                 'Default is otsus.')
             )
     
     parser.add_argument(
@@ -67,7 +73,7 @@ def parsing_args() -> argparse.ArgumentParser:
             action="store",
             type = int,
             default = None,
-            help=('Optional argument: blocksize parameter for adaptive thresholding')
+            help=('Optional argument: blocksize parameter for adaptive thresholding.')
             )
     
     parser.add_argument(
@@ -76,7 +82,7 @@ def parsing_args() -> argparse.ArgumentParser:
             action="store",
             type = int,
             default = None,
-            help=('Optional argument: c_value parameter for adaptive thesholding')
+            help=('Optional argument: c_value parameter for adaptive thresholding.')
             )
     
     parser.add_argument(
@@ -104,12 +110,14 @@ def parsing_args() -> argparse.ArgumentParser:
         help=('Select whether to use multiprocessing')
     )
     
-    args = parser.parse_args()
-
-    return args
+    return parser.parse_args()
 
 
-def ocr__on_file(file_path, args,  thresh_mode, tesseract, new_dir):
+def ocr_on_file(file_path: str,
+                args: argparse.Namespace,
+                thresh_mode: Threshmode,
+                tesseract: Tesseract,
+                new_dir: str) -> tuple[dict, bool, bool]:
     """
     Perform OCR on an image file, including preprocessing and reading QR codes if present.
 
@@ -156,20 +164,18 @@ def ocr__on_file(file_path, args,  thresh_mode, tesseract, new_dir):
 def ocr_on_dir(crop_dir: str,
                new_dir: str,
                verbose_print: Callable,
-               args: argparse.ArgumentParser
-               ) -> list[dict[str, str]]:
+               args: argparse.ArgumentParser) -> list[dict[str, str]]:
     """
-    Performs ocr on a given directory 
+    Performs OCR on a given directory.
 
     Args:
-        crop_dir (str): path to directory with cropped pictures
-        new_dir (str): path to new directory
-        verbose_print (Callable): print funktion die abhängig vom user input 
-        printet oder nicht
-        args (argparse.ArgumentParser): arg parse argumente
+        crop_dir (str): Path to the directory with cropped pictures.
+        new_dir (str): Path to the new directory where preprocessed images will be saved.
+        verbose_print (Callable): Print function depending on user input.
+        args (argparse.ArgumentParser): Argparse arguments.
 
     Returns:
-        list[dict[str, str]]: _description_
+        List[dict[str, str]]: A list containing dictionaries with OCR results for each image.
     """
     tesseract = Tesseract()
     ocr_results: list = []
@@ -180,14 +186,14 @@ def ocr_on_dir(crop_dir: str,
     files = glob.glob(os.path.join(f"{crop_dir}/*.jpg"))
     if not args.multiprocessing:
         for file in files:
-            transcript, qr, nuri = ocr__on_file(file, args,  thresh_mode, tesseract, new_dir)
+            transcript, qr, nuri = ocr_on_file(file, args,  thresh_mode, tesseract, new_dir)
             ocr_results.append(transcript)
             if qr == True: count_qr += 1
             if nuri == True: total_nuri += 1
     else:
     # Use all the cores
         with mp.Pool() as pool:
-            result = pool.starmap(ocr__on_file, [(file, args,  thresh_mode, tesseract, new_dir) for file in files])
+            result = pool.starmap(ocr_on_file, [(file, args,  thresh_mode, tesseract, new_dir) for file in files])
             for transcript, qr, nuri in result:
                 ocr_results.append(transcript)
                 if qr == True: count_qr += 1
@@ -198,7 +204,7 @@ def ocr_on_dir(crop_dir: str,
     return ocr_results
 
 if __name__ == "__main__":
-    args = parsing_args()
+    args = parse_arguments()
     #New function verbose print
     verbose_print: Callable = print if args.verbose else lambda *a, **k: None    
     #Find path to tesseract
