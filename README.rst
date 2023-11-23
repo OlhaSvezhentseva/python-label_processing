@@ -21,29 +21,29 @@ Installation
 1. Create a python environment with python 3.10 (e.g. with conda). On newer python versions some of the dependencies might not work.
    This can be done with conda like this:
 
-   `conda create --name mfnb python=3.10`
+   ``conda create --name mfnb python=3.10``
 
 2. Clone python-mfnb from https://code.naturkundemuseum.berlin/collection-mining/label_processing.git .
 
-   `git clone https://code.naturkundemuseum.berlin/collection-mining/label_processing.git`
+   ``git clone https://code.naturkundemuseum.berlin/collection-mining/label_processing.git``
 
 3. cd in label_processing-main
 
-   `cd <path to python-label_processing-main>`
+   ``cd <path to python-label_processing-main>``
    
 4. Install with pip, which will automatically fetch the requirements.
 
-   `pip install .`
+   ``pip install .``
 
 5. If it is intended to use tesseract, it needs to be installed. This can be done via a package manager:
    
    on ubuntu/debian:
 
-   `sudo apt install tesseract-ocr`
+   ``sudo apt install tesseract-ocr``
 
-   or on mac:
+   or on Mac OS:
    
-   `brew install tesseract`
+   ``brew install tesseract``
 
 
 Input preparation
@@ -56,7 +56,6 @@ Input preparation
 
 
 **In terms of data acquisition, the following standards are recommended to optimize the outputs:**
-
 - The pictures quality should be standardized and uniform as much as possible, preferably using macro photography, the .jpg format and 300 DPI resolution.
 - If there are multiple labels in one picture, they should be clearly separated from one another without overlapping. The text in the label should be aligned horizontally.
 - If possible, the specimen shouldn't be present in the picture with the labels.
@@ -96,7 +95,7 @@ have to be installed (only for Mac OS and Linux. On Windows they come with the
 Python DLLs) These can be installed via the command line with the following
 commands:
 
-Mac OS X:
+Mac OS:
 
 ``brew install zbar``
 
