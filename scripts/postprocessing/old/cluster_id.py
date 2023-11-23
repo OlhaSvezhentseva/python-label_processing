@@ -10,7 +10,7 @@ import os
 import warnings
 warnings.filterwarnings('ignore')
 #Import module from this package
-import label_processing.clustering_preprocessing as clustering_preprocessing
+import label_processing.old.clustering_preprocessing as clustering_preprocessing
 
 
 def parsing_args():
