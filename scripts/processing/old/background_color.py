@@ -12,7 +12,7 @@ import argparse
 import glob
 from pathlib import Path
 #Import module from this package
-from label_processing.backgroundcolor_detection import BackgroundColorDetector
+from label_processing.old.backgroundcolor_detection import BackgroundColorDetector
 
 
 def parsing_args() -> argparse.ArgumentParser:
