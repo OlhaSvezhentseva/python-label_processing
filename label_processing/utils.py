@@ -1,8 +1,4 @@
-"""
-Contains useful functions that are used on multiple occasions throughout the package
-"""
-
-# Import Librairies
+# Import third-party libraries
 import os
 import re
 import json
@@ -16,6 +12,7 @@ PATTERN = r"/u/|http|u/|coll|mfn|/u|URI"
 
 
 #---------------------Check dir JPEG---------------------#
+
 
 def check_dir(dir) -> None:
     """
@@ -50,10 +47,8 @@ def generate_filename(original_path: str, appendix: str,
 
     Returns:
         str: new file or directory name
-    """
-    #check if file is a dir and add apendix
-    
-    #remove extension if it has one
+    """    
+    #Remove extension if it has one
     new_filename, _ = os.path.splitext(os.path.basename(original_path))
     
     appendix = appendix.strip("_")
@@ -106,6 +101,7 @@ def check_text(transcript: str) -> bool:
     pattern = re.compile(PATTERN)
     match = pattern.search(transcript)
     return True if match else False
+
 
 def replace_nuri(transcript: dict[str, str]) -> dict[str, str]:
     """
@@ -168,6 +164,7 @@ def load_jpg(filepath: str) -> np.ndarray:
     jpg = cv2.imread(filepath)
     return jpg
 
+
 def load_json(file: str):
     """
     Load JSON data from a file and deserialize it.
@@ -181,6 +178,7 @@ def load_json(file: str):
     with open(file, 'r') as f:
         data = json.load(f)
     return data
+
 
 def read_vocabulary(file: str) -> dict:
     """
