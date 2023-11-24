@@ -34,10 +34,10 @@ To utilize this script, a model must be trained in advance using the detecto obj
   3. File Management: Generates fitting filenames (with class) and organizes results in a structured manner.
 
   **Usage:**
-  
+
   To utilize the script, execute it from the command line as follows:
 
-    `crop_seg.py [-h] [-c N] [-np N] -j </path/to/jpgs> -o </path/to/jpgs_outputs>`
+    crop_seg.py [-h] [-c N] [-np N] -j </path/to/jpgs> -o </path/to/jpgs_outputs>
 
 ### rotation.py
 This script is designed to automate the image rotation process using a pre-trained PyTorch model. 
@@ -59,7 +59,7 @@ The model predicts the angle by which each image needs to be rotated, with possi
 
   To utilize the script, execute it from the command line as follows:
 
-    `python rotation.py [-h] -i <input_images> -o <rotated_images>`
+    python rotation.py [-h] -i <input_images> -o <rotated_images>
 
   
 ### image_classifier
@@ -83,7 +83,7 @@ This script is particularly useful for tasks that involve predicting classes for
 
   To utilize the script, execute it from the command line as follows:
 
-    `image_classifier.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>`
+    image_classifier.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
 
 
 ### tesseract_ocr.py
@@ -112,7 +112,7 @@ It performs OCR on a directory containing cropped images in JPG format, applies 
 
   To utilize the script, execute it from the command line as follows:
 
-    `tesseract_ocr.py [-h] [-v] [-t <thresholding>] [-b <blocksize>] [-c <c_value>] -d <crop-dir> [-multi <multiprocessing>] -o <outdir> [-o <out-dir>]`
+    tesseract_ocr.py [-h] [-v] [-t <thresholding>] [-b <blocksize>] [-c <c_value>] -d <crop-dir> [-multi <multiprocessing>] -o <outdir> [-o <out-dir>]
 
 
 ### vision_api.py
@@ -140,4 +140,4 @@ Please note that this service incurs costs, as it relies on the Google Cloud API
 
   To utilize the script, execute it from the command line as follows:
 
-    `vision_api.py [-h] [-np] -d <crop-dir> -c <credentials>`
+    vision_api.py [-h] [-np] -d <crop-dir> -c <credentials>
