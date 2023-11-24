@@ -8,8 +8,8 @@ from label_processing.segmentation_cropping import *
 
 
 class TestSegmentationCropping(unittest.TestCase):
-    # path_to_model = "../../models/model_labels_box.pth"
-    path_to_model = "../../models/mfn_rot_classifier.pth"
+    path_to_model = "../../models/old/model_labels_box.pth"
+    # path_to_model = "../../models/mfn_rot_classifier.pth"
     jpg_path: Path =  Path("../testdata/uncropped/coll.mfn-berlin.de_u_43acf9__label.jpg")
     label_predictor = PredictLabel(path_to_model, ["box"], jpg_path)
 
