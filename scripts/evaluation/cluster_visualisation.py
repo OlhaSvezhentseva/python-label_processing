@@ -1,14 +1,12 @@
-"""
-Module creating and saving a visual (scatter plot) of the clustering´s results.
-"""
-
+# Import third-party libraries
 import gensim
 import json
 import string
 import argparse
 import os
+from typing import Union
 
-import plotly.express as px  #import plotly express
+import plotly.express as px
 
 from gensim.models import Word2Vec
 from nltk import word_tokenize
@@ -19,25 +17,32 @@ import pandas as pd
 import seaborn as sns
 import numpy as np
 
+# Suppress warning messages during execution
 import warnings
 warnings.filterwarnings('ignore')
 
 
 
-def parsing_args() -> argparse.ArgumentParser:
-    '''generate the command line arguments using argparse'''
+def parse_arguments() -> argparse.Namespace:
+    """
+    Parse command-line arguments using argparse.
+
+    Returns:
+        argparse.Namespace: Parsed command-line arguments.
+    """
     usage = 'cluster_visualisation.py [-h] [-c N] \
-    -gt <ground truth ocr output> -c <cluster output>  -o <path to output directory> -s <cluster_size>'
+    -gt <ground_truth_ocr_output> -c <cluster_output>  -o <path_to_output_directory> -s <cluster_size>'
     parser = argparse.ArgumentParser(description=__doc__,
                                      add_help=False,
                                      usage=usage
                                      )
 
-    parser.add_argument(
-        '-h', '--help',
-        action='help',
-        help='Open this help text.'
-    )
+    # Define command-line arguments and their descriptions
+    parser = argparse.ArgumentParser(
+        description="Doesn't execute any module.",
+        add_help = False,
+        usage = usage)
+
     parser.add_argument(
         '-o', '--out_dir',
         metavar='',
@@ -46,19 +51,21 @@ def parsing_args() -> argparse.ArgumentParser:
         help=('Directory in which the resulting crops and the csv will be stored.\n'
               'Default is the user current working directory.')
     ),
+
     parser.add_argument(
         '-c', '--cluster_json',
         metavar='',
         type=str,
         required=True,
-        help=('path to cluster_json')
+        help=('Path to cluster Json file.')
     ),
+
     parser.add_argument(
         '-gt', '--ground_truth',
         metavar='',
         type=str,
         default=None,
-        help=('path to ground truth json')
+        help=('Path to ground truth Json file')
     )
 
     parser.add_argument(
@@ -66,15 +73,12 @@ def parsing_args() -> argparse.ArgumentParser:
         metavar='',
         type=str,
         default = 1,
-        help=('Minimal number of labels the cluster must have to be plotted')
+        help=('Minimal number of labels the cluster must have to be plotted.')
     )
-    args = parser.parse_args()
+    return parser.parse_args()
 
 
-    return args
-
-
-def is_word(token: str):
+def is_word(token: str) -> bool:
     """
     Check if a token is a valid word.
 
@@ -89,16 +93,18 @@ def is_word(token: str):
             return True
 
 
-def build_word_vectors(labels, ground_truth=True):
+def build_word_vectors(labels: list[dict[str, str]], ground_truth: bool = True) -> tuple[Word2Vec, list[dict[str, Union[str, list[str]]]]]:
     """
     Build word vectors for labels.
 
     Args:
-        labels (list): List of label objects containing text.
+        labels (List[Dict[str, str]]): List of label objects containing text.
+        ground_truth (bool): Flag indicating if labels are ground truth. Defaults to True.
 
     Returns:
-        gensim.models.Word2Vec: Word2Vec model trained on label tokens.
-        list: List of tokenized labels with associated IDs.
+        Tuple[Word2Vec, List[Dict[str, Union[str, List[str]]]]]: 
+            Word2Vec model trained on label tokens.
+            List of tokenized labels with associated IDs.
     """
     tokenized_labels = []
     if ground_truth:
@@ -119,26 +125,25 @@ def build_word_vectors(labels, ground_truth=True):
     return model, tokenized_labels
 
 
-def build_mean_label_vector(model: gensim.models.Word2Vec, labels: list):
+def build_mean_label_vector(model: Word2Vec, labels: list[dict[str, Union[str, list[str]]]]) -> dict[str, np.ndarray]:
     """
     Build a vector for a label by taking the mean of word vectors.
 
     Args:
-        model (gensim.models.Word2Vec): Word2Vec model.
-        labels (list): List of tokenized labels with associated IDs.
+        model (Word2Vec): Word2Vec model.
+        labels (List[Dict[str, Union[str, List[str]]]]): List of tokenized labels with associated IDs.
 
     Returns:
-        dict: Dictionary mapping label IDs to their mean vectors.
+        Dict[str, np.ndarray]: Dictionary mapping label IDs to their mean vectors.
     """
     labels_vectors = {}
     for label in labels:
-        # np.mean([model.wv[token] for token in label["tokens"]])
         mean_vector = np.mean([model.wv[token] for token in label["tokens"]], axis=0)
         labels_vectors[label["ID"]] = mean_vector
     return labels_vectors
 
 
-def load_json(file: str):
+def load_json(file: str) -> dict:
     """
     Load data from a JSON file.
 
@@ -146,14 +151,24 @@ def load_json(file: str):
         file (str): Path to the JSON file.
 
     Returns:
-        dict: Loaded JSON data.
+        Dict: Loaded JSON data.
     """
     with open(file, 'r') as f:
         data = json.load(f)
     return data
 
 
-def count_cluster_size(vectors, all_labels):
+def count_cluster_size(vectors: dict, all_labels: dict) -> dict:
+    """
+    Count the size of each cluster.
+
+    Args:
+        vectors (Dict): Dictionary of label vectors.
+        all_labels (Dict): Dictionary of all labels.
+
+    Returns:
+        Dict: Dictionary mapping cluster IDs to their sizes.
+    """
     cluster_counts = {}
     for file_id in vectors:
         cluster = all_labels[file_id][0]
@@ -164,7 +179,7 @@ def count_cluster_size(vectors, all_labels):
     return cluster_counts
 
 
-def main(ground_truth: str, clusters_file: str, out_dir: str, cluster_size: str):
+def main(ground_truth: str, clusters_file: str, out_dir: str, cluster_size: int):
     """
     Main function for processing label data, performing T-SNE dimensionality reduction, and saving a scatter plot.
 
@@ -172,8 +187,7 @@ def main(ground_truth: str, clusters_file: str, out_dir: str, cluster_size: str)
         ground_truth (str): Path to the ground truth JSON file.
         clusters_file (str): Path to the cluster JSON file.
         out_dir (str): Directory where the scatter plot image will be saved.
-        cluster_size str): The minimal size of cluster that will be plotted
-
+        cluster_size (int): The minimal size of cluster that will be plotted.
     """
     if ground_truth:
         labels = load_json(ground_truth)
@@ -228,24 +242,7 @@ def main(ground_truth: str, clusters_file: str, out_dir: str, cluster_size: str)
     fig.write_html(os.path.join(out_dir, "cluster_plot.html"))
     return print(f"\nThe interactive scatter plot has been successfully saved in {out_dir}")
 
-    '''
-    plt.figure(figsize=(20, 12))  # Increase the figure size
-    sns.scatterplot(
-        x="tsne-2d-one", y="tsne-2d-two",
-        hue="y",
-        style="y",
-        palette=sns.color_palette("hls", len(set(df.y))),
-        data=df,
-        legend="full",
-        alpha=0.9
-    ).set(title="Label data T-SNE projection")
-    plt.legend(loc='upper right', bbox_to_anchor=(1.15, 1.5), ncol=1)
-    plt.tight_layout()  # Adjust margins
-    plt.savefig(os.path.join(out_dir, "cluster_plot.png"), bbox_inches='tight')  # Save with bbox_inches='tight'
-    return print(f"\nThe image has been successfully saved in {out_dir}")
-    '''
-
 
 if __name__ == "__main__":
-    args = parsing_args()
+    args = parse_arguments()
     exit(main(args.ground_truth, args.cluster_json, args.out_dir, args.cluster_size))
