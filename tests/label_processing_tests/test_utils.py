@@ -45,7 +45,7 @@ class TestUtils(unittest.TestCase):
         This test checks if the check_text function correctly identifies certain patterns in text.
         """
         pattern_1 = "http:/hello/world"
-        pattern_2 = "collection "
+        pattern_2 = "CASENTO 56396"
         self.assertTrue(check_text(pattern_1))
         self.assertFalse(check_text(pattern_2))
     
