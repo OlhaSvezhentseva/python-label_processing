@@ -27,7 +27,7 @@ class TestUtils(unittest.TestCase):
 
     def test_check_text(self):
         pattern_1 = "http:/hello/world"
-        pattern_2 = "collection "
+        pattern_2 = "CASENTO 56396"
         self.assertTrue(check_text(pattern_1))
         self.assertFalse(check_text(pattern_2))
     
