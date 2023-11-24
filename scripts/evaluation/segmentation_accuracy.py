@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""
-Module containing the accuracy evaluation parameters of the segmentation model.
-"""
 
-#Import Librairies
+# Import third-party libraries
 import argparse
 import os
 import warnings
 import pandas as pd
 import plotly.io as pio
+
+# Suppress warning messages during execution
 warnings.filterwarnings('ignore')
-#Import module from this package
+
+# Import the necessary module from the 'label_evaluation' module package
 from label_evaluation import iou_scores
 
 
@@ -19,13 +19,21 @@ FILENAME_CSV = "iou_scores.csv"
 FILENAME_BOXPLOT = "iou_box.jpg"
 FILENAME_BARCHART = "class_pred.jpg"
 
-def parsing_args() -> argparse.ArgumentParser:
-    '''generate the command line arguments using argparse'''
+
+def parse_arguments() -> argparse.Namespace:
+    """
+    Parse command-line arguments and return the parsed arguments.
+
+    Returns:
+        argparse.Namespace: Parsed command-line arguments.
+    """
     usage = 'segmentation_accuracy.py [-h] -g <ground_truth_coord> -p <predicted_coord> -r <results>'
-    parser =  argparse.ArgumentParser(description=__doc__,
-            add_help = False,
-            usage = usage
-            )
+
+    # Define command-line arguments and their descriptions
+    parser = argparse.ArgumentParser(
+        description="Execute the iou_scores.py module.",
+        add_help = False,
+        usage = usage)
 
     parser.add_argument(
             '-h','--help',
@@ -38,7 +46,7 @@ def parsing_args() -> argparse.ArgumentParser:
             metavar='',
             type=str,
             required = True,
-            help=('Path to the ground truth coordinates csv')
+            help=('Path to the ground truth coordinates csv.')
             )
 
     parser.add_argument(
@@ -46,7 +54,7 @@ def parsing_args() -> argparse.ArgumentParser:
             metavar='',
             type=str,
             required = True,
-            help=('Path to the predicted coordinates csv')
+            help=('Path to the predicted coordinates csv.')
             )
 
     parser.add_argument(
@@ -59,12 +67,11 @@ def parsing_args() -> argparse.ArgumentParser:
             )
 
     
-    args = parser.parse_args()
+    return parser.parse_args()
 
-    return args
 
 if __name__ == "__main__":
-    args = parsing_args()
+    args = parse_arguments()
     gt = args.ground_truth_coord
     pred = args.predicted_coord
     result_dir = args.results

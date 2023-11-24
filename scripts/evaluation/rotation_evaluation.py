@@ -1,3 +1,4 @@
+# Import third-party libraries
 import argparse
 import pandas as pd
 import plotly.express as px
@@ -5,7 +6,7 @@ import seaborn as sns
 import numpy as np
 import os
 
-def rotation_evaluation(input_csv_path, output_folder):
+def rotation_evaluation(input_csv_path: str, output_folder: str) -> None:
     """
     Create a comparison plot and save it to a given output folder.
 

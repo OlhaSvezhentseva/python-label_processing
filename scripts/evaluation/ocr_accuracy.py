@@ -1,23 +1,31 @@
 #!/usr/bin/env python3
-"""
-Module containing the accuracy evaluation parameters of the OCR outputs.
-"""
 
-#Import Librairies
+# Import third-party libraries
 import argparse
 import os
+
+# Suppress warning messages during execution
 import warnings
 warnings.filterwarnings('ignore')
-#Import module from this package
+
+# Import the necessary module from the 'label_evaluation' module package
 from label_evaluation import evaluate_text
 
-def parsing_args() -> argparse.ArgumentParser:
-    '''generate the command line arguments using argparse'''
+
+def parse_arguments() -> argparse.Namespace:
+    """
+    Parse command-line arguments and return the parsed arguments.
+
+    Returns:
+        argparse.Namespace: Parsed command-line arguments.
+    """
     usage = 'ocr_accuracy.py [-h] -g <ground_truth> -p <predicted_ocr> -r <results>'
-    parser =  argparse.ArgumentParser(description=__doc__,
-            add_help = False,
-            usage = usage
-            )
+
+    # Define command-line arguments and their descriptions
+    parser = argparse.ArgumentParser(
+        description="Execute the evaluate_text.py module.",
+        add_help = False,
+        usage = usage)
 
     parser.add_argument(
             '-h', '--help',
@@ -30,7 +38,7 @@ def parsing_args() -> argparse.ArgumentParser:
             metavar='',
             type=str,
             required = True,
-            help=('Path to the ground truth dataset')
+            help=('Path to the ground truth dataset.')
             )
 
     parser.add_argument(
@@ -38,7 +46,7 @@ def parsing_args() -> argparse.ArgumentParser:
             metavar='',
             type=str,
             required = True,
-            help=('Path json file OCR output')
+            help=('Path json file OCR output.')
             )
 
     parser.add_argument(
@@ -51,12 +59,11 @@ def parsing_args() -> argparse.ArgumentParser:
             )
 
     
-    args = parser.parse_args()
+    return parser.parse_args()
 
-    return args
 
 if __name__ == "__main__":
-    args = parsing_args()
+    args = parse_arguments()
     gt = args.ground_truth
     pred = args.predicted_ocr
     folder = args.results

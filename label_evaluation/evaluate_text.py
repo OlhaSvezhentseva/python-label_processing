@@ -1,4 +1,4 @@
-#Import Librairies
+# Import third-party libraries
 import jiwer
 import json
 import numpy as np
@@ -8,10 +8,14 @@ from cer import calculate_cer
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
-import label_processing.utils as utils
 from pathlib import Path
 import warnings
 import argparse
+
+# Import the necessary module from the 'label_processing' module package
+import label_processing.utils as utils
+
+# Suppress warning messages during execution
 warnings.filterwarnings('ignore')
 
 class EmptyReferenceError(Exception):

@@ -1,20 +1,23 @@
-# Import Librairies
+# Import third-party libraries
 import pandas as pd
 import re
 import warnings
+
+# Suppress warning messages during execution
 warnings.filterwarnings('ignore')
 
 
-def clean_data(data):
-    '''
-    Dataset preprocessing
+def clean_data(data: list[dict]) -> list[dict]:
+    """
+    Preprocess the dataset by converting text to lowercase, removing punctuation and whitespace,
+    and excluding entries containing 'http'.
 
     Args:
-        data (list of dict): List of dictionaries with labels' transcription
+        data (list of dict): List of dictionaries with labels' transcription.
 
     Returns:
-        list of dict: Preprocessed list of dictionaries
-    '''
+        list of dict: Preprocessed list of dictionaries.
+    """
     cleaned_data = []  # Create a new list to store cleaned data
     for item in data:
         text = item['text']
@@ -27,16 +30,16 @@ def clean_data(data):
     return cleaned_data
 
 
-def redundancy(data):
-    '''
-    Calculate transcription redundancy in preprocessed dataset.
+def redundancy(data: list[dict]) -> list[dict]:
+    """
+    Calculate transcription redundancy in a preprocessed dataset by identifying duplicate entries.
 
     Args:
-        data (list of dict): Preprocessed list of dictionaries with labels' transcription
+        data (list of dict): Preprocessed list of dictionaries with labels' transcription.
 
     Returns:
-        list of dict: Preprocessed list of dictionaries with grouped duplicates
-    '''
+        list of dict: Preprocessed list of dictionaries with grouped duplicates.
+    """
     data = clean_data(data)
     text_set = set()
     duplicates = []
@@ -48,16 +51,16 @@ def redundancy(data):
     return duplicates
 
 
-def per_redundancy(data):
-    '''
-    Calculate percentage of transcription redundancy in preprocessed dataset with grouped duplicates.
+def per_redundancy(data: list[dict]) -> int:
+    """
+    Calculate the percentage of transcription redundancy in a preprocessed dataset with grouped duplicates.
 
     Args:
-        data (list of dict): Preprocessed list of dictionaries with labels' transcription and grouped duplicates
+        data (list of dict): Preprocessed list of dictionaries with labels' transcription and grouped duplicates.
 
     Returns:
-        int: Percentage of redundant text
-    '''
+        int: Percentage of redundant text.
+    """
     data_clean = clean_data(data)
     duplicates = redundancy(data_clean)
     sum_text = len(data_clean)

@@ -1,28 +1,36 @@
 #!/usr/bin/env python3
-"""
-Module calculating labels' redundancy
-"""
-#Import module from this package
+
+# Import the necessary module from the 'label_evaluation' module package
 from label_evaluation import redundancy
-#Import Libraries
+
+# Import third-party libraries
 import argparse
 import pandas as pd
 import json
 import re
 import warnings
 import os
+
+# Suppress warning messages during execution
 warnings.filterwarnings('ignore')
 
 FILENAME_TXT = "percentage_red.txt"
 
 
-def parsing_args() -> argparse.ArgumentParser:
-    '''generate the command line arguments using argparse'''
+def parse_arguments() -> argparse.Namespace:
+    """
+    Parse command-line arguments and return the parsed arguments.
+
+    Returns:
+        argparse.Namespace: Parsed command-line arguments.
+    """
     usage = 'label_redundancy.py [-h] -d <dataset-dir> -o <output>'
-    parser =  argparse.ArgumentParser(description=__doc__,
-            add_help = False,
-            usage = usage
-            )
+
+    # Define command-line arguments and their descriptions
+    parser = argparse.ArgumentParser(
+        description="Execute the redundancy.py module.",
+        add_help = False,
+        usage = usage)
 
     parser.add_argument(
             '-h','--help',
@@ -35,7 +43,7 @@ def parsing_args() -> argparse.ArgumentParser:
             metavar='',
             type=str,
             required = True,
-            help=('Path to the dataset containing labels transcriptions')
+            help=('Path to the dataset containing labels transcriptions.')
             )
             
     parser.add_argument(
@@ -47,13 +55,11 @@ def parsing_args() -> argparse.ArgumentParser:
                   'Default is the user current working directory.')
             )
 
-    
-    args = parser.parse_args()
+    return parser.parse_args()
 
-    return args
 
 if __name__ == "__main__":
-    args = parsing_args()
+    args = parse_arguments()
     dataset_dir = args.dataset_dir
     result_dir = args.output
     
