@@ -8,12 +8,9 @@ from label_processing.tensorflow_classifier import *
 
 
 class TestTFClassifier(unittest.TestCase):
-<<<<<<< HEAD
     """
     A test suite for the TensorFlow classifier module.
     """
-=======
->>>>>>> de0dbc775a3a6fd1489fd615125815d7b4899260
     model = get_model("../../models/model_classifier")
     classes = ['handwritten', 'to_crop', 'typed']
     outdir = "../testdata/output"
@@ -32,30 +29,22 @@ class TestTFClassifier(unittest.TestCase):
         self.assertEqual(len(self.df.index), len(os.listdir(self.jpg_dir)))
 
     def test_class_prediction_empty(self):
-<<<<<<< HEAD
         """
         Test the case of class prediction with an empty directory.
 
         This test checks if the function raises a FileNotFoundError when given an empty input directory.
         """
-        empty_dir  = "../testdata/empty_dir"
-=======
         empty_dir = "../testdata/empty_dir"
->>>>>>> de0dbc775a3a6fd1489fd615125815d7b4899260
         Path(empty_dir).mkdir(parents=True, exist_ok=True)
         self.assertRaises(FileNotFoundError, class_prediction, self.model, self.classes, empty_dir, self.outdir)
 
     def test_create_dirs(self):
-<<<<<<< HEAD
         """
         Test the creation of directories based on class predictions.
 
         This test checks if the create_dirs function creates directories corresponding to the predicted classes.
         """
-        test_dir = os.path.join(self.outdir, "temp_dir") 
-=======
         test_dir = os.path.join(self.outdir, "temp_dir")
->>>>>>> de0dbc775a3a6fd1489fd615125815d7b4899260
         os.mkdir(test_dir)
         create_dirs(self.df, test_dir)
         for model_class in self.classes:
@@ -75,16 +64,12 @@ class TestTFClassifier(unittest.TestCase):
         self.assertEqual(new_name, f"CASENT0179609_L_label_{self.classes[0]}_1.jpg")
 
     def test_filter_pictures(self):
-<<<<<<< HEAD
         """
         Test the filtering of pictures based on class predictions.
 
         This test checks if the filter_pictures function filters pictures correctly based on class predictions.
         """
-        filter_pictures(self.jpg_dir,self.df, self.outdir)
-=======
         filter_pictures(self.jpg_dir, self.df, self.outdir)
->>>>>>> de0dbc775a3a6fd1489fd615125815d7b4899260
         picture_count = 0
         for model_class in self.classes:
             picture_count += len(os.listdir(os.path.join(self.outdir, model_class)))
