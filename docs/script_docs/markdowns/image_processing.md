@@ -4,7 +4,7 @@
 This section of the package is designed for the processing of images and the execution of Optical Character Recognition (OCR). 
 Key processing steps encompass:
 
-1. Image classification, distinguishing between multi-label and single-label images, as well as images containing a QR-Code or not.
+1. Image classification, distinguishing between multi-label and single-label images, handwritten/printed labels, as well as images containing a QR-Code or not.
 
 2. Cropping multi-label images to transform them into single-label images.
 
@@ -69,7 +69,6 @@ This script is particularly useful for tasks that involve predicting classes for
   **Key Features:**
 
   1. Command-Line Usage: Users can execute the script from the command line with options to specify the classifier model, input image directory, and output directory for saving results.
-  The command `-h` or `--help` displays a usage message and a list of available command-line options, along with brief explanations for each option.
 
   2. Model Selection: The script supports three pre-defined classifier models, each tailored to a specific classification task. Users can choose the appropriate model for their image classification needs (e.g., distinguishing between 'nuri' and 'not_nuri' (1), 'handwritten' and 'printed' (2), or 'multi' and 'single' labels (3)).
 
