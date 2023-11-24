@@ -1,4 +1,4 @@
-# Preprocessing
+# Image_Processing
 
 ## Description
 
@@ -17,7 +17,7 @@ Possible pre-processing steps include:
 ## Structure
 
 
-#`crop_seg.py` 
+`crop_seg.py` 
 is responsible for cropping images using a pretrained model and is able to 
 assign classes using object detection.
 
@@ -32,7 +32,7 @@ Single label pictures. There are supposed to be one single label image per label
 
 To run the file use the following command:
 
-    `python rotation.py -i input_images -o rotated_images`
+    python rotation.py -i input_images -o rotated_images
  
  Parameters:
  
@@ -56,7 +56,7 @@ This script works the best with images provided by picturae (since it was traine
 
 To run the file use the following command:
 
-    `python rotation.py -i input_images -o rotated_images`
+    python rotation.py -i input_images -o rotated_images
  
  Parameters:
  
