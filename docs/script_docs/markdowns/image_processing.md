@@ -34,7 +34,9 @@ To utilize this script, a model must be trained in advance using the detecto obj
   3. File Management: Generates fitting filenames (with class) and organizes results in a structured manner.
 
   **Usage:**
+  
   To utilize the script, execute it from the command line as follows:
+
     `crop_seg.py [-h] [-c N] [-np N] -j </path/to/jpgs> -o </path/to/jpgs_outputs>`
 
 ### rotation.py
@@ -54,7 +56,9 @@ The model predicts the angle by which each image needs to be rotated, with possi
   3. Image Rotation Functionality: The rotation function leverages the pre-trained model to predict the rotation angle for an input image and performs the rotation. The script supports four rotation angles: 0°, 90°, 180°, and 270°.
 
   **Usage:**
+
   To utilize the script, execute it from the command line as follows:
+
     `python rotation.py [-h] -i <input_images> -o <rotated_images>`
 
   
@@ -76,7 +80,9 @@ This script is particularly useful for tasks that involve predicting classes for
   5. Customizable Output Directory: Users have the option to specify an output directory for saving both the results (in CSV format) and the classified images. The default output directory is set to the current working directory.
       
   **Usage:**
+
   To utilize the script, execute it from the command line as follows:
+
     `image_classifier.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>`
 
 
@@ -103,7 +109,9 @@ It performs OCR on a directory containing cropped images in JPG format, applies 
   6. Image Saving: Save preprocessed images to a specified directory with optional filename appendix.
       
   **Usage:**
+
   To utilize the script, execute it from the command line as follows:
+
     `tesseract_ocr.py [-h] [-v] [-t <thresholding>] [-b <blocksize>] [-c <c_value>] -d <crop-dir> [-multi <multiprocessing>] -o <outdir> [-o <out-dir>]`
 
 
@@ -129,5 +137,7 @@ Please note that this service incurs costs, as it relies on the Google Cloud API
   5. API Call and Error Handling: Performs the actual API call, handles errors, and returns the processed transcription along with bounding box information.
 
   **Usage:**
+
   To utilize the script, execute it from the command line as follows:
+
     `vision_api.py [-h] [-np] -d <crop-dir> -c <credentials>`
