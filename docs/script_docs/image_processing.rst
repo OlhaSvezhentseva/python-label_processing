@@ -1,4 +1,4 @@
-Image-Processing
+Image_Processing
 =============
 
 .. contents ::
