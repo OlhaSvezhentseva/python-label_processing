@@ -7,22 +7,40 @@ from pathlib import Path
 
 
 class TestImageProcessor(unittest.TestCase):
+    """
+    A test suite for the ImageProcessor class.
+    """
     image_path: Path =  Path("../testdata/cropped_pictures/coll.mfn-berlin.de_u_115ff7__Preview_label_typed_1.jpg")
     image = cv2.imread(str(image_path))
     
     
     def test_construcor_image_from_image(self):
+        """
+        Test the constructor of ImageProcessor with an image provided directly.
+
+        This test checks if the ImageProcessor instance is correctly constructed with an image and a path.
+        """
         preprocessor = ImageProcessor(self.image, self.image_path)
         self.assertIsInstance(preprocessor.image, np.ndarray)
         self.assertEqual(preprocessor.path, self.image_path)
         
     
     def test_image_processor_from_path(self):
+        """
+        Test creating an ImageProcessor instance from an image path.
+
+        This test checks if the ImageProcessor instance is correctly created from an image path.
+        """
         preprocessor = ImageProcessor.read_image(self.image_path)
         self.assertIsInstance(preprocessor.image, np.ndarray)
         self.assertEqual(preprocessor.path, self.image_path)
     
     def test_image_processor_preprocessing(self):
+        """
+        Test the preprocessing method of ImageProcessor.
+
+        This test checks if the preprocessing method of ImageProcessor works with the specified threshold mode.
+        """
         preprocessor = ImageProcessor.read_image(self.image_path)
         preprocessor = preprocessor.preprocessing(Threshmode.OTSU)
         self.assertIsInstance(preprocessor.image, np.ndarray)
