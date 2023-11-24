@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Image-Processing
+=======
+# Image_Processing
+>>>>>>> 63a26aa3a9979edb3043223bc8d6708ae34561cf
 
 ## Description
 This section of the package is designed for the processing of images and the execution of Optical Character Recognition (OCR). 
@@ -25,7 +29,13 @@ To utilize this script, a model must be trained in advance using the detecto obj
     The expected input comprises images containing multiple labels, as illustrated in the documentation. These images should resemble those used to train the model. 
     While the model can tolerate some deviation from the training set, increased deviation leads to a higher error rate. It's essential to note that these images should be in the JPG format.
 
+<<<<<<< HEAD
   **Key Features:**
+=======
+`crop_seg.py` 
+is responsible for cropping images using a pretrained model and is able to 
+assign classes using object detection.
+>>>>>>> 63a26aa3a9979edb3043223bc8d6708ae34561cf
 
     1. **Predict Class of a Label:** Uses a pre-trained object detection model for label prediction (class and coordinates) with a configurable threshold, returning results in a Pandas DataFrame.
 
@@ -41,6 +51,17 @@ To utilize this script, a model must be trained in advance using the detecto obj
 
 	  crop_seg.py [-h] [-c N] [-np N] -j </path/to/jpgs> -o </path/to/jpgs_outputs>
 
+<<<<<<< HEAD
+=======
+    python rotation.py -i input_images -o rotated_images
+ 
+ Parameters:
+ 
+ -i (input_image_dir): path to the folder with the images
+ 
+ -o (output_image_dir, default = user's current working directory):
+  the path to the output folder, where rotated images are saved
+>>>>>>> 63a26aa3a9979edb3043223bc8d6708ae34561cf
   
 ### rotation.py
 This script is designed to automate the image rotation process using a pre-trained PyTorch model. 
@@ -48,7 +69,32 @@ The model predicts the angle by which each image needs to be rotated, with possi
 
   **Input:**
   
+<<<<<<< HEAD
     This script is most effective when used with images provided by Picturae, as it has been specifically trained on them. When applied to other images, it may result in more incorrect rotations than correct ones, making it less recommended for such cases.
+=======
+
+# `rotation.py` 
+is responsible for rotating the images.
+The angle, the image must be rotated to, is predicted by a pretrained PyTorch model. 
+The angle may have the following values: 0° (predicted that the image's orientation is already correct),
+90°, 180°, 270°. 
+
+Input:
+This script works the best with images provided by picturae (since it was trained on them). With other images it might do more wrong rotations than correct and is therefore not really recommended in this case.  
+
+
+
+To run the file use the following command:
+
+    python rotation.py -i input_images -o rotated_images
+ 
+ Parameters:
+ 
+ -i (input_image_dir): path to the folder with the images. These need to be single label images.
+ 
+ -o (output_image_dir, default = user's current working directory):
+  the path to the output folder, where rotated images are saved
+>>>>>>> 63a26aa3a9979edb3043223bc8d6708ae34561cf
   
   **Key Features:**
 
