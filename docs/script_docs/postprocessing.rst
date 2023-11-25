@@ -70,6 +70,7 @@ If the Edit distance falls below or equals a specified threshold, the script rep
 	The corrected transcripts are then stored as `spell_checked_transcripts.json`.
 
 
+
 	**Usage:**
 
     	To run the file make sure you are in the folder "postprocessing" and use the following command:
