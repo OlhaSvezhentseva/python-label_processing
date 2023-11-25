@@ -133,4 +133,8 @@ This script is designed to evaluate the accuracy of segmentation results by calc
 
 To utilize the script, execute it from the command line as follows:
 
+<<<<<<< HEAD
 		segmentation_accuracy.py [-h] -g <ground_truth_coord> -p <predicted_coord> -r <results>
+=======
+		segmentation_accuracy.py [-h] -g <ground_truth_coord> -p <predicted_coord> -r <results>
+>>>>>>> 58563878353d76c58cd349cc68f83c12cfb62edd
