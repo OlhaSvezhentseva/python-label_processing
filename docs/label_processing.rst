@@ -4,21 +4,6 @@ label\_processing
 Submodules
 ----------
 
-label\_processing.backgroundcolor\_detection module
----------------------------------------------------
-
-.. automodule:: label_processing.backgroundcolor_detection
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-label\_processing.clustering\_preprocessing module
---------------------------------------------------
-
-.. automodule:: label_processing.clustering_preprocessing
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 label\_processing.rotator module
 --------------------------------
