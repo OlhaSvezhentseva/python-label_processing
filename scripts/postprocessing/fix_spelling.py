@@ -5,7 +5,7 @@ from nltk import word_tokenize
 import argparse
 #Import module from this package
 from label_postprocessing.vocabulary import extract_vocabulary
-from label_postprocessing.utils import load_json, dump_json, read_vocabulary
+from label_processing.utils import load_json, dump_json, read_vocabulary
 
 
 def get_popular_words(vocabulary: dict, most_frequent: int) -> list[str]:
