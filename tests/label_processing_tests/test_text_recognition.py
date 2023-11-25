@@ -1,9 +1,11 @@
+# Import third-party libraries
 import unittest
 import cv2
 import numpy as np
-
-from label_processing.text_recognition import ImageProcessor, Tesseract, Threshmode
 from pathlib import Path
+
+# Import the necessary module from the 'label_processing' module package
+from label_processing.text_recognition import ImageProcessor, Tesseract, Threshmode
 
 
 class TestImageProcessor(unittest.TestCase):

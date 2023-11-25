@@ -1,8 +1,10 @@
+# Import third-party libraries
 import unittest
 import torchvision
 import cv2
 import numpy as np
 
+# Import the necessary module from the 'label_processing' module package
 from label_processing.rotator import *
 
 class RotatorTests(unittest.TestCase):

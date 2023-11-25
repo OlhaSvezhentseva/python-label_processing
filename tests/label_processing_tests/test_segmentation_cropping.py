@@ -1,15 +1,16 @@
+# Import third-party libraries
 import unittest
 import cv2
 import numpy as np
 from pathlib import Path
 import detecto
 
+# Import the necessary module from the 'label_processing' module package
 from label_processing.segmentation_cropping import *
 
 
 class TestSegmentationCropping(unittest.TestCase):
-    path_to_model = "../../models/old/model_labels_box.pth"
-    # path_to_model = "../../models/mfn_rot_classifier.pth"
+    path_to_model = "../../models/model_segmentation_label.pth"
     jpg_path: Path =  Path("../testdata/uncropped/coll.mfn-berlin.de_u_43acf9__label.jpg")
     label_predictor = PredictLabel(path_to_model, ["box"], jpg_path)
 
