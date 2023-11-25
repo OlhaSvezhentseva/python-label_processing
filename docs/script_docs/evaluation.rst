@@ -3,11 +3,7 @@ Evaluation
 ==========
 
 .. contents ::
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> 58563878353d76c58cd349cc68f83c12cfb62edd
 Description
 -----------
 
@@ -168,9 +164,4 @@ This script is designed to evaluate the accuracy of segmentation results by calc
 
 .. _gensin model: https://radimrehurek.com/gensim/models/word2vec.html
 .. _high-dimensional data: https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html
-<<<<<<< HEAD
 .. _this article: https://towardsdatascience.com/evaluating-ocr-output-quality-with-character-error-rate-cer-and-word-error-rate-wer-853175297510
-=======
-.. _this article: https://towardsdatascience.com/evaluating-ocr-output-quality-with-character-error-rate-cer-and-word-error-rate-wer-853175297510Scripts
--------
->>>>>>> 58563878353d76c58cd349cc68f83c12cfb62edd
