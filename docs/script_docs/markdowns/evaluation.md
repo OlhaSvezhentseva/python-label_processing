@@ -32,7 +32,7 @@ The output includes the `ocr_evaluation.csv` file in the specified directory, pr
 
 **Usage:**
 
-    To utilize the script, execute it from the command line as follows:
+To utilize the script, execute it from the command line as follows:
 
 		ocr_accuracy.py [-h] -g <ground_truth> -p <predicted_ocr> -r <results>
 
@@ -54,7 +54,7 @@ The resulting HTML plot allows users to hover over dots, revealing the transcrip
 
 **Usage:**
 
-    To utilize the script, execute it from the command line as follows:
+To utilize the script, execute it from the command line as follows:
 
 		cluster_visualisation.py [-h] -gt <ground_truth_ocr_output> -c <cluster_output>  -o <path_to_output_directory> -s <cluster_size>
 
@@ -78,7 +78,7 @@ It allows for customizable output directory specification and provides a concise
 
 **Usage:**
 
-    To utilize the script, execute it from the command line as follows:
+To utilize the script, execute it from the command line as follows:
 
 		evaluation_classifier.py [-h] -o </path/to/outputs> -d </path/to/gt_dataframe>
 
@@ -97,7 +97,7 @@ The output, indicating the redundancy percentage, is stored in the user-defined 
 	
 **Usage:**
 
-    To utilize the script, execute it from the command line as follows:
+To utilize the script, execute it from the command line as follows:
 
 		label_redundancy.py [-h] -d <dataset-dir> -o <output>
 
@@ -113,7 +113,7 @@ This script is designed to perform an evaluation of rotation predictions. It tak
 	
 **Usage:**
 
-    To utilize the script, execute it from the command line as follows:
+To utilize the script, execute it from the command line as follows:
 
 		python rotation_evaluation.py path_input_data.csv path_output_results_folder
 
@@ -131,6 +131,6 @@ This script is designed to evaluate the accuracy of segmentation results by calc
 	
 **Usage:**
 
-    To utilize the script, execute it from the command line as follows:
+To utilize the script, execute it from the command line as follows:
 
 		segmentation_accuracy.py [-h] -g <ground_truth_coord> -p <predicted_coord> -r <results>
