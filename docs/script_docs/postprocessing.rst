@@ -39,7 +39,7 @@ At the end one json file per category is saved in the output folder.
 
 		.. code:: bash
 
-		process_ocr.py [-h] -j <ocr-json> -o <out-dir>
+			process_ocr.py [-h] -j <ocr-json> -o <out-dir>
 	
 
 fix_spelling.py
@@ -76,4 +76,4 @@ If the Edit distance falls below or equals a specified threshold, the script rep
 
    		.. code:: bash
 
-	  	python fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34
+	  		python fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34
