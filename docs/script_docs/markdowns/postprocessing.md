@@ -28,6 +28,7 @@ At the end one json file per category is saved in the output folder.
 
 
 **Usage:**
+
 To run the file make sure you are in the folder "postprocessing" and use the following command:
 
 	process_ocr.py [-h] -j <ocr-json> -o <out-dir>
@@ -47,18 +48,20 @@ If the Edit distance falls below or equals a specified threshold, the script rep
 
 
 **Parameters:**
-	--transcripts: is the file you want correct transcripts from. It makes sense to use `corrected_transcripts.json` that was created in the previous step (`filter.py`).
 
-	--freq: is the number of the most frequent words that low-frequent words will be compared to.
+--transcripts: is the file you want correct transcripts from. It makes sense to use `corrected_transcripts.json` that was created in the previous step (`filter.py`).
 
-	--dist: threshold for Edit distance. Distance less/equal than this value will be considered to be a small one, so that the low-frequence word can be changed.
+--freq: is the number of the most frequent words that low-frequent words will be compared to.
 
-	--voc: (optional, per default False): path to the vocabulary.
-	When no vocabulary is explicitly provided, the script generates a vocabulary containing each unique word along with its respective count, saving the result as `vocabulary.csv`. If a vocabulary is already available, it can be passed as input to optimize processing time. 
-	The corrected transcripts are then stored as `spell_checked_transcripts.json`.
+--dist: threshold for Edit distance. Distance less/equal than this value will be considered to be a small one, so that the low-frequence word can be changed.
+
+--voc: (optional, per default False): path to the vocabulary.
+When no vocabulary is explicitly provided, the script generates a vocabulary containing each unique word along with its respective count, saving the result as `vocabulary.csv`. If a vocabulary is already available, it can be passed as input to optimize processing time. 
+The corrected transcripts are then stored as `spell_checked_transcripts.json`.
 
 
 **Usage:**
+
 To run the file make sure you are in the folder "postprocessing" and use the following command:
 
 	python fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34
