@@ -1,10 +1,9 @@
-"""
-Responsible for filtering the OCR ouputs according to 4 categories:nuris, empty transcripts, plausible output, nonsense output.
-Plausible outputs are corrected using regular expressions and is saved as corrected_transcripts.json.
-"""
+# Import third-party libraries
 import json
 import os
 import argparse
+
+# Import the necessary module from the 'label_processing' and `label_postprocessing` module packages
 import label_processing.utils as utils
 from label_postprocessing.ocr_postprocessing import (
     is_empty,
@@ -14,13 +13,21 @@ from label_postprocessing.ocr_postprocessing import (
     correct_transcript
 )
 
-def parsing_args() -> argparse.ArgumentParser:
-    '''generate the command line arguments using argparse'''
+
+def parse_arguments() -> argparse.Namespace:
+    """
+    Parse command-line arguments using argparse.
+
+    Returns:
+        argparse.Namespace: Parsed command-line arguments.
+    """
     usage = 'process_ocr.py [-h] -j <ocr-json> -o <out-dir>'
-    parser =  argparse.ArgumentParser(description=__doc__,
-            add_help = False,
-            usage = usage
-            )
+
+    # Define command-line arguments and their descriptions
+    parser = argparse.ArgumentParser(
+        description="Execute the ocr_postprocessing.py module.",
+        add_help = False,
+        usage = usage)
 
     parser.add_argument(
             '-h','--help',
@@ -33,7 +40,7 @@ def parsing_args() -> argparse.ArgumentParser:
             metavar='',
             type=str,
             required = True,
-            help=('Path to ocr output json file')
+            help=('Path to ocr output json file.')
             )
 
     parser.add_argument(
@@ -41,13 +48,11 @@ def parsing_args() -> argparse.ArgumentParser:
             metavar='',
             type=str,
             required = True,
-            help=('output directory where files should be saved')
+            help=('Output directory where files should be saved.')
             )
 
-    
-    args = parser.parse_args()
+    return parser.parse_args()
 
-    return args
 
 def main(ocr_output: str, outdir: str) -> None:
     """
@@ -81,5 +86,5 @@ def main(ocr_output: str, outdir: str) -> None:
     return 0
 
 if __name__ == "__main__":
-    args = parsing_args()
+    args = parse_arguments()
     exit(main(args.json, args.outdir))

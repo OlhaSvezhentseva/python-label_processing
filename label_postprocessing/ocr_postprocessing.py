@@ -1,4 +1,4 @@
-#Import Librairies
+# Import third-party libraries
 import json
 import re
 from nltk import word_tokenize
@@ -11,7 +11,16 @@ NON_ALPHA_NUM = re.compile("[^a-zA-Z\d\s]{2,}")
 PIPE = re.compile("[|]")
 
 
-def count_mean_token_length(tokens):
+def count_mean_token_length(tokens: str):
+    """
+    Calculates the mean length of tokens in a list.
+
+    Args:
+        tokens (list): List of tokens.
+
+    Returns:
+        float: Mean token length.
+    """
     total_length = 0
     for token in tokens:
         total_length += len(token)
@@ -20,7 +29,16 @@ def count_mean_token_length(tokens):
     return 0
 
 
-def is_plausible_prediction(transcript):
+def is_plausible_prediction(transcript: str):
+    """
+    Checks if a transcript is a plausible prediction based on the average token length.
+
+    Args:
+        transcript (str): Input transcript.
+
+    Returns:
+        bool: True if the transcript is plausible, False otherwise.
+    """
     tokens = word_tokenize(transcript)
     tokens_no_punct = [token for token in tokens if token not in string.punctuation]
     average_token_length = count_mean_token_length(tokens_no_punct)
@@ -29,7 +47,16 @@ def is_plausible_prediction(transcript):
     return True
 
 
-def correct_transcript(transcript):
+def correct_transcript(transcript: str):
+    """
+    Performs corrections on a transcript, removing non-ASCII characters, multiple non-alphanumeric characters, and the pipe character.
+
+    Args:
+        transcript (str): Input transcript.
+
+    Returns:
+        str: Corrected transcript.
+    """
     # remove single non-ASCII (spaces?)
     new_string = re.sub(NON_ASCII, ' ', transcript)
     # remove 2 or more non alphanumeric characters in a row
@@ -39,27 +66,66 @@ def correct_transcript(transcript):
     return result
 
 
-def is_nuri(transcript):
+def is_nuri(transcript: str):
+    """
+    Checks if a transcript starts with "http," indicating a Nuri.
+
+    Args:
+        transcript (str): Input transcript.
+
+    Returns:
+        bool: True if the transcript is a Nuri, False otherwise.
+    """
     if transcript.startswith("http"):
         return True
 
 
-def is_empty(transcript):
+def is_empty(transcript: str):
+    """
+    Checks if a transcript is empty.
+
+    Args:
+        transcript (str): Input transcript.
+
+    Returns:
+        bool: True if the transcript is empty, False otherwise.
+    """
     if len(transcript) == 0:
         return True
 
 
-def save_transcripts(transcripts, file_name):
+def save_transcripts(transcripts: dict, file_name: str):
+    """
+    Saves transcripts as a CSV file.
+
+    Args:
+        transcripts (dict): Dictionary of transcripts.
+        file_name (str): Name of the output CSV file.
+    """
     data = pd.DataFrame.from_dict(transcripts, orient="index")
     data.to_csv(file_name)
 
 
-def save_json(transcripts, file_name):
+def save_json(transcripts: list, file_name: str):
+    """
+    Saves transcripts as a JSON file.
+
+    Args:
+        transcripts (list): List of transcripts.
+        file_name (str): Name of the output JSON file.
+    """
     transcripts = json.dumps(transcripts, indent=4)
     with open(file_name, "w") as outfile:
         outfile.write(transcripts)
 
-def process_ocr_output(ocr_output):
+
+def process_ocr_output(ocr_output: str):
+    """
+    Processes OCR output, categorizing and saving transcripts based on Nuri, empty, plausible, and corrected.
+
+    Args:
+        ocr_output (str): OCR output file path.
+    """
     nuri_labels = {}
     empty_labels = {}
     plausible_labels = []
