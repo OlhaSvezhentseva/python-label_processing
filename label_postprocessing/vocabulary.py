@@ -1,4 +1,4 @@
-#Import Librairies
+# Import third-party libraries
 import json
 from nltk import word_tokenize
 import pandas as pd

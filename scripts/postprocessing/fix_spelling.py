@@ -1,9 +1,10 @@
-#Import Librairies
+# Import third-party libraries
 import re
 import jiwer
 from nltk import word_tokenize
 import argparse
-#Import module from this package
+
+# Import the necessary module from the 'label_processing' and 'label_postprocessing' module packages
 from label_postprocessing.vocabulary import extract_vocabulary
 from label_processing.utils import load_json, dump_json, read_vocabulary
 
@@ -20,6 +21,7 @@ def get_popular_words(vocabulary: dict, most_frequent: int) -> list[str]:
         list[str]: A list of the most frequent words.
     """
     return list(vocabulary.keys())[:most_frequent]
+
 
 def fix_spelling(labels: list[dict], vocabulary: dict, most_frequent: int, threshold: float) -> None:
     """
