@@ -14,7 +14,6 @@ from sklearn.manifold import TSNE
 
 import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
 import numpy as np
 
 # Suppress warning messages during execution

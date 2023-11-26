@@ -4,7 +4,6 @@
 import argparse
 import os
 import glob
-from time import time
 import multiprocessing as mp
 from enum import Enum
 from pathlib import Path

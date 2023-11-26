@@ -198,21 +198,6 @@ def crop_picture(img_raw: np.ndarray, path: str,
     cv2.imwrite(filepath, crop)
 
 
-def make_file_name(label_id: str, pic_class: str) -> None:
-    """
-    Create a fitting filename.
-
-    Args:
-        label_id (str): String containing the label id.
-        pic_class (str): Class of the label.
-
-    Returns:
-        filename (str): The created filename.
-    """
-    filename = f"{label_id}_{pic_class}.jpg"
-    return filename
-
-
 def create_dirs(dataframe: pd.DataFrame, path: str) -> None:
     """
     Create separate directories for every class.
@@ -248,12 +233,9 @@ def create_crops(jpg_dir: Path, dataframe: str,
         match = dataframe[dataframe.filename == filename]
         image_raw = label_processing.utils.load_jpg(filepath)
         label_id = Path(filename).stem
-        classes = []
         for _, row in match.iterrows():
-            pic_class = row['class']
-            filename = make_file_name(label_id, pic_class)
+            filename = label_id
             coordinates = {'xmin': int(row.xmin), 'ymin': int(row.ymin),
                            'xmax': int(row.xmax), 'ymax': int(row.ymax)}
-            crop_picture(image_raw, path, filename, pic_class, **coordinates)
-            classes.append(pic_class)
+            crop_picture(image_raw, path, filename, **coordinates)
     print(f"\nThe images have been successfully saved in {path}")

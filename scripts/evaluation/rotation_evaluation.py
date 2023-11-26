@@ -1,7 +1,6 @@
 # Import third-party libraries
 import argparse
 import pandas as pd
-import plotly.express as px
 import seaborn as sns
 import numpy as np
 import os

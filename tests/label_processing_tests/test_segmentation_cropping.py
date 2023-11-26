@@ -1,7 +1,5 @@
 # Import third-party libraries
 import unittest
-import cv2
-import numpy as np
 from pathlib import Path
 import detecto
 
@@ -12,16 +10,16 @@ from label_processing.segmentation_cropping import *
 class TestSegmentationCropping(unittest.TestCase):
     path_to_model = "../../models/model_segmentation_label.pth"
     jpg_path: Path =  Path("../testdata/uncropped/coll.mfn-berlin.de_u_43acf9__label.jpg")
-    label_predictor = PredictLabel(path_to_model, ["box"], jpg_path)
+    label_predictor = PredictLabel(path_to_model, ["label"], jpg_path)
 
     
     def test_predict_label_constructor(self):
-        label_predictor = PredictLabel(self.path_to_model, ["box"], self.jpg_path)
+        label_predictor = PredictLabel(self.path_to_model, ["label"], self.jpg_path)
         self.assertIsInstance(label_predictor.jpg_path, Path)
         self.assertIsInstance(label_predictor.model, detecto.core.Model)
 
     def test_predict_label_constructor_2(self):
-        label_predictor = PredictLabel(self.path_to_model, ["box"])
+        label_predictor = PredictLabel(self.path_to_model, ["label"])
         label_predictor.jpg_path = self.jpg_path
         self.assertIsInstance(label_predictor.jpg_path, Path)
     

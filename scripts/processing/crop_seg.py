@@ -5,8 +5,6 @@ import argparse
 import os
 import time
 import warnings
-import glob
-import pandas as pd
 from pathlib import Path
 
 # Suppress warning messages during execution
@@ -14,7 +12,6 @@ warnings.filterwarnings('ignore')
 
 # Import the necessary module from the 'label_processing' module package
 import label_processing.segmentation_cropping as scrop
-import label_processing.utils
 from label_processing.segmentation_cropping import create_crops
 
 THRESHOLD = 0.8
@@ -68,11 +65,11 @@ if __name__ == '__main__':
 
     # Get model
     script_dir = os.path.dirname(__file__)
-    rel_path = "../models/model_segmentation_label.pth"
+    rel_path = "../../models/model_segmentation_label.pth"
     model_path = os.path.join(script_dir, rel_path)
 
     jpg_dir = Path(args.jpg_dir)
-    classes = "label"
+    classes = ["label"]
     out_dir = args.out_dir
     
     predictor = scrop.PredictLabel(model_path, classes)

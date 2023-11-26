@@ -3,9 +3,7 @@ import numpy as np
 import pandas as pd
 import cv2
 import glob, os
-import pathlib
 from pathlib import Path
-import re
 import tensorflow as tf
 from tensorflow import keras
 import warnings
