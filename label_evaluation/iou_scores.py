@@ -94,17 +94,17 @@ def concat_frames(df_pred: pd.DataFrame, df_gt: pd.DataFrame) -> pd.DataFrame:
         df_gt (pd.DataFrame): dataframe containing the groundtruth 
 
     Returns:
-        pio.Figure: plotly.io graph object
+        pd.DataFrame: Concatenated dataframe with IOU scores.
     """
     
     df_gt.rename(columns={"class": "class_gt", "xmin": "xmin_gt",
                           "ymin": "ymin_gt", "xmax": "xmax_gt",
                           "ymax": "ymax_gt"},
-                 inplace = True)
+                 inplace=True)
     df_pred.rename(columns={"class": "class_pred", "xmin": "xmin_pred",
                             "ymin": "ymin_pred", "xmax": "xmax_pred",
                             "ymax": "ymax_pred"},
-                   inplace = True)
+                   inplace=True)
     frames: list[pd.DataFrame] = []
     for element in df_pred.filename.unique():
         df_pred_filename = df_pred[df_pred.filename == element]
@@ -115,6 +115,7 @@ def concat_frames(df_pred: pd.DataFrame, df_gt: pd.DataFrame) -> pd.DataFrame:
     #filepath = Path(f'{folder}/iou_scores.csv')
     #df.to_csv(filepath)
     return df
+
 
 def box_plot_iou(df_concat: pd.DataFrame) -> go.Figure():
     """
@@ -131,6 +132,7 @@ def box_plot_iou(df_concat: pd.DataFrame) -> go.Figure():
     fig = px.box(df_concat, y="score", points="all", color="class_pred")
     fig.update_layout(title_text="IOU Scores")
     return fig
+
 
 def class_pred(df_concat: pd.DataFrame) -> go.Figure():
     """

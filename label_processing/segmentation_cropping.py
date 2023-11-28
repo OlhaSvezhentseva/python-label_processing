@@ -182,7 +182,7 @@ def crop_picture(img_raw: np.ndarray, path: str,
     Crop the picture using the given coordinates.
 
     Args:
-        img_raw (numpy.ndarray): Input \JPG\ converted to a numpy matrix by cv2.
+        img_raw (numpy.ndarray): Input **JPG** converted to a numpy matrix by cv2.
         path (str): Path where the picture should be saved.
         filename (str): Name of the picture.
         pic_class (str): Class of the label.
