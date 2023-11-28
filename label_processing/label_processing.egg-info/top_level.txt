@@ -1,8 +1,0 @@
-clustering_preprocessing
-evaluate_text
-iou_scores
-redundancy
-segmentation_cropping
-text_recognition
-utils
-vision
