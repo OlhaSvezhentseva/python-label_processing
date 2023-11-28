@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Import the necessary module from the 'label_evaluation' module package
-from label_evaluation import redundancy
+import label_evaluation.redundancy
 
 # Import third-party libraries
 import argparse

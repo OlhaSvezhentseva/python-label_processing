@@ -1,5 +1,5 @@
 # Import the necessary module from the 'label_evaluation' module package
-from label_evaluation import accuracy_classifier
+import label_evaluation.accuracy_classifier
 
 # Import third-party libraries
 import argparse

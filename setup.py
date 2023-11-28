@@ -13,7 +13,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.9",
         "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
-        "operatzing System :: OS Independent",
+        "Operating System :: OS Independent",
     ],
     scripts=glob.glob("scripts/*/*.py"),
     #include_package_data=True, #include the static data specified in the MANIFEST.in
@@ -30,7 +30,7 @@ setup(
         "pytesseract",
         "tesseract",
         "pillow",
-        "google-cloud",
+        "google-cloud-vision",
         "deskew",
         "seaborn",
         "matplotlib",

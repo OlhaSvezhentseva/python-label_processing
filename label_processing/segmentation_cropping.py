@@ -1,7 +1,8 @@
-# Import third-party libraries
+# Import Librairies
 import cv2
-# import sys
-# import detecto
+#import sys
+import re
+#import detecto
 import torch
 import os
 import glob
@@ -9,19 +10,14 @@ import detecto.utils
 import concurrent.futures
 import pandas as pd
 import numpy as np
+
 from pathlib import Path
 from detecto.core import Model
-# from torchvision import transforms
-import warnings
-
-# Import the necessary module from the 'label_processing' module package
+#from torchvision import transforms
 import label_processing.utils
 
-# Suppress warning messages during execution
-warnings.filterwarnings('ignore')
 
-
-# ---------------------Image Segmentation---------------------#
+#---------------------Image Segmentation---------------------#
 
 
 class PredictLabel():
@@ -54,6 +50,7 @@ class PredictLabel():
         self.threshold = threshold
         self.model = self.retrieve_model()
 
+        
     @property
     def jpg_path(self):
         """str|Path|None: Property for JPG path."""
@@ -66,9 +63,9 @@ class PredictLabel():
             self._jpg_path = None
         elif (isinstance(isinstance, str)):
             self._jpg_path = Path(jpg_path)
-        elif (isinstance(jpg_path, Path)):
+        elif (isinstance(jpg_path,Path)):
             self._jpg_path = jpg_path
-
+            
     def retrieve_model(self) -> detecto.core.Model:
         """
         Retrieve the trained object detection model.
@@ -83,7 +80,7 @@ class PredictLabel():
             strict=False
         )
         return model
-
+    
     def class_prediction(self, jpg_path: Path = None) -> pd.DataFrame:
         """
         Predict labels for a given JPG file.
@@ -99,7 +96,6 @@ class PredictLabel():
         image = detecto.utils.read_image(str(jpg_path))
         predictions = self.model.predict(image)
         labels, boxes, scores = predictions
-        entries = []
         for i, labelname in enumerate(labels):
             entry = {}
             entry['filename'] = jpg_path.name
@@ -109,10 +105,8 @@ class PredictLabel():
             entry['ymin'] = boxes[i][1]
             entry['xmax'] = boxes[i][2]
             entry['ymax'] = boxes[i][3]
-            entries.append(entry)
-        return entries
-
-
+        return entry
+    
 def prediction_parallel(jpg_dir: Path | str, predictor: PredictLabel,
                         n_processes: int) -> pd.DataFrame:
     """
@@ -130,7 +124,6 @@ def prediction_parallel(jpg_dir: Path | str, predictor: PredictLabel,
         jpg_dir = Path(jpg_dir)
 
     file_names: list[Path] = list(jpg_dir.glob("*.jpg"))
-
     with concurrent.futures.ProcessPoolExecutor(max_workers=n_processes) as executor:
         results = executor.map(predictor.class_prediction, file_names)
 
@@ -157,13 +150,13 @@ def clean_predictions(jpg_dir: Path, dataframe: pd.DataFrame,
     print("\nFilter coordinates")
     colnames = ['score', 'xmin', 'ymin', 'xmax', 'ymax']
     for header in colnames:
-        dataframe[header] = dataframe[header].astype('str').str. \
+        dataframe[header] = dataframe[header].astype('str').str.\
             extractall('(\d+.\d+)').unstack().fillna('').sum(axis=1).astype(float)
     dataframe = dataframe.loc[dataframe['score'] >= threshold]
-    dataframe[['xmin', 'ymin', 'xmax', 'ymax']] = \
-        dataframe[['xmin', 'ymin', 'xmax', 'ymax']].fillna('0')
+    dataframe[['xmin', 'ymin','xmax','ymax']] = \
+        dataframe[['xmin', 'ymin','xmax','ymax']].fillna('0')
     if out_dir is None:
-        parent_dir = jpg_dir.resolve().parent  # get parent of jpg_dir
+        parent_dir = jpg_dir.resolve().parent  #get parent of jpg_dir
     else:
         parent_dir = out_dir
     filename = f"{jpg_dir.stem}_predictions.csv"
@@ -173,8 +166,8 @@ def clean_predictions(jpg_dir: Path, dataframe: pd.DataFrame,
     return dataframe
 
 
-# ---------------------Image Cropping---------------------#
-
+#---------------------Image Cropping---------------------#    
+    
 
 def crop_picture(img_raw: np.ndarray, path: str,
                  filename: str, pic_class: str, **coordinates) -> None:
@@ -182,19 +175,33 @@ def crop_picture(img_raw: np.ndarray, path: str,
     Crop the picture using the given coordinates.
 
     Args:
-        img_raw (numpy.ndarray): Input **JPG** converted to a numpy matrix by cv2.
+        img_raw (numpy.ndarray): Input JPG converted to a numpy matrix by cv2.
         path (str): Path where the picture should be saved.
         filename (str): Name of the picture.
         pic_class (str): Class of the label.
-        **coordinates: Coordinates for cropping.
+        coordinates: Coordinates for cropping.
     """
     xmin = coordinates['xmin']
     ymin = coordinates['ymin']
     xmax = coordinates['xmax']
     ymax = coordinates['ymax']
-    filepath = f"{path}/{pic_class}/{filename}"
+    filepath=f"{path}/{pic_class}/{filename}"
     crop = img_raw[ymin:ymax, xmin:xmax]
     cv2.imwrite(filepath, crop)
+
+
+def make_file_name(label_id: str, pic_class: str, occurence: int) -> None:
+    """
+    Creates a fitting filename.
+
+    Args:
+        label_id (str): string containing the label id.
+        pic_class (str): class of the label.
+        occurence (int): counts how many times the label class already occured in the picture.
+    """
+    label_id = re.sub(r"_+label", "", label_id) 
+    filename = f"{label_id}_label_{pic_class}_{occurence}.jpg"
+    return filename
 
 
 def create_dirs(dataframe: pd.DataFrame, path: str) -> None:
@@ -213,28 +220,32 @@ def create_dirs(dataframe: pd.DataFrame, path: str) -> None:
 def create_crops(jpg_dir: Path, dataframe: str,
                  out_dir: Path = Path(os.getcwd())) -> None:
     """
-    Create crops using the CSV from applying the model and the original
+    Creates crops by using the csv from applying the model and the original
     pictures inside a directory.
 
     Args:
-        jpg_dir (Path): Path to directory with JPGs.
-        dataframe (str): Path to CSV file.
-        out_dir (Path): Path to the target directory to save the cropped JPGs.
+        jpg_dir (): path to directory with jpgs.
+        dataframe (str): path to csv file.
+        out_dir (Path): path to the target directory to save the cropped jpgs.
     """
     dir_path = jpg_dir
     out_dir = Path(out_dir)
     new_dir_name = Path(dir_path.name + "_cropped")
     path = out_dir.joinpath(new_dir_name)
     path.mkdir(parents=True, exist_ok=True)
-    create_dirs(dataframe, path)  # creates dirs for every class
+    create_dirs(dataframe, path) #creates dirs for every class
     for filepath in glob.glob(os.path.join(dir_path, '*.jpg')):
         filename = os.path.basename(filepath)
         match = dataframe[dataframe.filename == filename]
         image_raw = label_processing.utils.load_jpg(filepath)
         label_id = Path(filename).stem
-        for _, row in match.iterrows():
-            filename = label_id
-            coordinates = {'xmin': int(row.xmin), 'ymin': int(row.ymin),
-                           'xmax': int(row.xmax), 'ymax': int(row.ymax)}
-            crop_picture(image_raw, path, filename, **coordinates)
+        classes = []
+        for _,row in match.iterrows(): 
+            pic_class = row['class']
+            occ = classes.count(pic_class) + 1 
+            filename = make_file_name(label_id, pic_class, occ)
+            coordinates = {'xmin':int(row.xmin),'ymin':int(row.ymin),
+                           'xmax':int(row.xmax),'ymax':int(row.ymax)}
+            crop_picture(image_raw,path,filename,pic_class,**coordinates)
+            classes.append(pic_class)
     print(f"\nThe images have been successfully saved in {path}")
