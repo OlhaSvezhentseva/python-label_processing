@@ -84,16 +84,6 @@ if __name__ == "__main__":
     csv_filepath = os.path.join(result_dir, FILENAME_CSV)
     df_concat.to_csv(csv_filepath, index=False)  # Specify index=False to avoid writing row indices to the CSV
     print(f"The csv has been successfully saved in {csv_filepath}")
-<<<<<<< HEAD
-
-    # create boxplot
-    fig = iou_scores.box_plot_iou(df_concat, accuracy_txt_path=os.path.join(result_dir, 'accuracy_percentage.txt'))
-    boxplot_filepath = os.path.join(result_dir, FILENAME_BOXPLOT)
-    pio.write_image(fig, boxplot_filepath, format="jpg")
-    print(f"The boxplot has been successfully saved in {boxplot_filepath}")
-
-=======
->>>>>>> 2e638d1bd2c9bbfe7a6937717015360ebdf52b97
 
     # create boxplot
     fig = iou_scores.box_plot_iou(df_concat, accuracy_txt_path=os.path.join(result_dir, 'accuracy_percentage.txt'))
