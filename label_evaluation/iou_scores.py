@@ -54,10 +54,8 @@ def comparison(df_pred_filename: pd.DataFrame,
     the iou-score. Then it takes the maximum score and adds it to the dataframe. 
 
     Args:
-        df_pred_filename (pd.DataFrame): subdataframe of predicted labels 
-            containing all the rows belonging to one filename
-        df_gt_filename (pd.DataFrame):  subdataframe of groundtruth 
-            containing all the rows belonging to one filename
+        df_pred_filename (pd.DataFrame): subdataframe of predicted labels containing all the rows belonging to one filename
+        df_gt_filename (pd.DataFrame):  subdataframe of groundtruth containing all the rows belonging to one filename
 
     Returns:
         pd.DataFrame: new sub-dataframe with coordinates of ground truth and 
@@ -89,8 +87,7 @@ def concat_frames(df_pred: pd.DataFrame, df_gt: pd.DataFrame) -> pd.DataFrame:
     Concats predicted and groundtruth dataset with the coordinates' IOU scores.
 
     Args:
-        df_pred (pd.DataFrame): dataframe with predicted bounding boxes from 
-            segmentation
+        df_pred (pd.DataFrame): dataframe with predicted bounding boxes from segmentation
         df_gt (pd.DataFrame): dataframe containing the groundtruth 
 
     Returns:
@@ -122,8 +119,7 @@ def box_plot_iou(df_concat: pd.DataFrame) -> go.Figure():
     Creates box plot of the calculated IOU scores for each class.
 
     Args:
-        df_pred (pd.DataFrame): dataframe with predicted bounding boxes from 
-            segmentation
+        df_pred (pd.DataFrame): dataframe with predicted bounding boxes from segmentation
         df_gt (pd.DataFrame): dataframe containing the groundtruth 
 
     Returns:
