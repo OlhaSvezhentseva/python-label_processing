@@ -13,7 +13,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.9",
         "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
-        "operatzing System :: OS Independent",
+        "Operating System :: OS Independent",
     ],
     #only include scripts and not __init__.py
     scripts = [script for script in glob.glob("scripts/*/*.py") if "__init__" not in script],
@@ -31,7 +31,7 @@ setup(
         "pytesseract",
         "tesseract",
         "pillow",
-        "google-cloud",
+        "google-cloud-vision",
         "deskew",
         "seaborn",
         "matplotlib",

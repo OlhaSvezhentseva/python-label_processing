@@ -1,5 +1,5 @@
 Image-Processing
-=============
+================
 
 .. contents ::
 

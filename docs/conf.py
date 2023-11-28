@@ -6,9 +6,9 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'EIEE'
-copyright = '2023, Margot Belot'
-author = 'Margot Belot'
+project = 'ELIE'
+copyright = '2023, Margot Belot, Olha Svezhentseva, Leonardo Preuss'
+authors = 'Margot Belot, Olha Svezhentseva, Leonardo Preuss'
 release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
@@ -24,8 +24,9 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'renku'
 html_static_path = ['_static']
+autodoc_mock_imports = ['google.cloud']
 
 import sys, os
 

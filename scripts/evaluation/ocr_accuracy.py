@@ -9,7 +9,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Import the necessary module from the 'label_evaluation' module package
-from label_evaluation import evaluate_text
+import label_evaluation.evaluate_text
 
 
 def parse_arguments() -> argparse.Namespace:

@@ -11,7 +11,7 @@ import plotly.io as pio
 warnings.filterwarnings('ignore')
 
 # Import the necessary module from the 'label_evaluation' module package
-from label_evaluation import iou_scores
+import label_evaluation.iou_scores
 
 
 #Setting filenames as Constants
