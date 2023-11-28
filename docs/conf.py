@@ -7,8 +7,8 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'ELIE'
-copyright = '2023, Margot Belot'
-author = 'Margot Belot'
+copyright = '2023, Margot Belot, Olha Svezhentseva, Leonardo Preuss'
+authors = 'Margot Belot, Olha Svezhentseva, Leonardo Preuss'
 release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
