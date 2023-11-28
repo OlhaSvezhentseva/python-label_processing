@@ -15,7 +15,7 @@ import label_processing.segmentation_cropping as scrop
 from label_processing.segmentation_cropping import create_crops
 
 THRESHOLD = 0.8
-PROCESSES = 12
+PROCESSES = 1
 
 def parse_arguments() -> argparse.Namespace:
     """
@@ -66,7 +66,8 @@ if __name__ == '__main__':
     # Get model
     script_dir = os.path.dirname(__file__)
     rel_path = "../../models/model_segmentation_label.pth"
-    model_path = os.path.join(script_dir, rel_path)
+    #model_path = os.path.join(script_dir, rel_path)
+    model_path = "/home/leonardopreuss/Projects/mfnb_label_pipeline/python-label_processing_private/old/models/model_labels_box.pth"
 
     jpg_dir = Path(args.jpg_dir)
     classes = ["label"]
@@ -75,7 +76,7 @@ if __name__ == '__main__':
     predictor = scrop.PredictLabel(model_path, classes)
     
     # 1. Model Predictions
-    df = scrop.prediction_parallel(jpg_dir,predictor, PROCESSES)
+    df = scrop.prediction_parallel(jpg_dir,predictor, 12)
     finish = time.perf_counter()
 
     # 2. Filter model predictions and save csv

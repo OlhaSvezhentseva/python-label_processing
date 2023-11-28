@@ -89,8 +89,7 @@ def concat_frames(df_pred: pd.DataFrame, df_gt: pd.DataFrame) -> pd.DataFrame:
     Concats predicted and groundtruth dataset with the coordinates' IOU scores.
 
     Args:
-        df_pred (pd.DataFrame): dataframe with predicted bounding boxes from 
-            segmentation
+        df_pred (pd.DataFrame): dataframe with predicted bounding boxes from segmentation
         df_gt (pd.DataFrame): dataframe containing the groundtruth 
 
     Returns:
