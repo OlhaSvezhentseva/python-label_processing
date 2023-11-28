@@ -162,6 +162,6 @@ This script is designed to evaluate the accuracy of segmentation results by calc
 
 		segmentation_accuracy.py [-h] -g <ground_truth_coord> -p <predicted_coord> -r <results>
 
-.. _gensin model: https://radimrehurek.com/gensim/models/word2vec.html
+.. _gensim model: https://radimrehurek.com/gensim/models/word2vec.html
 .. _high-dimensional data: https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html
 .. _this article: https://towardsdatascience.com/evaluating-ocr-output-quality-with-character-error-rate-cer-and-word-error-rate-wer-853175297510
