@@ -39,18 +39,22 @@ def parse_arguments() -> argparse.Namespace:
         description="Execute the text_recognition.py module.",
         add_help = False,
         usage = usage)
-
-    parser.add_argument(
-            '-h','--help',
-            action='help',
-            help='Open this help text.'
-            )
     
     parser.add_argument(
             '-h','--help',
             action='help',
             help='Description of the command-line arguments.'
             )
+
+    parser.add_argument(
+            '-v', '--verbose',
+            metavar='',
+            action=argparse.BooleanOptionalAction,
+            type = int,
+            default = False,
+            help=('Optional argument: Let the script run verbose')
+            )
+
     
     parser.add_argument(
             '-t', '--thresholding',

@@ -1,8 +1,5 @@
-scripts
+Scripts
 =======
-
-Subpackages
------------
 
 .. toctree::
    :maxdepth: 4

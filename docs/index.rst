@@ -8,15 +8,12 @@ Welcome to ELIE's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Introduction:
+   :caption: ELIE Doucumentation
 
    readme
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
+   tutorial
    modules
+   scripts
 
 
 Indices and tables

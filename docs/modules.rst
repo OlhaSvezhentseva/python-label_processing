@@ -1,5 +1,5 @@
-Entomological_label_Information_extraction
-==========================================
+Modules
+=======
 
 .. toctree::
    :maxdepth: 4
@@ -7,4 +7,3 @@ Entomological_label_Information_extraction
    label_evaluation
    label_postprocessing
    label_processing
-   scripts
