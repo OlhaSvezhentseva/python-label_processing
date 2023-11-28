@@ -1,12 +1,14 @@
 # Import third-party libraries
 import pandas as pd
-import numpy as np
 import plotly.express as px
 import plotly.graph_objs as go
+from pathlib import Path
+
 
 # Suppress warning messages during execution
 import warnings
 warnings.filterwarnings('ignore')
+
 
 def calculate_iou(pred_coords: tuple[float, float, float, float], 
                   gt_coords: tuple[str, float, float, float, float]) -> float:
@@ -46,39 +48,49 @@ def calculate_iou(pred_coords: tuple[float, float, float, float],
     #Return the IOU and intersection box
     return iou
 
+
 def comparison(df_pred_filename: pd.DataFrame,
                df_gt_filename: pd.DataFrame) -> pd.DataFrame:
     """
-    For one unique jpg filename this function uses the bounding box-coordinates 
+    For one unique jpg filename, this function uses the bounding box-coordinates 
     of each predicted label and calculates for every label of the ground truth 
     the iou-score. Then it takes the maximum score and adds it to the dataframe. 
 
     Args:
-        df_pred_filename (pd.DataFrame): subdataframe of predicted labels containing all the rows belonging to one filename
-        df_gt_filename (pd.DataFrame):  subdataframe of groundtruth containing all the rows belonging to one filename
+        df_pred_filename (pd.DataFrame): subdataframe of predicted labels 
+            containing all the rows belonging to one filename
+        df_gt_filename (pd.DataFrame): subdataframe of ground truth 
+            containing all the rows belonging to one filename
 
     Returns:
         pd.DataFrame: new sub-dataframe with coordinates of ground truth and 
             predicted labels as well as the (max) iou score
     """
     max_scores = []
-    max_coords = []
+    max_coords = {'class_gt': [], 'xmin_gt': [], 'ymin_gt': [], 'xmax_gt': [], 'ymax_gt': []}
+
     for _, row_pred in df_pred_filename.iterrows():
-        max_score: float = 0
-        pred_coords = (row_pred.xmin_pred, row_pred.ymin_pred,
-                       row_pred.xmax_pred, row_pred.ymax_pred)
+        max_score = 0
+        pred_coords = (row_pred.xmin_pred, row_pred.ymin_pred, row_pred.xmax_pred, row_pred.ymax_pred)
+        max_coord = {'class_gt': None, 'xmin_gt': None, 'ymin_gt': None, 'xmax_gt': None, 'ymax_gt': None}
+
         for _, row_gt in df_gt_filename.iterrows():
-            gt_coords = (row_gt.class_gt, row_gt.xmin_gt,
-                         row_gt.ymin_gt, row_gt.xmax_gt, row_gt.ymax_gt)
+            gt_coords = (row_gt.class_gt, row_gt.xmin_gt, row_gt.ymin_gt, row_gt.xmax_gt, row_gt.ymax_gt)
             iou = calculate_iou(pred_coords, gt_coords)
+
             if iou > max_score:
                 max_score = iou
-                max_coord = gt_coords
-        max_coords.append(max_coord)
+                max_coord = {'class_gt': row_gt.class_gt, 'xmin_gt': row_gt.xmin_gt,
+                             'ymin_gt': row_gt.ymin_gt, 'xmax_gt': row_gt.xmax_gt, 'ymax_gt': row_gt.ymax_gt}
+
         max_scores.append(max_score)
+        for key, value in max_coord.items():
+            max_coords[key].append(value)
+
     df_pred_filename["score"] = max_scores
-    df_pred_filename[["class_gt","xmin_gt", "ymin_gt",
-                      "xmax_gt", "ymax_gt"]] = max_coords
+    for key, values in max_coords.items():
+        df_pred_filename[key] = values
+
     return df_pred_filename
 
 
@@ -114,44 +126,27 @@ def concat_frames(df_pred: pd.DataFrame, df_gt: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def box_plot_iou(df_concat: pd.DataFrame) -> go.Figure():
+def box_plot_iou(df_concat: pd.DataFrame, accuracy_txt_path: str = None) -> go.Figure():
     """
     Creates box plot of the calculated IOU scores for each class.
 
     Args:
-        df_pred (pd.DataFrame): dataframe with predicted bounding boxes from segmentation
-        df_gt (pd.DataFrame): dataframe containing the groundtruth 
+        df_concat (pd.DataFrame): dataframe with predicted and groundtruth bounding boxes
+        accuracy_txt_path (str): file path to save accuracy percentages in a text file
 
     Returns:
         pio.Figure: plotly.io graph object
     """
     fig = px.box(df_concat, y="score", points="all", color="class_pred")
     fig.update_layout(title_text="IOU Scores")
+
+    # Calculate accuracy percentages and save to text file
+    accuracy_df = df_concat.groupby("class_pred")["score"].mean().reset_index()
+    accuracy_df["accuracy_percentage"] = accuracy_df["score"] * 100
+
+    if accuracy_txt_path:
+        accuracy_txt_path = Path(accuracy_txt_path)
+        accuracy_df.to_csv(accuracy_txt_path, index=False)
+
     return fig
 
-
-def class_pred(df_concat: pd.DataFrame) -> go.Figure():
-    """
-    Creates a bar chart of the predicted and groundtruth classes. 
-    Shows the accuracy of the predicted classes of each label compared to the groundtruth.
-
-    Args:
-        df_concat (pd.DataFrame): concatenated dataframe
-        
-    Returns:
-        pio.Figure: plotly.io graph object
-    """
-    iou_df = df_concat
-    conditions = [(iou_df['class_pred'] == iou_df['class_gt']), #define conditions
-                 (iou_df['class_pred'] != iou_df['class_gt'])]
-    choices = ['match', 'no_match'] #define choices
-    #create new column in DataFrame that displays results of comparisons
-    iou_df['comparison_values'] = np.select(conditions, choices, default='Tie') 
-    # Plot
-    fig = px.histogram(iou_df, x='class_pred',
-                       color="comparison_values").update_xaxes(
-                           categoryorder='total descending')
-    fig.update_layout(xaxis_type='category', title_text='match VS no_match')
-    return fig
-    
-    
