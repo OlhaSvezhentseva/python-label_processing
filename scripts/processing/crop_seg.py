@@ -65,9 +65,9 @@ if __name__ == '__main__':
 
     # Get model
     script_dir = os.path.dirname(__file__)
-    rel_path = "../../models/model_segmentation_label.pth"
+    model_path = "../../models/model_segmentation_label.pth"
     #model_path = os.path.join(script_dir, rel_path)
-    model_path = "/home/leonardopreuss/Projects/mfnb_label_pipeline/python-label_processing_private/old/models/model_labels_box.pth"
+    #model_path = "/home/leonardopreuss/Projects/mfnb_label_pipeline/python-label_processing_private/old/models/model_labels_box.pth"
 
     jpg_dir = Path(args.jpg_dir)
     classes = ["label"]
