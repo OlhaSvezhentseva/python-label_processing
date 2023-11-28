@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'EIEE'
+project = 'ELIE'
 copyright = '2023, Margot Belot'
 author = 'Margot Belot'
 release = '1.0.0'
