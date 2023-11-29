@@ -190,33 +190,6 @@ def crop_picture(img_raw: np.ndarray, path: str,
     cv2.imwrite(filepath, crop)
 
 
-def make_file_name(label_id: str, pic_class: str, occurence: int) -> None:
-    """
-    Creates a fitting filename.
-
-    Args:
-        label_id (str): string containing the label id.
-        pic_class (str): class of the label.
-        occurence (int): counts how many times the label class already occured in the picture.
-    """
-    label_id = re.sub(r"_+label", "", label_id) 
-    filename = f"{label_id}_label_{pic_class}_{occurence}.jpg"
-    return filename
-
-
-def create_dirs(dataframe: pd.DataFrame, path: str) -> None:
-    """
-    Create separate directories for every class.
-
-    Args:
-        dataframe (pd.Dataframe): DataFrame containing the classes as a column.
-        path (str): Path of the chosen directory.
-    """
-    uniques = dataframe["class"].unique()
-    for uni_class in uniques:
-        Path(f"{path}/{uni_class}").mkdir(parents=True, exist_ok=True)
-
-
 def create_crops(jpg_dir: Path, dataframe: str,
                  out_dir: Path = Path(os.getcwd())) -> None:
     """
@@ -233,19 +206,17 @@ def create_crops(jpg_dir: Path, dataframe: str,
     new_dir_name = Path(dir_path.name + "_cropped")
     path = out_dir.joinpath(new_dir_name)
     path.mkdir(parents=True, exist_ok=True)
-    create_dirs(dataframe, path) #creates dirs for every class
     for filepath in glob.glob(os.path.join(dir_path, '*.jpg')):
         filename = os.path.basename(filepath)
         match = dataframe[dataframe.filename == filename]
         image_raw = label_processing.utils.load_jpg(filepath)
         label_id = Path(filename).stem
-        classes = []
+        label_occ = []
         for _,row in match.iterrows(): 
-            pic_class = row['class']
-            occ = classes.count(pic_class) + 1 
-            filename = make_file_name(label_id, pic_class, occ)
+            occ = label_occ.count(label_id) + 1 
+            filename = f"{label_id}_{occ}.jpg"
             coordinates = {'xmin':int(row.xmin),'ymin':int(row.ymin),
                            'xmax':int(row.xmax),'ymax':int(row.ymax)}
-            crop_picture(image_raw,path,filename,pic_class,**coordinates)
+            crop_picture(image_raw,path,filename,**coordinates)
             classes.append(pic_class)
     print(f"\nThe images have been successfully saved in {path}")
