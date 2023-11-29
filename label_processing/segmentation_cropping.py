@@ -1,7 +1,6 @@
 # Import Librairies
 import cv2
 #import sys
-import re
 #import detecto
 import torch
 import os
