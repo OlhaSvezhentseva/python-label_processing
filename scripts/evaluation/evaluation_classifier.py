@@ -62,7 +62,7 @@ if __name__ == '__main__':
     target = df["gt"].unique().tolist()
 
     # 1. Accuracy Scores
-    accuracy_classifier.metrics(target, pred, gt, out_dir=out_dir)
+    label_evaluation.accuracy_classifier.metrics(target, pred, gt, out_dir=out_dir)
     
     # 2. Confusion Matrix
-    accuracy_classifier.cm(target, pred, gt, out_dir=out_dir)
+    label_evaluation.accuracy_classifier.cm(target, pred, gt, out_dir=out_dir)

@@ -12,7 +12,6 @@ from gensim.models import Word2Vec
 from nltk import word_tokenize
 from sklearn.manifold import TSNE
 
-import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 

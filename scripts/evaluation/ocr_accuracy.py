@@ -71,6 +71,6 @@ if __name__ == "__main__":
 
     out_dir = os.path.realpath(folder)
     print(f"\nThe OCR accuracy results have been successfully saved in {out_dir}")
-    evaluate_text.evaluate_text_predictions(gt, pred, folder)
+    label_evaluation.evaluate_text.evaluate_text_predictions(gt, pred, folder)
 
 

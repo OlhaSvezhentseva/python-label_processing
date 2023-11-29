@@ -217,5 +217,4 @@ def create_crops(jpg_dir: Path, dataframe: str,
             coordinates = {'xmin':int(row.xmin),'ymin':int(row.ymin),
                            'xmax':int(row.xmax),'ymax':int(row.ymax)}
             crop_picture(image_raw,path,filename,**coordinates)
-            classes.append(pic_class)
     print(f"\nThe images have been successfully saved in {path}")

@@ -64,7 +64,7 @@ if __name__ == "__main__":
     with open(dataset_dir, 'r') as file:
         json_data = json.load(file)
 
-    result = redundancy.per_redundancy(json_data)
+    result = label_evaluation.redundancy.per_redundancy(json_data)
     out_dir = os.path.realpath(result_dir)
 
     #Write result in text file
