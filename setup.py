@@ -46,6 +46,7 @@ setup(
         "scikit-learn",
         "plotly-express",
         "sphinx",
-        "sphinx-rtd-theme"
+        "sphinx-rtd-theme",
+        "renku-sphinx-theme"
     ],
 )
