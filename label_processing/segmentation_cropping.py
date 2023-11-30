@@ -60,7 +60,7 @@ class PredictLabel():
         """Setter for JPG path."""
         if jpg_path == None:
             self._jpg_path = None
-        elif (isinstance(isinstance, str)):
+        elif (isinstance(jpg_path, str)):
             self._jpg_path = Path(jpg_path)
         elif (isinstance(jpg_path,Path)):
             self._jpg_path = jpg_path
@@ -95,17 +95,21 @@ class PredictLabel():
         image = detecto.utils.read_image(str(jpg_path))
         predictions = self.model.predict(image)
         labels, boxes, scores = predictions
+        
+        entries = []  # List to store all entries for each label
         for i, labelname in enumerate(labels):
             entry = {}
             entry['filename'] = jpg_path.name
             entry['class'] = labelname
-            entry['score'] = scores[i]
+            entry['score'] = scores[i].item()
             entry['xmin'] = boxes[i][0]
             entry['ymin'] = boxes[i][1]
             entry['xmax'] = boxes[i][2]
             entry['ymax'] = boxes[i][3]
-        return entry
-    
+            entries.append(entry)  # Append entry to the list 
+        return pd.DataFrame(entries)
+
+
 def prediction_parallel(jpg_dir: Path | str, predictor: PredictLabel,
                         n_processes: int) -> pd.DataFrame:
     """
@@ -129,7 +133,7 @@ def prediction_parallel(jpg_dir: Path | str, predictor: PredictLabel,
     final_results = []
     # merge list of lists to single list
     map(final_results.extend, results)
-    return pd.DataFrame(list(results))
+    return pd.concat(results, ignore_index=True)
 
 
 def clean_predictions(jpg_dir: Path, dataframe: pd.DataFrame,
@@ -169,7 +173,7 @@ def clean_predictions(jpg_dir: Path, dataframe: pd.DataFrame,
     
 
 def crop_picture(img_raw: np.ndarray, path: str,
-                 filename: str, pic_class: str, **coordinates) -> None:
+                 filename: str, **coordinates) -> None:
     """
     Crop the picture using the given coordinates.
 
@@ -177,19 +181,18 @@ def crop_picture(img_raw: np.ndarray, path: str,
         img_raw (numpy.ndarray): Input JPG converted to a numpy matrix by cv2.
         path (str): Path where the picture should be saved.
         filename (str): Name of the picture.
-        pic_class (str): Class of the label.
         coordinates: Coordinates for cropping.
     """
     xmin = coordinates['xmin']
     ymin = coordinates['ymin']
     xmax = coordinates['xmax']
     ymax = coordinates['ymax']
-    filepath=f"{path}/{pic_class}/{filename}"
+    filepath=f"{path}/{filename}"
     crop = img_raw[ymin:ymax, xmin:xmax]
     cv2.imwrite(filepath, crop)
 
 
-def create_crops(jpg_dir: Path, dataframe: str,
+def create_crops(jpg_dir: Path, dataframe: pd.DataFrame,
                  out_dir: Path = Path(os.getcwd())) -> None:
     """
     Creates crops by using the csv from applying the model and the original
@@ -205,16 +208,18 @@ def create_crops(jpg_dir: Path, dataframe: str,
     new_dir_name = Path(dir_path.name + "_cropped")
     path = out_dir.joinpath(new_dir_name)
     path.mkdir(parents=True, exist_ok=True)
+    
     for filepath in glob.glob(os.path.join(dir_path, '*.jpg')):
         filename = os.path.basename(filepath)
         match = dataframe[dataframe.filename == filename]
         image_raw = label_processing.utils.load_jpg(filepath)
         label_id = Path(filename).stem
         label_occ = []
-        for _,row in match.iterrows(): 
-            occ = label_occ.count(label_id) + 1 
+        for _, row in match.iterrows():
+            occ = label_occ.count(label_id) + 1
             filename = f"{label_id}_{occ}.jpg"
-            coordinates = {'xmin':int(row.xmin),'ymin':int(row.ymin),
-                           'xmax':int(row.xmax),'ymax':int(row.ymax)}
-            crop_picture(image_raw,path,filename,**coordinates)
+            coordinates = {'xmin': int(row.xmin), 'ymin': int(row.ymin),
+                           'xmax': int(row.xmax), 'ymax': int(row.ymax)}
+            crop_picture(image_raw, path, filename, **coordinates)
+            label_occ.append(label_id)
     print(f"\nThe images have been successfully saved in {path}")
