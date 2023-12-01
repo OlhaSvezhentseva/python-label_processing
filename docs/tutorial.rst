@@ -1,7 +1,7 @@
 Tutorial
 ========
 
-*A brief introduction on how to build a workflow using this package*
+*A brief example on how to build a workflow using this package*
 
 .. contents ::
 
@@ -11,11 +11,11 @@ To utilize this package, it is essential to have natural-history labels containi
 Mock data has been supplied in the "tests/testdata" directory for experimentation. 
 We encourage you to test the package with your own dataset. 
 However, if your data substantially differs from the examples outlined in the associated paper, you may consider training your own segmentation and classification models. 
-Code for the training process is available in a separate repository.
+Code for the training process is available in the "training" repository.
 
 1. Preperation
 --------------
-We first want to create a new directory in a location of your choice and cd into it e.g.:
+We first want to create a new directory in a location of your choice and cd into it:
     
     ``mkdir -p output_elie/output && cd elie_tutorial``
 
@@ -23,7 +23,7 @@ We will now copy our jpg images in there (adjust command with the location of yo
 
     ``cp -r ../data .``
 
-2. Segmentation
+1. Segmentation
 ---------------
 If your images are already cropped, that's excellent. 
 In case they are not, there's no issue; we can assist you with the cropping process. 
@@ -39,7 +39,7 @@ Don't forget that you can obtain information about the usage of any script by ru
 3. Classification
 -----------------
 Now that we have a collection of cropped pictures, the next step is classification. 
-Our objective is to classify them into the categories of "handwritten" and "printed." 
+Our objective is to classify them into the categories of "handwritten" and "printed".
 To initiate the classification process, run the following command:
 
     ``image_classifier.py -m 2 -o output -j output/data_cropped``
@@ -53,14 +53,19 @@ Now that we have the labels with printed text ready, we can proceed to extract t
 Fortunately, we provide a Tesseract wrapper that also handles the preprocessing, alleviating the need for manual intervention. 
 Let's give it a try:
 
-    ``image_classifier.py -m 2 -o output -j output/data_cropped``
+    ``tesseract_ocr.py -d output/data_cropped -o output``
 
 Once again, you will discover the output in the `output` directory under the name `ocr_preprocessing.py`. 
-The structure is explained in the image_classifier section of this documentation.
+The structure is explained in the tesseract_ocr section of this documentation.
 
 5. Postprocessing
 -----------------
 - TODO
+
+
+
+
+
 
 
 
