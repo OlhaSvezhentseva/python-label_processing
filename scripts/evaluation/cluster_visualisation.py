@@ -42,21 +42,12 @@ def parse_arguments() -> argparse.Namespace:
         usage = usage)
 
     parser.add_argument(
-        '-o', '--out_dir',
-        metavar='',
-        type=str,
-        default=os.getcwd(),
-        help=('Directory in which the resulting crops and the csv will be stored.\n'
-              'Default is the user current working directory.')
-    ),
-
-    parser.add_argument(
         '-c', '--cluster_json',
         metavar='',
         type=str,
         required=True,
         help=('Path to cluster Json file.')
-    ),
+    )
 
     parser.add_argument(
         '-gt', '--ground_truth',
