@@ -8,10 +8,11 @@ Welcome to ELIE's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: ELIE Doucumentation
+   :caption: ELIE Documentation
 
    readme
    tutorial
+   flowchart
    modules
    scripts
 
