@@ -22,16 +22,37 @@ class TestSegmentationCropping(unittest.TestCase):
         label_predictor = PredictLabel(self.path_to_model, ["label"])
         label_predictor.jpg_path = self.jpg_path
         self.assertIsInstance(label_predictor.jpg_path, Path)
-    
+
     def test_class_prediction(self):
         entries = self.label_predictor.class_prediction(self.jpg_path)
-        self.assertIsInstance(entries, list)
-        [self.assertIsInstance(entry, dict) for entry in entries]
-    
+        self.assertIsInstance(entries, pd.DataFrame)
+
+        # self.assertIsInstance(entries, list)
+        # [self.assertIsInstance(entry, dict) for entry in entries]
+
     def test_class_prediction_parallel(self):
         df = prediction_parallel("../testdata/uncropped", self.label_predictor, 1)
-        print(df["score"])
+        # print(df["score"])
         self.assertIsInstance(df, pd.DataFrame)
-        self.assertEqual(len(df.columns), 100)
-        
-    #TODO Tests for remaining functions
+        self.assertEqual(len(df.columns), 7)
+
+    def test_number_of_labels_detected_single_image(self):
+        df = self.label_predictor.class_prediction(self.jpg_path)
+        self.assertEqual(len(df), 3)
+
+    def test_number_of_labels_detected_image_folder(self):
+        df = prediction_parallel("../testdata/uncropped", self.label_predictor, 1)
+        self.assertEqual(len(df), 16)
+
+    def test_threshold(self):
+        df = prediction_parallel("../testdata/uncropped", self.label_predictor, 1)
+        # print(df["score"])
+        clean_df = clean_predictions(Path("../testdata/uncropped"), df,1.0)
+        self.assertEqual(len(clean_df),0)
+
+    def test_crops(self):
+        df = prediction_parallel("../testdata/uncropped", self.label_predictor, 1)
+        # no cleaning
+        create_crops(Path("../testdata/uncropped"), df, out_dir=Path("check_crops"))
+        crop_files = glob.glob(os.path.join(Path("check_crops/uncropped_cropped"),'*.jpg'))
+        self.assertEqual(len(df),len(crop_files))
