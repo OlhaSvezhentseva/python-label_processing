@@ -47,7 +47,15 @@ class TestImageProcessor(unittest.TestCase):
         preprocessor = preprocessor.preprocessing(Threshmode.OTSU)
         self.assertIsInstance(preprocessor.image, np.ndarray)
         
-    #TODO Test if pictures are actually different 
+    def test_different_pictures(self):
+        """
+        test if the preprocessed picture is different from the original picture
+        """
+        preprocessor = ImageProcessor.read_image(self.image_path)
+        preprocessor = preprocessor.preprocessing(Threshmode.OTSU)
+        if self.image.shape == preprocessor.image.shape:
+            self.assertFalse(np.allclose(self.image, preprocessor.image))
+
     
     def test_save_image(self):
         preprocessor = ImageProcessor.read_image(self.image_path)
