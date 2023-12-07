@@ -62,6 +62,12 @@ The structure is explained in the tesseract_ocr section of this documentation.
 -----------------
 - TODO
 
+6. Clustering
+-------------
+- TODO
+- Recommend specific module from Joel's package
+- Clustering visualisation
+
 
 
 
