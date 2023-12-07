@@ -60,7 +60,18 @@ The structure is explained in the tesseract_ocr section of this documentation.
 
 5. Postprocessing
 -----------------
-- TODO
+This step helps to get an overview of the generated transcripts by dividing them in several classes:
+"nuris", empty transcripts, nonsense transcripts, and plausible transcripts.
+
+Transcripts are categorized as nonsense if the average length of a single token is smaller than 2 letters,
+this is based on the observations, that Pytesseract may generate a lot of single letter tokens,
+when mistakenly recognizing paper imperfections as text.
+Plausible transcripts undergo correction by eliminating non-ASCII and non-alphanumeric symbols
+before being saved as corrected_transcripts.json.
+
+    ``process_ocr.py [-h] -j <ocr-json> -o <out-dir>``
+
+You will see a json file per category saved in the output folder.
 
 6. Clustering
 -------------
