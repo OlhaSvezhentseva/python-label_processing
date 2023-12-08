@@ -15,6 +15,7 @@ Welcome to ELIE's documentation!
    flowchart
    modules
    scripts
+   feedback
 
 
 Indices and tables
