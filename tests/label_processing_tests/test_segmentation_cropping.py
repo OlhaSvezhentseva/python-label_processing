@@ -106,3 +106,4 @@ class TestSegmentationCropping(unittest.TestCase):
         create_crops(Path("../testdata/uncropped"), df, out_dir=Path("check_crops"))
         crop_files = glob.glob(os.path.join(Path("check_crops/uncropped_cropped"),'*.jpg'))
         self.assertEqual(len(df),len(crop_files))
+    
