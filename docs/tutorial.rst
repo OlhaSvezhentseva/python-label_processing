@@ -17,7 +17,7 @@ Code for the training process is available in the "training" repository.
 --------------
 We first want to create a new directory in a location of your choice and cd into it:
     
-    ``mkdir -p elie_trutorial/output && cd elie_tutorial``
+    ``mkdir -p elie_tutorial/output && cd elie_tutorial``
 
 We will now copy our jpg images in there (adjust command with the location of your pictures):
 
