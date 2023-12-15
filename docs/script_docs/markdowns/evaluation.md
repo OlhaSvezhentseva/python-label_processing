@@ -2,7 +2,7 @@
 
 ## Description
 This module aims at evaluating the various modules of the pipeline.
-For a thorough assessment, it is essential to furnish the *Ground Truth data* for comparison with the predicted data.
+For a thorough assessment, it is essential to furnish the **Ground Truth data** for comparison with the predicted data.
 Key evaluation steps encompass:
 
 1. Calculate evaluation metrics, such as CER, WER, IoU, or accuracy, based on the processed data.
