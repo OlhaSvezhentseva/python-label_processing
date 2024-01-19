@@ -11,8 +11,8 @@ class TestTFClassifier(unittest.TestCase):
     """
     A test suite for the TensorFlow classifier module.
     """
-    model = get_model("../../models/model_classifier")
-    classes = ['handwritten', 'to_crop', 'typed']
+    model = get_model("../../models/label_classifier_hp")
+    classes = ['handwritten', 'printed']
     outdir = "../testdata/output"
     jpg_dir = "../testdata/cropped_pictures"
     df = class_prediction(model, classes,

@@ -4,7 +4,7 @@ from pathlib import Path
 import detecto
 
 # Import the necessary module from the 'label_processing' module package
-from label_processing.segmentation_cropping import *
+from label_processing.label_detection_module import *
 
 
 class TestSegmentationCropping(unittest.TestCase):
@@ -16,7 +16,7 @@ class TestSegmentationCropping(unittest.TestCase):
         jpg_path (Path): The file path to a sample JPG image for testing.
         label_predictor (PredictLabel): An instance of the PredictLabel class for testing.
     """
-    path_to_model = "../../models/model_segmentation_label.pth"
+    path_to_model = "../../models/label_detection_model.pth"
     jpg_path: Path =  Path("../testdata/uncropped/coll.mfn-berlin.de_u_43acf9__label.jpg")
     label_predictor = PredictLabel(path_to_model, ["label"], jpg_path)
 

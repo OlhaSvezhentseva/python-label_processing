@@ -11,8 +11,8 @@ from pathlib import Path
 warnings.filterwarnings('ignore')
 
 # Import the necessary module from the 'label_processing' module package
-import label_processing.segmentation_cropping as scrop
-from label_processing.segmentation_cropping import create_crops
+import label_processing.label_detection_module as scrop
+from label_processing.label_detection_module import create_crops
 
 THRESHOLD = 0.8
 PROCESSES = 1
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     # Get model
     script_dir = os.path.dirname(__file__)
-    model_path = "../../models/model_segmentation_label.pth"
+    model_path = "../../models/label_detection_model.pth"
     #model_path = os.path.join(script_dir, rel_path)
     #model_path = "/home/leonardopreuss/Projects/mfnb_label_pipeline/python-label_processing_private/old/models/model_labels_box.pth"
 

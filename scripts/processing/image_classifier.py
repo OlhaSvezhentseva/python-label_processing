@@ -69,9 +69,9 @@ def get_model_path(model_int):
     """
     script_dir = os.path.dirname(__file__)
     model_paths = {
-        1: "../../models/model_classifier_nuri_not_nuri",
-        2: "../../models/model_classifier_hp",
-        3: "../../models/model_classifier_multi_single"
+        1: "../../models/label_classifier_nuri_not_nuri",
+        2: "../../models/label_classifier_hp",
+        3: "../../models/label_classifier_multi_single"
     }
     return os.path.abspath(os.path.join(script_dir, model_paths.get(model_int)))
 

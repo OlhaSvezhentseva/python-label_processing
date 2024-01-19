@@ -13,7 +13,7 @@ We encourage you to test the package with your own dataset.
 However, if your data substantially differs from the examples outlined in the associated paper, you may consider training your own segmentation and classification models. 
 Code for the training process is available in the "training" repository.
 
-1. Preperation
+1. Preparation
 --------------
 We first want to create a new directory in a location of your choice and cd into it:
     
