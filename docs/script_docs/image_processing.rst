@@ -22,8 +22,8 @@ Scripts
 For usage information, run any of these scripts with the option --help.
 
 
-crop_seg.py
-~~~~~~~~~~~
+label_detection_script.py
+~~~~~~~~~~~~~~~~~~~~~~~~~
 This script is designed to crop images based on a pre-trained model and is capable of assigning classes through object detection.
 To utilize this script, a model must be trained in advance using the detecto object detection package. Detailed instructions on model training, along with an illustrative notebook, can be found in the `documentation repository`_ for the detecto package.
 
