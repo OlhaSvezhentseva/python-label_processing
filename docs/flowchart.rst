@@ -7,4 +7,4 @@ Flowchart
    :alt: ELIE Flowchart
    :align: center
 
-   ELIE flowchart
+

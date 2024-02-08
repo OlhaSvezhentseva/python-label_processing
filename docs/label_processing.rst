@@ -13,10 +13,10 @@ label\_processing.rotator module
    :undoc-members:
    :show-inheritance:
 
-label\_processing.segmentation\_cropping module
+label\_processing.detection\_cropping module
 -----------------------------------------------
 
-.. automodule:: label_processing.segmentation_cropping
+.. automodule:: label_processing.label_detection_module
    :members:
    :undoc-members:
    :show-inheritance:

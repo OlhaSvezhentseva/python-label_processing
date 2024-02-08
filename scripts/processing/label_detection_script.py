@@ -24,11 +24,11 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'crop_seg.py [-h] [-c N] [-np N] -j </path/to/jpgs> -o </path/to/jpgs_outputs>'
+    usage = 'label_detection_script.py [-h] [-c N] [-np N] -j </path/to/jpgs> -o </path/to/jpgs_outputs>'
 
     # Define command-line arguments and their descriptions
     parser = argparse.ArgumentParser(
-        description="Execute the segmentation_cropping.py module.",
+        description="Execute the label_detection_module.py.",
         add_help = False,
         usage = usage)
 

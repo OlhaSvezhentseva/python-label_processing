@@ -46,7 +46,7 @@ To utilize this script, a model must be trained in advance using the detecto obj
 
     .. code:: bash
 
-	  crop_seg.py [-h] [-c N] [-np N] -j </path/to/jpgs> -o </path/to/jpgs_outputs>
+	  label_detection_script.py [-h] [-c N] [-np N] -j </path/to/jpgs> -o </path/to/jpgs_outputs>
 
   
 rotation.py

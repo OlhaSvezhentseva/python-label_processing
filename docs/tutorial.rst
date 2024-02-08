@@ -31,7 +31,7 @@ However, if the results obtained with our pre-trained models are not satisfactor
 
 To initiate the segmentation process on your images, please execute the following command in the terminal:
 
-    ``crop_seg.py -j data -o output``
+    ``label_detection_script.py -j data -o output``
 
 Once the script execution is complete, you should find a new directory named `data_cropped` within your `output` directory. 
 Don't forget that you can obtain information about the usage of any script by running the script with the `-h` flag.
