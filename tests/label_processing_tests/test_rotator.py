@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 
 # Import the necessary module from the 'label_processing' module package
-from label_processing.rotator import *
+from old.modules.rotator import *
 
 class RotatorTests(unittest.TestCase):
     """
@@ -25,4 +25,4 @@ class RotatorTests(unittest.TestCase):
         rot_det = RotationDetector(efficientnet)
         rotated_img = rotation(rot_det, self.image, TorchConfig)
         self.assertIsInstance(rotated_img, np.ndarray)
-        
+    
