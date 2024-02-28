@@ -5,10 +5,10 @@ Submodules
 ----------
 
 
-label\_processing.rotator module
---------------------------------
+label\_processing.rotation\_module module
+-----------------------------------------
 
-.. automodule:: label_processing.rotator
+.. automodule:: label_processing.label_rotation_module
    :members:
    :undoc-members:
    :show-inheritance:

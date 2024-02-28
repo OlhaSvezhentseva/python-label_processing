@@ -49,8 +49,8 @@ To utilize this script, a model must be trained in advance using the detecto obj
 	  label_detection_script.py [-h] [-c N] [-np N] -j </path/to/jpgs> -o </path/to/jpgs_outputs>
 
   
-rotation.py
-~~~~~~~~~~~
+label_rotation_script.py
+~~~~~~~~~~~~~~~~~~~~~~~~
 This script is designed to automate the image rotation process using a pre-trained PyTorch model. 
 The model predicts the angle by which each image needs to be rotated, with possible values of 0° (indicating that the image's orientation is correct), 90°, 180°, or 270°.
 
@@ -60,19 +60,17 @@ The model predicts the angle by which each image needs to be rotated, with possi
   
   **Key Features:**
 
-    1. **PyTorch Configuration:** The TorchConfig class provides a convenient configuration for PyTorch, including device selection (GPU or CPU), model path specification, and image transformation settings. 
+    1. **Rotate Images Functionality:** Rotates images based on a given angle and saves the rotated image. It calculates the target angle to rotate the image, performs the rotation around its center, and writes the rotated image to the output directory.
     
-    2. **Rotation Detection Neural Network:** The RotationDetector class implements a neural network for rotation detection. It extends a base neural network model and customizes the classifier layer to predict rotation angles.
+    2. **Prediction of Angles:** Loads a trained model, predicts angles for input images using the model, and rotates images accordingly.
     
-    3. **Image Rotation Functionality:** The rotation function leverages the pre-trained model to predict the rotation angle for an input image and performs the rotation. The script supports four rotation angles: 0°, 90°, 180°, and 270°.
-
   **Usage:**
 
     To utilize the script, execute it from the command line as follows:
 
     .. code:: bash
 
-	  python rotation.py [-h] -i <input_images> -o <rotated_images>
+	  python label_rotation_script.py [-h] -i <input_images> -o <rotated_images>
 
   
 image_classifier
