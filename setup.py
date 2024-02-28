@@ -27,7 +27,6 @@ setup(
         "torch",
         "detecto",
         "opencv-python",
-        "detecto",
         "pytesseract",
         "tesseract",
         "pillow",
