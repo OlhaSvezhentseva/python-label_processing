@@ -28,7 +28,7 @@ from torchvision.utils import save_image
 from pathlib import Path
 
 # Import the necessary module from the 'label_processing' module package
-import label_processing.rotator as rotator
+import old.modules.rotator as rotator
 
 # Suppress warning messages during execution
 warnings.filterwarnings('ignore')
