@@ -8,7 +8,7 @@ from keras.models import load_model
 
 # Define constants
 IMAGE_SIZE = (224, 224)
-NUM_CLASSES = 5
+NUM_CLASSES = 4
 
 
 def rotate_image(img_path: str, angle: int, output_dir: str)-> None:
@@ -30,8 +30,8 @@ def rotate_image(img_path: str, angle: int, output_dir: str)-> None:
             print(f"Error: Unable to read image '{img_path}'.")
             return
 
-        # Check if the angle is not 0 or empty
-        if angle == 0 or angle == NUM_CLASSES - 1:
+        # Check if the angle is not 0
+        if angle == 0:
             print(f"Skipping image '{img_path}' as it does not need rotation.")
             return
 
@@ -58,12 +58,12 @@ def rotate_image(img_path: str, angle: int, output_dir: str)-> None:
         rotated_img = cv2.warpAffine(img, rotation_matrix, (new_width, new_height))
 
         # Construct the output file path
-        out_path = os.path.join(output_dir, os.path.basename(img_path))
+        output_dir = os.path.join(output_dir, os.path.basename(img_path))
 
-        # Write the rotated image to the output directory
-        success = cv2.imwrite(out_path, rotated_img)
+        # Write the rotated image back to the file
+        success = cv2.imwrite(img_path, rotated_img)
         if not success:
-            print(f"Error: Failed to write rotated image '{out_path}' to file.")
+            print(f"Error: Failed to write rotated image '{img_path}' to file.")
             return
 
         print(f"Successfully rotated image '{img_path}' by {target_angle * 90} degrees to reach 0 degree.")
@@ -83,7 +83,7 @@ def predict_angles(input_image_dir: str, output_image_dir: str) -> None:
         None
     """
     # Load images and labels
-    loaded_images = []  # Initialize an empty list to store loaded images
+    loaded_images = []
     for img_path in glob(os.path.join(input_image_dir, '*.jpg')):
         img = cv2.imread(img_path)
         img = cv2.resize(img, IMAGE_SIZE)
