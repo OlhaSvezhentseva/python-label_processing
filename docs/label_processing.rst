@@ -4,6 +4,13 @@ label\_processing
 Submodules
 ----------
 
+label\_processing.detect\_module module
+-----------------------------------------
+
+.. automodule:: label_processing.detect_empty_labels_module
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 label\_processing.rotation\_module module
 -----------------------------------------

@@ -135,3 +135,23 @@ This script is designed to evaluate the accuracy of segmentation results by calc
 To utilize the script, execute it from the command line as follows:
 
 		segmentation_accuracy.py [-h] -g <ground_truth_coord> -p <predicted_coord> -r <results>
+
+
+### evaluation_detect_empty_labels.py
+This script is designed to evaluate the accuracy of the pixel analysis results.
+
+**Inputs:**
+
+Paths to the empty and not_empty folders.
+
+**Key Features:**
+
+1. Evaluation Function: Compares predicted labels to ground truth labels, computing accuracy metrics for both empty and non-empty label images. It prints evaluation metrics, including accuracy for empty and non-empty folders, as well as the overall accuracy.
+
+2. Results Generation: Prints out the evaluation metrics, including accuracy for both types of labels and overall accuracy.
+   	
+**Usage:**
+
+To utilize the script, execute it from the command line as follows:
+
+    	evaluation_detect_empty_labels.py [-h] -e <empty_folder> -n <not_empty_folder>

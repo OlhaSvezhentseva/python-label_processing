@@ -161,5 +161,33 @@ Please note that this service incurs costs, as it relies on the Google Cloud API
 
      vision_api.py [-h] [-np] -d <crop-dir> -c <credentials>
 
+
+detect_empty_labels_script.py
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This script utilises pixel analysis to identify and segregate empty and non-empty label images.
+Determines whether the image is empty based on a threshold for dark pixels.
+
+  **Input:**
+
+    The input should consist of individual images containing single labels.
+
+  **Key Features:**
+
+    1. **Pixel Analysis:** It analyses the brightness of individual pixels in a cropped region of the image. It calculates pixel brightness based on the sum of RGB values and determines if a pixel is dark based on a specified threshold. By computing the proportion of dark pixels in the cropped region, it provides a metric for evaluating whether an image is empty or not.
+
+    2. **Image Cropping:** Prior to pixel analysis, the input images are cropped to focus on the central region. This cropping helps in reducing the influence of irrelevant areas in the image, focusing only on the label area where the actual content is expected to be present.
+   
+    3. **Image Classification:** Based on the proportion of dark pixels detected in the cropped region, the script classifies images as either empty or non-empty. If the proportion of dark pixels falls below a certain threshold, the image is classified as empty; otherwise, it's classified as non-empty.
+   
+    4. **Move Images:** Organises images into separate folders based on their classification (empty or non-empty).
+   
+  **Usage:**
+
+    To utilize the script, execute it from the command line as follows:
+
+    .. code:: bash
+
+     detect_empty_labels_script.py [-h] -e <path_to_empty_folder> -n </path_to_not_empty_folder>
+
 .. _Google Cloud credentials JSON: https://developers.google.com/workspace/guides/create-credentials
 .. _documentation repository: https://detecto.readthedocs.io/en/latest/

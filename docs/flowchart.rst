@@ -3,7 +3,7 @@
 Flowchart
 =========
 
-.. figure:: ELIE_flowchart.jpg
+.. figure:: ELIE_flowchart.png
    :alt: ELIE Flowchart
    :align: center
 
