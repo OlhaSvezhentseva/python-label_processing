@@ -324,3 +324,14 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/linux,visualstudiocode,python,pycharm
 
 testdata/output/*
+
+__pycache__/
+
+# Ignore the dist folder and its contents
+dist/
+
+# Ignore the build folder and its contents
+build/
+
+# Ignore the .vscode folder and its contents
+.vscode/
