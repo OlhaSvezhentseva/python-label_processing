@@ -134,7 +134,7 @@ fabric.properties
 label_processing/__pycache__/
 label_evaluation/__pycache__/
 label_postprocessing/__pycache__/
-script/__pycache__/
+scripts/__pycache__/
 *.py[cod]
 *$py.class
 
