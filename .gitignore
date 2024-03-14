@@ -324,3 +324,5 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/linux,visualstudiocode,python,pycharm
 
 testdata/output/*
+
+label_processing.egg-info/
