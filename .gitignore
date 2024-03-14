@@ -131,7 +131,10 @@ fabric.properties
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
-__pycache__/
+label_processing/__pycache__/
+label_evaluation/__pycache__/
+label_postprocessing/__pycache__/
+script/__pycache__/
 *.py[cod]
 *$py.class
 
@@ -325,4 +328,4 @@ pyrightconfig.json
 
 testdata/output/*
 
-label_processing.egg-info/
+label_processing/label_processing.egg-info/
