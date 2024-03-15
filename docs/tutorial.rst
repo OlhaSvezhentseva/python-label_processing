@@ -23,7 +23,7 @@ We will now copy our jpg images in there (adjust command with the location of yo
 
     ``cp -r ../data .``
 
-2. Segmentation
+2. Detection
 ---------------
 If your images are already cropped, that's excellent. 
 In case they are not, there's no issue; we can assist you with the cropping process. 

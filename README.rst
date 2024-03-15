@@ -7,11 +7,11 @@ Collection Mining - Entomological Label Information Extraction
 
 Introduction
 ------------
-This package is a comprehensive solution that seamlessly integrates a range of AI models and functional components, meticulously designed to facilitate the segmentation, classification, rotation, OCR, and clustering of entomology specimen labels. It serves as the foundational framework for the initial steps of information extraction, working in conjunction with the python-mfnb clustering package, which handles clustering in subsequent stages.
+This package is a comprehensive solution that seamlessly integrates a range of AI models and functional components, meticulously designed to facilitate the detection, classification, rotation, OCR, and clustering of entomology specimen labels. It serves as the foundational framework for the initial steps of information extraction, working in conjunction with the python-mfnb clustering package, which handles clustering in subsequent stages.
 
 Moreover, the installation package includes three specialized TensorFlow classifiers, each thoughtfully adapted to accommodate the distinct styles of input labels. This additional functionality enhances the versatility of the package.
 
-In addition to these core features, our package offers a set of modules, designed to streamline label classification during the segmentation process, optimize image preprocessing before the application of Pytesseract or Google Vision OCR, and refine the postprocessing of OCR outputs to augment the clustering phase.
+In addition to these core features, our package offers a set of modules, designed to streamline label classification during the detection process, optimize image preprocessing before the application of Pytesseract or Google Vision OCR, and refine the postprocessing of OCR outputs to augment the clustering phase.
 
 This comprehensive package allows to efficiently navigate the intricate landscape of entomology label processing while conserving valuable time and resources. It combines precision with versatility, making it an invaluable asset for data processing in the field of entomology.
 
@@ -48,7 +48,7 @@ Installation
 
 Input preparation
 -----------------
-**The modules are best to be performed on jpg images of labels from entomology databases such as:**
+**The modules are best to be performed on JPEG images of labels from entomology databases such as:**
    
    - `AntWeb`_
    - `Bees&Bytes`_
