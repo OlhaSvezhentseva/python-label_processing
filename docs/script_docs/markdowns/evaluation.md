@@ -119,7 +119,7 @@ To utilize the script, execute it from the command line as follows:
 		python rotation_evaluation.py path_input_data.csv path_output_results_folder
 
 
-### segmentation_accuracy.py
+### label_detection_accuracy.py
 This script is designed to evaluate the accuracy of segmentation results by calculating Intersection over Union (IoU) scores. It takes as input two CSV files containing ground truth and predicted coordinates, respectively.
 
 **Key Features:**
@@ -134,7 +134,7 @@ This script is designed to evaluate the accuracy of segmentation results by calc
 
 To utilize the script, execute it from the command line as follows:
 
-		segmentation_accuracy.py [-h] -g <ground_truth_coord> -p <predicted_coord> -r <results>
+		label_detection_accuracy.py [-h] -g <ground_truth_coord> -p <predicted_coord> -r <results>
 
 
 ### evaluation_detect_empty_labels.py
