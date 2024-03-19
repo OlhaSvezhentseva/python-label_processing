@@ -72,12 +72,22 @@ class PredictLabel():
         Returns:
             detecto.core.Model: Trained object detection model.
         """
+        if not os.path.exists(self.path_to_model):
+            raise FileNotFoundError(f"Model file '{self.path_to_model}' not found.")
+        
+        if os.path.getsize(self.path_to_model) == 0:
+            raise IOError(f"Model file '{self.path_to_model}' is empty.")
+        
         model_type = Model.DEFAULT
         model = Model(self.classes, model_name=model_type)
-        model.get_internal_model().load_state_dict(torch.load(
-            self.path_to_model, map_location=model._device),
-            strict=False
-        )
+        try:
+            model.get_internal_model().load_state_dict(torch.load(
+                self.path_to_model, map_location=model._device),
+                strict=False
+            )
+        except Exception as e:
+            raise IOError(f"Error loading model file '{self.path_to_model}': {e}")
+        
         return model
     
     def class_prediction(self, jpg_path: Path = None) -> pd.DataFrame:
