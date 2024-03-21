@@ -6,6 +6,7 @@ import argparse
 import os
 import warnings
 import pandas as pd
+import time
 
 # Suppress warning messages during execution
 warnings.filterwarnings('ignore')
@@ -48,6 +49,7 @@ def parse_arguments() -> argparse.Namespace:
 
 if __name__ == '__main__': 
     # Parse command-line arguments
+    start_time = time.time()
     args = parse_arguments()
     out_dir = args.out_dir
 
@@ -66,3 +68,7 @@ if __name__ == '__main__':
     
     # 2. Confusion Matrix
     label_evaluation.accuracy_classifier.cm(target, pred, gt, out_dir=out_dir)
+
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Total time taken: {duration} seconds")

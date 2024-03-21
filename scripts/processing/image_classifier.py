@@ -5,6 +5,7 @@ import label_processing.tensorflow_classifier
 import argparse
 import os
 import warnings
+import time
 
 # Suppress warning messages during execution
 warnings.filterwarnings('ignore')
@@ -17,7 +18,7 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'python image_classifier.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>'
+    usage = 'image_classifier.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>'
     
     # Define command-line arguments and their descriptions
     parser = argparse.ArgumentParser(
@@ -98,6 +99,7 @@ def main():
     """
     Main function to execute the script.
     """
+    start_time = time.time()
     args = parse_arguments()
     
     model_path = get_model_path(args.model)
@@ -113,6 +115,10 @@ def main():
 
     # Save classified pictures
     label_processing.tensorflow_classifier.filter_pictures(jpeg_dir, df, out_dir=out_dir)
+
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Total time taken: {duration} seconds")
 
 if __name__ == '__main__':
     main()

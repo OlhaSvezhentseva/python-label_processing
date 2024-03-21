@@ -29,7 +29,7 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'segmentation_accuracy.py [-h] -g <ground_truth_coord> -p <predicted_coord> -r <results>'
+    usage = 'label_detection_accuracy.py [-h] -g <ground_truth_coord> -p <predicted_coord> -r <results>'
 
     # Define command-line arguments and their descriptions
     parser = argparse.ArgumentParser(
