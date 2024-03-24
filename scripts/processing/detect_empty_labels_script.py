@@ -2,6 +2,7 @@
 import os
 import argparse
 import sys
+import time
 
 # Import the necessary module from the 'label_processing' module package
 from label_processing.detect_empty_labels_module import find_empty_labels
@@ -50,6 +51,7 @@ def parse_arguments() -> argparse.Namespace:
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     args = parse_arguments()
     input_image_dir = args.input_image_dir
     output_image_dir = args.output_image_dir
@@ -63,3 +65,7 @@ if __name__ == "__main__":
     else:
         find_empty_labels(input_image_dir, output_image_dir)
         print(f"\nEmpty and non-empty labels moved to respective folders in {output_image_dir}")
+
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Total time taken: {duration} seconds")
