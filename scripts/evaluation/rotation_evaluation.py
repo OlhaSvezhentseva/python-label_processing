@@ -10,10 +10,12 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from sklearn.utils.class_weight import compute_class_weight
 import tensorflow as tf
 from keras.models import load_model
+import time
 
 # Define constants
 IMAGE_SIZE = (224, 224)
 TEXT_FILE = "accuracy_metrics.txt"
+ANGLE_NAMES = {0: '0', 1: '90', 2: '180', 3: '270'}
 
 def rotation_evaluation(input_image_dir: str, output_folder_path: str) -> None:
     """
@@ -90,6 +92,8 @@ def rotation_evaluation(input_image_dir: str, output_folder_path: str) -> None:
     confusion_matrix_plot_path = os.path.join(output_folder_path, 'confusion_matrix.png')
     plt.figure(figsize=(8, 6))
     sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues')
+    plt.xticks(ticks=np.arange(4) + 0.5, labels=[ANGLE_NAMES[i] for i in range(4)])
+    plt.yticks(ticks=np.arange(4) + 0.5, labels=[ANGLE_NAMES[i] for i in range(4)])
     plt.xlabel('Predicted labels')
     plt.ylabel('True labels')
     plt.title('Confusion Matrix')
@@ -103,5 +107,9 @@ if __name__ == "__main__":
     parser.add_argument("output_folder_path", type=str, help="Path to the output folder.")
 
     args = parser.parse_args()
+    start_time = time.time()
 
     rotation_evaluation(args.input_image_dir, args.output_folder_path)
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Total time taken: {duration} seconds")

@@ -61,7 +61,7 @@ def rotate_image(img_path: str, angle: int, output_dir: str)-> None:
         output_dir = os.path.join(output_dir, os.path.basename(img_path))
 
         # Write the rotated image back to the file
-        success = cv2.imwrite(img_path, rotated_img)
+        success = cv2.imwrite(output_dir, rotated_img)
         if not success:
             print(f"Error: Failed to write rotated image '{img_path}' to file.")
             return

@@ -1,6 +1,7 @@
 # Import third-party libraries
 import os
 import argparse
+import time
 
 # Import the necessary module from the 'label_processing' module package
 from label_processing.label_rotation_module import predict_angles
@@ -50,6 +51,7 @@ def parse_arguments() -> argparse.Namespace:
 
 if __name__ == "__main__":
     args = parse_arguments()
+    start = time.perf_counter()
     input_image_dir = args.input_image_dir
     output_image_dir = args.output_image_dir
 
@@ -58,5 +60,9 @@ if __name__ == "__main__":
     elif not os.path.exists(output_image_dir):
         print(f"Error: Output directory '{output_image_dir}' not found.")
     else:
-        predict_angles(input_image_dir, output_image_dir)
+        predict_angles(input_image_dir, output_image_dir = output_image_dir)
         print(f"\nThe rotated images have been successfully saved in {output_image_dir}")
+    
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Total time taken: {duration} seconds")
