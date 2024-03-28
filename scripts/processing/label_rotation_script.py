@@ -50,6 +50,7 @@ def parse_arguments() -> argparse.Namespace:
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     args = parse_arguments()
     start = time.perf_counter()
     input_image_dir = args.input_image_dir
