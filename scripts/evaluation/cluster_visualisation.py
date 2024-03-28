@@ -5,6 +5,7 @@ import string
 import argparse
 import os
 from typing import Union
+import time
 
 import plotly.express as px
 
@@ -30,23 +31,17 @@ def parse_arguments() -> argparse.Namespace:
     """
     usage = 'cluster_visualisation.py [-h] \
     -gt <ground_truth_ocr_output> -c <cluster_output>  -o <path_to_output_directory> -s <cluster_size>'
-    parser = argparse.ArgumentParser(description=__doc__,
-                                     add_help=False,
-                                     usage=usage
-                                     )
-
-    # Define command-line arguments and their descriptions
     parser = argparse.ArgumentParser(
-        description="Doesn't execute any module.",
+        description="Script for visualizing cluster data.",
         add_help = False,
         usage = usage)
 
     parser.add_argument(
-        '-c', '--cluster_json',
+        '-c', '--cluster_tsv',
         metavar='',
         type=str,
         required=True,
-        help=('Path to cluster Json file.')
+        help=('Path to cluster TSV file.')
     )
 
     parser.add_argument(
@@ -54,13 +49,13 @@ def parse_arguments() -> argparse.Namespace:
         metavar='',
         type=str,
         default=None,
-        help=('Path to ground truth Json file')
+        help=('Path to ground truth JSON file')
     )
 
     parser.add_argument(
         '-s', '--cluster_size',
         metavar='',
-        type=str,
+        type=int,
         default = 1,
         help=('Minimal number of labels the cluster must have to be plotted.')
     )
@@ -147,6 +142,23 @@ def load_json(file: str) -> dict:
     return data
 
 
+def load_tsv_and_convert_to_json(file: str) -> dict:
+    """
+    Load data from a TSV file and convert it to JSON.
+
+    Args:
+        file (str): Path to the TSV file.
+
+    Returns:
+        Dict: Converted JSON data.
+    """
+    data = pd.read_csv(file, sep='\t', header=None)
+    json_data = {}
+    for index, row in data.iterrows():
+        json_data[str(index)] = row.to_list()
+    return json_data
+
+
 def count_cluster_size(vectors: dict, all_labels: dict) -> dict:
     """
     Count the size of each cluster.
@@ -174,34 +186,38 @@ def main(ground_truth: str, clusters_file: str, out_dir: str, cluster_size: int)
 
     Args:
         ground_truth (str): Path to the ground truth JSON file.
-        clusters_file (str): Path to the cluster JSON file.
+        clusters_file (str): Path to the cluster TSV file.
         out_dir (str): Directory where the scatter plot image will be saved.
         cluster_size (int): The minimal size of cluster that will be plotted.
     """
-    if ground_truth:
-        labels = load_json(ground_truth)
-        clusters = load_json(clusters_file)
-        model1, tokens = build_word_vectors(labels, ground_truth=True)
-
+    if ground_truth is not None:
+        try:
+            labels = load_json(ground_truth)
+            clusters = load_tsv_and_convert_to_json(clusters_file)
+            model1, tokens = build_word_vectors(labels, ground_truth=True)
+        except Exception as e:
+            print(f"Error loading ground truth data: {e}")
+            return
     else:
-        labels = load_json(clusters_file)
-        print(labels)
-        clusters = labels
-        model1, tokens = build_word_vectors(labels, ground_truth=False)
-        # print(tokens)
+        try:
+            labels = load_tsv_and_convert_to_json(clusters_file)
+            clusters = labels
+            model1, tokens = build_word_vectors(labels, ground_truth=False)
+        except Exception as e:
+            print(f"Error loading cluster data: {e}")
+            return
 
     label_vectors = build_mean_label_vector(model1, tokens)
     cluster_counts = count_cluster_size(label_vectors, labels)
-    clusters_to_plot = [cluster for cluster, count in cluster_counts.items() if count >= int(cluster_size)]
 
-    # filter label vectors based on clusters to plot
+    clusters_to_plot = [cluster for cluster, count in cluster_counts.items() if count >= cluster_size]
+
     filtered_label_vectors = {file_id: vector for file_id, vector in label_vectors.items() if
                               labels[file_id][0] in clusters_to_plot}
     clusters_sorted = [labels[file_id][0] for file_id in filtered_label_vectors]
     label_ids = [file_id for file_id in filtered_label_vectors]  # extract label IDs
     tokens_list = [labels[file_id][1] for file_id in filtered_label_vectors]  # extract tokens
     data = np.array(list(filtered_label_vectors.values()))
-
 
     tsne = TSNE(n_components=2, verbose=1, perplexity=40, n_iter=300)
     tsne_results = tsne.fit_transform(data)
@@ -225,13 +241,20 @@ def main(ground_truth: str, clusters_file: str, out_dir: str, cluster_size: int)
         legend=dict(x=1.15, y=1.5),
     )
 
-    if not os.path.exists(args.out_dir):
-        os.makedirs(args.out_dir)
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
 
-    fig.write_html(os.path.join(out_dir, "cluster_plot.html"))
-    return print(f"\nThe interactive scatter plot has been successfully saved in {out_dir}")
-
+    filename = os.path.join(out_dir, "cluster_plot.html")
+    try:
+        fig.write_html(filename)
+        print(f"\nThe interactive scatter plot has been successfully saved in {out_dir}")
+    except Exception as e:
+        print(f"Error saving plot: {e}")
 
 if __name__ == "__main__":
+    start_time = time.time()
     args = parse_arguments()
-    exit(main(args.ground_truth, args.cluster_json, args.out_dir, args.cluster_size))
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Total time taken: {duration} seconds")
+    exit(main(args.ground_truth, args.cluster_tsv, args.out_dir, args.cluster_size))
