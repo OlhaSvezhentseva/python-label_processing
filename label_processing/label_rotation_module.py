@@ -11,7 +11,7 @@ IMAGE_SIZE = (224, 224)
 NUM_CLASSES = 4
 
 
-def rotate_image(img_path: str, angle: int, output_dir: str)-> None:
+def rotate_image(img_path: str, angle: int, output_dir: str) -> bool:
     """
     Rotate an image based on a given angle and save the rotated image.
 
@@ -21,19 +21,22 @@ def rotate_image(img_path: str, angle: int, output_dir: str)-> None:
         output_dir (str): Directory where the rotated image will be saved.
 
     Returns:
-        None
+        bool: True if the image is rotated, False if it's skipped.
     """
     try:
         # Read the image
         img = cv2.imread(img_path)
         if img is None:
             print(f"Error: Unable to read image '{img_path}'.")
-            return
+            return False
 
         # Check if the angle is not 0
         if angle == 0:
             print(f"Skipping image '{img_path}' as it does not need rotation.")
-            return
+            success = cv2.imwrite(os.path.join(output_dir, os.path.basename(img_path)), img)
+            if not success:
+                print(f"Error: Failed to write skipped image '{img_path}' to file.")
+            return False
 
         # Get image dimensions
         height, width = img.shape[:2]
@@ -58,17 +61,19 @@ def rotate_image(img_path: str, angle: int, output_dir: str)-> None:
         rotated_img = cv2.warpAffine(img, rotation_matrix, (new_width, new_height))
 
         # Construct the output file path
-        output_dir = os.path.join(output_dir, os.path.basename(img_path))
+        output_path = os.path.join(output_dir, os.path.basename(img_path))
 
         # Write the rotated image back to the file
-        success = cv2.imwrite(output_dir, rotated_img)
+        success = cv2.imwrite(output_path, rotated_img)
         if not success:
             print(f"Error: Failed to write rotated image '{img_path}' to file.")
-            return
+            return False
 
         print(f"Successfully rotated image '{img_path}' by {target_angle * 90} degrees to reach 0 degree.")
+        return True
     except Exception as e:
         print(f"Error: An exception occurred while processing image '{img_path}': {e}")
+        return False
 
 
 def predict_angles(input_image_dir: str, output_image_dir: str) -> None:
@@ -82,13 +87,16 @@ def predict_angles(input_image_dir: str, output_image_dir: str) -> None:
     Returns:
         None
     """
+    skipped_count = 0
+    rotated_count = 0
+
     # Load images and labels
     loaded_images = []
     for img_path in glob(os.path.join(input_image_dir, '*.jpg')):
         img = cv2.imread(img_path)
         img = cv2.resize(img, IMAGE_SIZE)
         loaded_images.append(img)
-        
+
     # Load the trained model
     model_path = '../../models/rotation_model.h5'
     if not os.path.exists(model_path):
@@ -114,4 +122,11 @@ def predict_angles(input_image_dir: str, output_image_dir: str) -> None:
     # Apply rotation to images based on their predicted angles
     for img_path, predicted_angle in zip(filenames, predicted_labels):
         # Save rotated image to the output directory
-        rotate_image(img_path, predicted_angle, output_image_dir)
+        if rotate_image(img_path, predicted_angle, output_image_dir):
+            rotated_count += 1
+        else:
+            skipped_count += 1
+
+    print(f"Total images rotated: {rotated_count}")
+    print(f"Total images skipped: {skipped_count}")
+

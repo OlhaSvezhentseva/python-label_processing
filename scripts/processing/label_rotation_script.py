@@ -52,7 +52,6 @@ def parse_arguments() -> argparse.Namespace:
 if __name__ == "__main__":
     start_time = time.time()
     args = parse_arguments()
-    start = time.perf_counter()
     input_image_dir = args.input_image_dir
     output_image_dir = args.output_image_dir
 
@@ -61,7 +60,7 @@ if __name__ == "__main__":
     elif not os.path.exists(output_image_dir):
         print(f"Error: Output directory '{output_image_dir}' not found.")
     else:
-        predict_angles(input_image_dir, output_image_dir = output_image_dir)
+        predict_angles(input_image_dir, output_image_dir)
         print(f"\nThe rotated images have been successfully saved in {output_image_dir}")
     
     end_time = time.time()
