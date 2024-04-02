@@ -8,6 +8,7 @@ import argparse
 import json
 import warnings
 import os
+import time
 
 # Suppress warning messages during execution
 warnings.filterwarnings('ignore')
@@ -57,6 +58,7 @@ def parse_arguments() -> argparse.Namespace:
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     args = parse_arguments()
     dataset_dir = args.dataset_dir
     result_dir = args.output
@@ -73,3 +75,7 @@ if __name__ == "__main__":
         
     filepath = os.path.join(out_dir, FILENAME_TXT)
     print(f"The txt has been successfully saved in {filepath}")
+
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Total time taken: {duration} seconds")

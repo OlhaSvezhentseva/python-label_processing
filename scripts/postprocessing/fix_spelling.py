@@ -3,6 +3,7 @@ import re
 import jiwer
 from nltk import word_tokenize
 import argparse
+import time
 
 # Import the necessary module from the 'label_processing' and 'label_postprocessing' module packages
 from label_postprocessing.vocabulary import extract_vocabulary
@@ -56,6 +57,7 @@ def fix_spelling(labels: list[dict], vocabulary: dict, most_frequent: int, thres
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     parser = argparse.ArgumentParser()
     parser.add_argument("--transcripts", type=str)
     parser.add_argument("--freq", type=int)
@@ -69,4 +71,8 @@ if __name__ == "__main__":
 
     labels = load_json(args.transcripts)
     fix_spelling(labels, vocabulary, args.freq, args.dist)
+
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Total time taken: {duration} seconds")
 

@@ -6,6 +6,7 @@ import os
 import warnings
 import pandas as pd
 import plotly.io as pio
+import time
 
 # Suppress warning messages during execution
 warnings.filterwarnings('ignore')
@@ -71,6 +72,7 @@ def parse_arguments() -> argparse.Namespace:
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     args = parse_arguments()
     gt = args.ground_truth_coord
     pred = args.predicted_coord
@@ -90,4 +92,9 @@ if __name__ == "__main__":
     boxplot_filepath = os.path.join(result_dir, FILENAME_BOXPLOT)
     pio.write_image(fig, boxplot_filepath, format="jpg")
     print(f"The boxplot has been successfully saved in {boxplot_filepath}")
+
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Total time taken: {duration} seconds")
+    
 

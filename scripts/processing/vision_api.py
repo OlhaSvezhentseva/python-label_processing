@@ -9,6 +9,7 @@ import os
 import concurrent.futures
 from typing import Iterator
 import warnings
+import time
 
 # Import the necessary module from the 'label_processing' module package
 from label_processing import vision, utils
@@ -92,6 +93,7 @@ def main(crop_dir: str, credentials: str, encoding: str = 'utf8') -> None:
         credentials (str): The path to the Google Cloud Vision API credentials.
         encoding (str, optional): The encoding for saving files. Defaults to 'utf8'.
     """
+    start_time = time.time()
     results_json = []
     # Check if JPEGs exist in the specified directory
     utils.check_dir(crop_dir)
@@ -120,6 +122,10 @@ def main(crop_dir: str, credentials: str, encoding: str = 'utf8') -> None:
         entry.pop("bounding_boxes")
         json_no_bounding.append(entry)
     utils.save_json(json_no_bounding, RESULTS_JSON, parent_dir)
+
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Total time taken: {duration} seconds")
 
 
 if __name__ == '__main__':

@@ -2,6 +2,7 @@
 import os
 import argparse
 import sys
+import time
 
 
 def parse_arguments() -> argparse.Namespace:
@@ -83,6 +84,7 @@ def evaluate_labels(empty_folder: str, not_empty_folder: str) -> None:
     
 
 if __name__ == "__main__":
+    start_time = time.time()
     args = parse_arguments()
     empty_image_dir = args.empty_folder
     not_empty_image_dir = args.not_empty_folder
@@ -95,3 +97,7 @@ if __name__ == "__main__":
         sys.exit(1)
     else:
         evaluate_labels(empty_image_dir, not_empty_image_dir)
+
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Total time taken: {duration} seconds")

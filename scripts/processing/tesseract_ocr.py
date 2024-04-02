@@ -9,6 +9,8 @@ from enum import Enum
 from pathlib import Path
 from typing import Callable
 import warnings
+import time
+
 
 # Import the necessary module from the 'label_processing' module package
 from label_processing.text_recognition import (Tesseract, 
@@ -207,6 +209,7 @@ def ocr_on_dir(crop_dir: str,
     return ocr_results
 
 if __name__ == "__main__":
+    start_time = time.time()
     args = parse_arguments()
     #New function verbose print
     verbose_print: Callable = print if args.verbose else lambda *a, **k: None    
@@ -231,4 +234,8 @@ if __name__ == "__main__":
     
     verbose_print(f"Saving results in {os.path.abspath(outdir)} .")
     utils.save_json(result_data, FILENAME, outdir)
+
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Total time taken: {duration} seconds")
 

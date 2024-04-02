@@ -2,6 +2,7 @@
 import json
 import os
 import argparse
+import time
 
 # Import the necessary module from the 'label_processing' and `label_postprocessing` module packages
 import label_processing.utils as utils
@@ -62,6 +63,7 @@ def main(ocr_output: str, outdir: str) -> None:
         ocr_output (str): The path to the OCR output JSON file.
         outdir (str): The directory where the output files will be saved.
     """
+    start_time = time.time()
     nuri_labels = {}
     empty_labels = {}
     plausible_labels = []
@@ -83,6 +85,9 @@ def main(ocr_output: str, outdir: str) -> None:
     save_transcripts(empty_labels, os.path.join(outdir, "empty_transcripts.csv"))
     utils.save_json(plausible_labels, "plausible_transcripts.json", outdir)
     utils.save_json(clean_labels, "corrected_transcripts.json", outdir)
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Total time taken: {duration} seconds")
     return 0
 
 if __name__ == "__main__":

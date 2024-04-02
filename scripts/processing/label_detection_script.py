@@ -84,7 +84,6 @@ if __name__ == '__main__':
     print(f"Finished in {round(finish-start, 2)} second(s)")
 
     # 3. Cropping
-    start = time.perf_counter()
     create_crops(jpg_dir, df, out_dir = out_dir)
     finish = time.perf_counter()
     print(f"Finished in {round(finish-start, 2)} second(s)")

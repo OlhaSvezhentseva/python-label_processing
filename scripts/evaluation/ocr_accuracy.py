@@ -3,6 +3,7 @@
 # Import third-party libraries
 import argparse
 import os
+import time
 
 # Suppress warning messages during execution
 import warnings
@@ -63,6 +64,7 @@ def parse_arguments() -> argparse.Namespace:
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     args = parse_arguments()
     gt = args.ground_truth
     pred = args.predicted_ocr
@@ -72,5 +74,9 @@ if __name__ == "__main__":
     out_dir = os.path.realpath(folder)
     print(f"\nThe OCR accuracy results have been successfully saved in {out_dir}")
     label_evaluation.evaluate_text.evaluate_text_predictions(gt, pred, folder)
+
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Total time taken: {duration} seconds")
 
 

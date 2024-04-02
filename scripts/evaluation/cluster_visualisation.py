@@ -190,6 +190,7 @@ def main(ground_truth: str, clusters_file: str, out_dir: str, cluster_size: int)
         out_dir (str): Directory where the scatter plot image will be saved.
         cluster_size (int): The minimal size of cluster that will be plotted.
     """
+    start_time = time.time()
     if ground_truth is not None:
         try:
             labels = load_json(ground_truth)
@@ -250,11 +251,11 @@ def main(ground_truth: str, clusters_file: str, out_dir: str, cluster_size: int)
         print(f"\nThe interactive scatter plot has been successfully saved in {out_dir}")
     except Exception as e:
         print(f"Error saving plot: {e}")
-
-if __name__ == "__main__":
-    start_time = time.time()
-    args = parse_arguments()
+    
     end_time = time.time()
     duration = end_time - start_time
     print(f"Total time taken: {duration} seconds")
+
+if __name__ == "__main__":
+    args = parse_arguments()
     exit(main(args.ground_truth, args.cluster_tsv, args.out_dir, args.cluster_size))
