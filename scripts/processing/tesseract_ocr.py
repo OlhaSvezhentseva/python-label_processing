@@ -108,12 +108,12 @@ def parse_arguments() -> argparse.Namespace:
             )
 
     parser.add_argument(
-        '-multi', '--multiprocessing',
-        metavar='',
-        action=argparse.BooleanOptionalAction,
-        default=False,
-        help=('Select whether to use multiprocessing')
-    )
+            '-multi', '--multiprocessing',
+            metavar='',
+            action=argparse.BooleanOptionalAction,
+            default=False,
+            help=('Select whether to use multiprocessing')
+            )
     
     return parser.parse_args()
 
