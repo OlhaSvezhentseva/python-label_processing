@@ -283,7 +283,7 @@ class ImageProcessor():
         """
         if angle is None:
         # Handle the case where angle is None, e.g., log a message or skip deskewing
-            print("Warning: Skew angle could not be determined. Skipping deskewing.")
+            print(f"Warning: Skew angle for file {self.filename} could not be determined. Skipping deskewing.")
             return self
     
         # If angle is not None, proceed with deskewing
@@ -303,12 +303,8 @@ class ImageProcessor():
         Returns:
             ImageProcessor: An instance of the Image class representing the preprocessed image.
         """
-        print("DEBUG: Entering preprocessing method")
-
         # Skew angle has to be calculated before processing
         angle = self.get_skew_angle()
-
-        print("DEBUG: Skew angle:", angle)
 
         if angle is None:
             # Handle the case where angle is None, e.g., log a message or skip preprocessing
