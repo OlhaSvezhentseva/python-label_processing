@@ -224,15 +224,15 @@ if __name__ == "__main__":
     new_dir_path = os.path.join(outdir, new_dir)
     Path(new_dir_path).mkdir(parents=True, exist_ok=True)
     
-    verbose_print(f"\nPerforming OCR on {os.path.abspath(crop_dir)} .\n")
+    verbose_print(f"\nPerforming OCR on {os.path.abspath(crop_dir)}.\n")
     result_data = ocr_on_dir(crop_dir,
                              new_dir_path,
                              verbose_print,
                              args)
     verbose_print((f"\nPreprocessed images have been saved in"
-                   f"os.path.abspath{os.path.abspath(new_dir_path)} ."))
+                   f"os.path.abspath{os.path.abspath(new_dir_path)}."))
     
-    verbose_print(f"Saving results in {os.path.abspath(outdir)} .")
+    verbose_print(f"Saving results in {os.path.abspath(outdir)}.")
     utils.save_json(result_data, FILENAME, outdir)
 
     end_time = time.time()
