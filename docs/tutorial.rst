@@ -64,8 +64,8 @@ Now we want to make sure that they are all rotated to a 0° angle, so their text
 To initiate the rotation process, run the following command:
 
     ``label_rotation_script.py -o output -i output/printed``
-
-The rotated puctures are saved in the `output`directory.
+    
+The rotated pictures are saved in the `output` directory.
 
 6. OCR 
 -------
