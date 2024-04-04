@@ -97,6 +97,7 @@ class ImageProcessor():
     def path(self, path: str) -> None:
         self._path = path
     
+
     def copy_this(self) -> ImageProcessor:
         """
         Creates a copy of the current Image instance.
@@ -106,6 +107,7 @@ class ImageProcessor():
         """
         return copy.copy(self)
     
+
     @staticmethod
     def read_image(path: str|Path) -> ImageProcessor:
         """
@@ -148,7 +150,7 @@ class ImageProcessor():
         image_instance.image = image
         return image_instance
 
-    
+
     def remove_noise(self) -> ImageProcessor:
         """
         Remove noise from the image using median blur.
@@ -161,6 +163,7 @@ class ImageProcessor():
         image_instance.image = image
         return image_instance
     
+
     def thresholding(self, thresh_mode: Enum) -> ImageProcessor:
         """
         Perform thresholding on the image.
@@ -170,8 +173,7 @@ class ImageProcessor():
 
         Returns:
             Image: An instance of the Image class representing the thresholded image.
-        """
-        
+        """ 
         if thresh_mode == Threshmode.OTSU:
             image = cv2.threshold(self.image, 0, 255,
                                 cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
@@ -194,7 +196,7 @@ class ImageProcessor():
         image_instance = self.copy_this()
         image_instance.image = image
         return image_instance
-    
+
 
     def dilate(self) -> ImageProcessor:
         """
@@ -209,6 +211,7 @@ class ImageProcessor():
         image_instance.image = image
         return image_instance
 
+
     def erode(self) -> ImageProcessor:
         """
         Erode the image using a 5x5 kernel.
@@ -222,6 +225,7 @@ class ImageProcessor():
         image_instance.image = image
         return image_instance
     
+
     @staticmethod
     def _rotate(
         image: np.ndarray, angle: float | np.float, background: Union[int, Tuple[int, int, int]]
@@ -252,6 +256,7 @@ class ImageProcessor():
                                                int(round(width))),
                               borderValue=background)
 
+
     def get_skew_angle(self) -> Optional[np.float64]: #returns either float or None
         """
         Calculate and return the skew angle of the image.
@@ -264,7 +269,8 @@ class ImageProcessor():
         angle = determine_skew(grayscale, max_angle = MAX_SKEW_ANGLE,
                                min_angle=MIN_SKEW_ANGLE)
         return angle
-        
+
+
     def deskew(self, angle: Optional[np.float64]) -> ImageProcessor:
         """
         Rotate the image to deskew it.
@@ -275,11 +281,17 @@ class ImageProcessor():
         Returns:
             Image: An instance of the Image class representing the deskewed image.
         """
-        #print(f"Rotating {self.filename}")
+        if angle is None:
+        # Handle the case where angle is None, e.g., log a message or skip deskewing
+            print("Warning: Skew angle could not be determined. Skipping deskewing.")
+            return self
+    
+        # If angle is not None, proceed with deskewing
         image = self._rotate(self.image, angle, (255, 255, 255))
         image_instance = self.copy_this()
         image_instance.image = image
         return image_instance
+
 
     def preprocessing(self, thresh_mode: Threshmode) -> ImageProcessor:
         """
@@ -291,14 +303,26 @@ class ImageProcessor():
         Returns:
             ImageProcessor: An instance of the Image class representing the preprocessed image.
         """
-        #skewangle has to be calculated before processing
+        print("DEBUG: Entering preprocessing method")
+
+        # Skew angle has to be calculated before processing
         angle = self.get_skew_angle()
+
+        print("DEBUG: Skew angle:", angle)
+
+        if angle is None:
+            # Handle the case where angle is None, e.g., log a message or skip preprocessing
+            print("Warning: Skew angle could not be determined. Skipping preprocessing.")
+            return self
+
+        # Perform preprocessing
         image = self.get_grayscale()
-        #blurring before thresholding
         image = image.blur()
         image = image.thresholding(thresh_mode=thresh_mode)
-        #image = image.remove_noise()
         image = image.deskew(angle)
+            # Check if angle is None before deskewing
+        if angle is not None:
+            image = image.deskew(angle)
         return image
 
 
@@ -312,9 +336,13 @@ class ImageProcessor():
         Returns:
             Optional[str]: Decoded QR-code text as a str or None if there is no QR-code found.
         """
-        detect = cv2.QRCodeDetector()
-        value = detect.detectAndDecode(self.image)[0]
-        return value if value else None
+        try:
+            detect = cv2.QRCodeDetector()
+            value = detect.detectAndDecode(self.image)[0]
+            return value if value else None
+        except Exception as e:
+            print(f"An error occurred while detecting and decoding QR code: {e}")
+            return None
     
     
     def save_image(self, dir_path: str | Path, appendix: Optional[str] = None) -> None:
@@ -325,13 +353,15 @@ class ImageProcessor():
             dir_path (str | Path): The directory path where the image will be saved.
             appendix (str, optional): An optional string to append to the image filename. Defaults to None.
         """
-        if appendix:
-            filename = utils.generate_filename(self.filename, appendix,
-                                               extension = "jpg")
-        else:
-            filename = self.filename
-        filename_processed = os.path.join(dir_path, filename)
-        cv2.imwrite(filename_processed, self.image)
+        try:
+            if appendix:
+                filename = utils.generate_filename(self.filename, appendix, extension="jpg")
+            else:
+                filename = self.filename
+            filename_processed = os.path.join(dir_path, filename)
+            cv2.imwrite(filename_processed, self.image)
+        except Exception as e:
+            print(f"An error occurred while saving the image: {e}")
     
 
 class Threshmode(Enum):
@@ -350,9 +380,9 @@ class Threshmode(Enum):
         if threshmode == 1:
             return cls.OTSU
         if threshmode == 2:
-            return cls.ADAPTIVE_GAUSSIAN
-        if threshmode == 3:
             return cls.ADAPTIVE_MEAN
+        if threshmode == 3:
+            return cls.ADAPTIVE_GAUSSIAN
     
     
 #---------------------OCR Tesseract---------------------#
