@@ -17,8 +17,7 @@ from label_processing import vision, utils
 # Suppress warning messages during execution
 warnings.filterwarnings('ignore')
 
-#CREDENTIALS = '/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/total-contact-297417-48ed6585325e.json'
-#DIR = '/home/leonardo/to_save/Projects/Museum_for_Natural_history/ocr_to_data/results_ocr/test'
+CREDENTIALS = '/Volumes/DISQ/Data_Collection/digitize_output/mfn-berlin-ocr-6fe89c113d9c.json'
 RESULTS_JSON = "ocr_google_vision.json"
 RESULTS_JSON_BOUNDING = "ocr_google_vision_wbounding.json"
 BACKUP_TSV = "ocr_google_vision_backup.tsv"
