@@ -10,6 +10,7 @@ import concurrent.futures
 from typing import Iterator
 import warnings
 import time
+import threading
 
 # Import the necessary module from the 'label_processing' module package
 from label_processing import vision, utils
@@ -71,23 +72,32 @@ def parse_arguments() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def vision_caller(filename: str, credentials: str, backup_file: str) -> dict[str, str]:
+def vision_caller(filename: str, credentials: str, output_dir: str, lock: threading.Lock) -> dict[str, str]:
     """
     Perform OCR using Google Cloud Vision API on an image file.
 
     Args:
         filename (str): The path to the input image file.
         credentials (str): The path to the Google Cloud Vision API credentials.
-        backup_file (str): The path to save the backup TSV file.
+        output_dir (str): The directory where the backup TSV file will be saved.
+        lock (threading.Lock): A lock for thread-safe printing.
 
     Returns:
         dict[str, str]: A dictionary containing the OCR results.
     """
     vision_image = vision.VisionApi.read_image(filename, credentials)
     ocr_result: dict = vision_image.vision_ocr()
+    backup_file = os.path.join(output_dir, BACKUP_TSV)
+    
+    with lock:
+        vision_caller.processed_count += 1
+        if vision_caller.processed_count % 1000 == 0:
+            print(f"Processed {vision_caller.processed_count} images...")
+    
     with open(backup_file, "w", encoding="utf8") as bf:
         bf.write(f"{ocr_result['ID']}\t{ocr_result['text']}")
-    return ocr_result 
+    
+    return ocr_result
 
 
 def main(crop_dir: str, credentials: str, output_dir: str, encoding: str = 'utf8') -> None:
@@ -112,11 +122,16 @@ def main(crop_dir: str, credentials: str, output_dir: str, encoding: str = 'utf8
     num_files = len(filenames)
     print(f"Number of files to process: {num_files}")
 
+    lock = threading.Lock()
+
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        results: Iterator[dict[str, str]] = executor.map(vision_caller,
-                                                         filenames,
-                                                         [credentials]* len(filenames),
-                                                         [BACKUP_TSV]*len(filenames))
+        results: Iterator[dict[str, str]] = executor.map(
+            vision_caller,
+            filenames,
+            [credentials]* len(filenames),
+            [output_dir]*len(filenames),
+            [lock]*len(filenames)
+        )
     
     results_json = list(results)
 
