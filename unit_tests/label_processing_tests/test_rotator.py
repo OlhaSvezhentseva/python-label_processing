@@ -6,8 +6,9 @@ from label_processing.label_rotation_module import *
 
 class TestRotateImage(unittest.TestCase):
     def test_rotate_image(self):
-        img_path = "/Users/Margot/Desktop/test/d2d306bf-449f-4af8-8c12-b73dba69e37b_label_front_0001_label.jpg"
-        output_dir = '/Users/Margot/Desktop/output'
+        filename = "BLF1542(10)-6_L_label_handwritten_1.jpg"
+        img_path = f"../testdata/cropped_pictures/{filename}"
+        output_dir = '../testdata//output'
         angle = 1 
         
         # Call the function to test
