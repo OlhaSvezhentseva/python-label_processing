@@ -19,13 +19,13 @@ extensions = ['sphinx.ext.todo', 'sphinx.ext.viewcode', 'sphinx.ext.autodoc']
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+# default is _static but this created a Warning, since its empty
 html_static_path = []
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'renku'
-html_static_path = ['_static']
 autodoc_mock_imports = ['google.cloud']
 
 import sys, os
