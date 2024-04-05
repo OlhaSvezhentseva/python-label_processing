@@ -17,7 +17,6 @@ from label_processing import vision, utils
 # Suppress warning messages during execution
 warnings.filterwarnings('ignore')
 
-CREDENTIALS = '/Volumes/DISQ/Data_Collection/digitize_output/mfn-berlin-ocr-6fe89c113d9c.json'
 RESULTS_JSON = "ocr_google_vision.json"
 RESULTS_JSON_BOUNDING = "ocr_google_vision_wbounding.json"
 BACKUP_TSV = "ocr_google_vision_backup.tsv"
@@ -30,7 +29,7 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'vision_api.py [-h] [-np] -d <crop-dir> -c <credentials>'
+    usage = 'vision_api.py [-h] [-np] -d <crop-dir> -c <credentials> -o <output_dir>'
 
     # Define command-line arguments and their descriptions
     parser = argparse.ArgumentParser(
@@ -60,6 +59,14 @@ def parse_arguments() -> argparse.Namespace:
             help=('Directory which contains the cropped jpgs on which the'
                   'ocr is supposed to be applied')
             )
+    
+    parser.add_argument(
+            '-o', '--output_dir',
+            metavar='',
+            type=str,
+            required = True,
+            help=('Directory where the json outputs will be saved.')
+            )
 
     return parser.parse_args()
 
@@ -83,7 +90,7 @@ def vision_caller(filename: str, credentials: str, backup_file: str) -> dict[str
     return ocr_result 
 
 
-def main(crop_dir: str, credentials: str, encoding: str = 'utf8') -> None:
+def main(crop_dir: str, credentials: str, output_dir: str, encoding: str = 'utf8') -> None:
     """
     Perform OCR on a directory containing JPEG images using Google Cloud Vision API.
 
@@ -93,6 +100,7 @@ def main(crop_dir: str, credentials: str, encoding: str = 'utf8') -> None:
         encoding (str, optional): The encoding for saving files. Defaults to 'utf8'.
     """
     start_time = time.time()
+    print("Starting OCR process...")
     results_json = []
     # Check if JPEGs exist in the specified directory
     utils.check_dir(crop_dir)
@@ -101,6 +109,9 @@ def main(crop_dir: str, credentials: str, encoding: str = 'utf8') -> None:
     filenames = [file for file in glob.glob(os.path.join(f"{crop_dir}/*.jpg"))]
 
     # Run API calls on multiple threads
+    num_files = len(filenames)
+    print(f"Number of files to process: {num_files}")
+
     with concurrent.futures.ThreadPoolExecutor() as executor:
         results: Iterator[dict[str, str]] = executor.map(vision_caller,
                                                          filenames,
@@ -108,19 +119,19 @@ def main(crop_dir: str, credentials: str, encoding: str = 'utf8') -> None:
                                                          [BACKUP_TSV]*len(filenames))
     
     results_json = list(results)
-    
-    # Get the parent_directory
-    parent_dir = os.path.join(crop_dir, os.pardir)
+
+    print("OCR process completed.")
 
     # Select wheteher it should be saved as utf-8 or ascii
-    utils.save_json(results_json, RESULTS_JSON_BOUNDING, parent_dir)
+    print("Saving OCR results...")
+    utils.save_json(results_json, RESULTS_JSON_BOUNDING, output_dir)
 
     # Without bounding boxes
     json_no_bounding = []
     for entry in results_json:
         entry.pop("bounding_boxes")
         json_no_bounding.append(entry)
-    utils.save_json(json_no_bounding, RESULTS_JSON, parent_dir)
+    utils.save_json(json_no_bounding, RESULTS_JSON, output_dir)
 
     end_time = time.time()
     duration = end_time - start_time
@@ -129,4 +140,4 @@ def main(crop_dir: str, credentials: str, encoding: str = 'utf8') -> None:
 
 if __name__ == '__main__':
     args = parse_arguments()
-    exit(main(args.dir, args.credentials))
+    exit(main(args.dir, args.credentials, args.output_dir))
