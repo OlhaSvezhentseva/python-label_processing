@@ -70,11 +70,11 @@ The model predicts the angle by which each image needs to be rotated, with possi
 
     .. code:: bash
 
-	  python label_rotation_script.py [-h] -i <input_images> -o <rotated_images>
+	  label_rotation_script.py [-h] -i <input_images> -o <rotated_images>
 
   
-image_classifier
-~~~~~~~~~~~~~~~~
+image_classifier.py
+~~~~~~~~~~~~~~~~~~~
 This script is designed to simplify the process of image classification using pre-trained TensorFlow classifier models. 
 This script is particularly useful for tasks that involve predicting classes for images and efficiently organizing them based on these predictions.
 

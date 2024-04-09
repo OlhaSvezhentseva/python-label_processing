@@ -116,7 +116,7 @@ This script is designed to perform an evaluation of rotation predictions. It tak
 
 To utilize the script, execute it from the command line as follows:
 
-		python rotation_evaluation.py path_input_data.csv path_output_results_folder
+		rotation_evaluation.py path_input_data.csv path_output_results_folder
 
 
 ### label_detection_accuracy.py

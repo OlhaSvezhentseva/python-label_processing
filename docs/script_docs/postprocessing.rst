@@ -76,4 +76,4 @@ If the Edit distance falls below or equals a specified threshold, the script rep
 
    		.. code:: bash
 
-	  		python fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34
+	  		fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34
