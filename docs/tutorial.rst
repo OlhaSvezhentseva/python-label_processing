@@ -57,7 +57,7 @@ To initiate the classification process, run the following command:
 Upon inspecting the output directory, you will notice the emergence of two new subdirectories: `handwritten` and `printed`. 
 In the subsequent steps, we intend to utilize the labels associated with printed text.
 
-1. Label Rotation
+5. Label Rotation
 ------------------
 The labels are cropped, their content filtered and classified.
 Now we want to make sure that they are all rotated to a 0° angle, so their text can be read correctly by the OCR.
@@ -78,7 +78,7 @@ Let's give it a try:
 The results are in the `output` directory under the name `ocr_preprocessed.json`. 
 The structure is explained in the tesseract_ocr section of this documentation.
 
-1. Postprocessing
+7. Postprocessing
 -----------------
 This process facilitates the examination of generated transcripts by categorizing them into distinct classes: "nuris," empty transcripts, nonsense transcripts, and plausible transcripts.
 
@@ -90,7 +90,7 @@ Plausible transcripts undergo correction by removing non-ASCII and non-alphanume
 
 A JSON file will be saved for each category in the output folder.
 
-1. Clustering
+8. Clustering
 -------------
 For analyzing the extracted data, we suggest employing another Python package known as `python-mfnb`. 
 This toolset is specifically crafted for the extraction, processing, and organization of information derived from collecting event labels within natural history collections. 
