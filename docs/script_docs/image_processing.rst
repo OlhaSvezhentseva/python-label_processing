@@ -22,8 +22,8 @@ Scripts
 For usage information, run any of these scripts with the option --help.
 
 
-label_detection_script.py
-~~~~~~~~~~~~~~~~~~~~~~~~~
+detectio .py
+~~~~~~~~~~~~
 This script is designed to crop images based on a pre-trained model and is capable of assigning classes through object detection.
 To utilize this script, a model must be trained in advance using the detecto object detection package. Detailed instructions on model training, along with an illustrative notebook, can be found in the `documentation repository`_ for the detecto package.
 
@@ -46,11 +46,11 @@ To utilize this script, a model must be trained in advance using the detecto obj
 
     .. code:: bash
 
-	  label_detection_script.py [-h] [-c N] [-np N] -j </path/to/jpgs> -o </path/to/jpgs_outputs>
+	  detection.py [-h] [-c N] [-np N] -j </path/to/jpgs> -o </path/to/jpgs_outputs>
 
   
-label_rotation_script.py
-~~~~~~~~~~~~~~~~~~~~~~~~
+rotation.py
+~~~~~~~~~~~
 This script is designed to automate the image rotation process using a pre-trained PyTorch model. 
 The model predicts the angle by which each image needs to be rotated, with possible values of 0° (indicating that the image's orientation is correct), 90°, 180°, or 270°.
 
@@ -70,11 +70,11 @@ The model predicts the angle by which each image needs to be rotated, with possi
 
     .. code:: bash
 
-	  label_rotation_script.py [-h] -i <input_images> -o <rotated_images>
+	  rotation.py [-h] -i <input_images> -o <rotated_images>
 
   
-image_classifier.py
-~~~~~~~~~~~~~~~~~~~
+classifiers.py
+~~~~~~~~~~~~~~
 This script is designed to simplify the process of image classification using pre-trained TensorFlow classifier models. 
 This script is particularly useful for tasks that involve predicting classes for images and efficiently organizing them based on these predictions.
 
@@ -96,11 +96,11 @@ This script is particularly useful for tasks that involve predicting classes for
 
     .. code:: bash
 
-     image_classifier.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
+     classifiers.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
 
 
-tesseract_ocr.py
-~~~~~~~~~~~~~~~~
+tesseract.py
+~~~~~~~~~~~~
 This script is designed for Optical Character Recognition (OCR) using the Tesseract OCR engine. 
 It performs OCR on a directory containing cropped images in JPG format, applies preprocessing steps, and saves the results in JSON format: `{"ID": "<filename>", "text": "<ocr transcript>"}`. 
 
@@ -128,11 +128,11 @@ It performs OCR on a directory containing cropped images in JPG format, applies 
 
     .. code:: bash
 
-     tesseract_ocr.py [-h] [-v] [-t <thresholding>] [-b <blocksize>] [-c <c_value>] -d <crop-dir> [-multi <multiprocessing>] -o <outdir> [-o <out-dir>]
+     tesseract.py [-h] [-v] [-t <thresholding>] [-b <blocksize>] [-c <c_value>] -d <crop-dir> [-multi <multiprocessing>] -o <outdir> [-o <out-dir>]
 
 
-vision_api.py
-~~~~~~~~~~~~~
+vision.py
+~~~~~~~~~
 Performs Optical Character Recognition (OCR) using the Google Vision API on segmented labels, initiating API calls and generating results in a JSON file: `{"ID": "<filename>", "text": "<ocr transcript>"}`.
 Please note that this service incurs costs, as it relies on the Google Cloud API. To utilize this service, a Google Cloud account is required, along with a JSON file containing the necessary credentials.
 
@@ -159,11 +159,11 @@ Please note that this service incurs costs, as it relies on the Google Cloud API
 
     .. code:: bash
 
-     vision_api.py [-h] [-np] -d <crop-dir> -c <credentials>
+     vision.py [-h] [-np] -d <crop-dir> -c <credentials>
 
 
-detect_empty_labels_script.py
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+analysis.py
+~~~~~~~~~~~
 This script utilises pixel analysis to identify and segregate empty and non-empty label images.
 Determines whether the image is empty based on a threshold for dark pixels.
 
@@ -187,7 +187,7 @@ Determines whether the image is empty based on a threshold for dark pixels.
 
     .. code:: bash
 
-     detect_empty_labels_script.py [-h] -e <path_to_empty_folder> -n </path_to_not_empty_folder>
+     analysis.py [-h] -e <path_to_empty_folder> -n </path_to_not_empty_folder>
 
 .. _Google Cloud credentials JSON: https://developers.google.com/workspace/guides/create-credentials
 .. _documentation repository: https://detecto.readthedocs.io/en/latest/

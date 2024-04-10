@@ -15,8 +15,8 @@ Key post-processing steps encompass:
 For usage information, run any of these scripts with the option --help.
 
 
-### process_ocr.py
-The script, `process_ocr.py`, categorizes transcripts into four groups: "nuris," empty transcripts, nonsense transcripts, and plausible transcripts. 
+### process.py
+The script, `process.py`, categorizes transcripts into four groups: "nuris," empty transcripts, nonsense transcripts, and plausible transcripts. 
 Plausible transcripts undergo correction by eliminating non-ASCII and non-alphanumeric symbols before being saved as `corrected_transcripts.json`.
 At the end one json file per category is saved in the output folder.
 
@@ -31,10 +31,10 @@ At the end one json file per category is saved in the output folder.
 
 To run the file make sure you are in the folder "postprocessing" and use the following command:
 
-	process_ocr.py [-h] -j <ocr-json> -o <out-dir>
+	process.py [-h] -j <ocr-json> -o <out-dir>
 	
 
-### fix_spelling.py
+### spelling.py
 The script `fix_spelling.py` verifies and corrects spelling mistakes by computing the Edit distance between words occurring less than 2 times and the 20 most common words in the transcripts. 
 If the Edit distance falls below or equals a specified threshold, the script replaces the word with a frequently appearing word. This process assumes that the frequently used word represents the correctly spelled version of the word in question.
 
@@ -64,4 +64,4 @@ The corrected transcripts are then stored as `spell_checked_transcripts.json`.
 
 To run the file make sure you are in the folder "postprocessing" and use the following command:
 
-	fix_spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34
+	spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34

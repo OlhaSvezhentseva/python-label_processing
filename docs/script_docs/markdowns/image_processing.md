@@ -16,7 +16,7 @@ Key processing steps encompass:
 For usage information, run any of these scripts with the option --help.
 
 
-### label_detection_script.py
+### detection.py
 This script is designed to crop images based on a pre-trained model and is capable of assigning classes through object detection.
 To utilize this script, a model must be trained in advance using the detecto object detection package. Detailed instructions on model training, along with an illustrative notebook, can be found in the documentation repository for the detecto package: https://detecto.readthedocs.io/en/latest/.
 
@@ -37,7 +37,7 @@ To utilize this script, a model must be trained in advance using the detecto obj
 
   To utilize the script, execute it from the command line as follows:
 
-    label_detection_script.py [-h] [-c N] [-np N] -j </path/to/jpgs> -o </path/to/jpgs_outputs>
+    detection.py [-h] [-c N] [-np N] -j </path/to/jpgs> -o </path/to/jpgs_outputs>
 
 ### rotation.py
 This script is designed to automate the image rotation process using a pre-trained PyTorch model. 
@@ -59,10 +59,10 @@ The model predicts the angle by which each image needs to be rotated, with possi
 
   To utilize the script, execute it from the command line as follows:
 
-    python rotation.py [-h] -i <input_images> -o <rotated_images>
+    rotation.py [-h] -i <input_images> -o <rotated_images>
 
   
-### image_classifier
+### classifiers_py
 This script is designed to simplify the process of image classification using pre-trained TensorFlow classifier models. 
 This script is particularly useful for tasks that involve predicting classes for images and efficiently organizing them based on these predictions.
 
@@ -82,10 +82,10 @@ This script is particularly useful for tasks that involve predicting classes for
 
   To utilize the script, execute it from the command line as follows:
 
-    image_classifier.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
+    classifiers.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
 
 
-### tesseract_ocr.py
+### tesseract.py
 This script is designed for Optical Character Recognition (OCR) using the Tesseract OCR engine. 
 It performs OCR on a directory containing cropped images in JPG format, applies preprocessing steps, and saves the results in JSON format: `{"ID": "<filename>", "text": "<ocr transcript>"}`. 
 
@@ -111,10 +111,10 @@ It performs OCR on a directory containing cropped images in JPG format, applies 
 
   To utilize the script, execute it from the command line as follows:
 
-    tesseract_ocr.py [-h] [-v] [-t <thresholding>] [-b <blocksize>] [-c <c_value>] -d <crop-dir> [-multi <multiprocessing>] -o <outdir> [-o <out-dir>]
+    tesseract.py [-h] [-v] [-t <thresholding>] [-b <blocksize>] [-c <c_value>] -d <crop-dir> [-multi <multiprocessing>] -o <outdir> [-o <out-dir>]
 
 
-### vision_api.py
+### vision.py
 Performs Optical Character Recognition (OCR) using the Google Vision API on segmented labels, initiating API calls and generating results in a JSON file: `{"ID": "<filename>", "text": "<ocr transcript>"}`.
 Please note that this service incurs costs, as it relies on the Google Cloud API. To utilize this service, a Google Cloud account is required, along with a JSON file containing the necessary credentials.
 
@@ -139,10 +139,10 @@ Please note that this service incurs costs, as it relies on the Google Cloud API
 
   To utilize the script, execute it from the command line as follows:
 
-    vision_api.py [-h] [-np] -d <crop-dir> -c <credentials>
+    vision.py [-h] [-np] -d <crop-dir> -c <credentials>
 
 
-### detect_empty_labels_script.py
+### analysis.py
 This script utilises pixel analysis to identify and segregate empty and non-empty label images.
 Determines whether the image is empty based on a threshold for dark pixels.
 
@@ -164,4 +164,4 @@ Determines whether the image is empty based on a threshold for dark pixels.
 
     To utilize the script, execute it from the command line as follows:
 
-     detect_empty_labels_script.py [-h] -e <path_to_empty_folder> -n <path_to_not_empty_folder>
+     analysis.py [-h] -e <path_to_empty_folder> -n <path_to_not_empty_folder>

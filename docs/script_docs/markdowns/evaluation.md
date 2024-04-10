@@ -14,7 +14,7 @@ Key evaluation steps encompass:
 ## Scripts
 For usage information, run any of these scripts with the option --help.
 
-### ocr_accuracy.py
+### ocr_eval.py
 This script evaluates the accuracy of Optical Character Recognition (OCR) output by comparing it to the ground truth. The Levenshtein distance is calculated for each transcript, measuring discrepancies on both character and word levels. This results in two scores: Character Error Rate (CER) and Word Error Rate (WER), indicating the extent to which the model misinterpreted the text.
 
 CER is normalized between 0 and 1, with 0 signifying identical predicted and reference text. WER, on the other hand, represents the error count divided by the total number of words in the ground truth. WER is not normalized and can exceed 1, particularly if the predicted text contains more words than the ground truth, such as when OCR introduces additional nonsensical words.
@@ -35,10 +35,10 @@ The output includes the `ocr_evaluation.csv` file in the specified directory, pr
 
 To utilize the script, execute it from the command line as follows:
 
-		ocr_accuracy.py [-h] -g <ground_truth> -p <predicted_ocr> -r <results>
+		ocr_eval.py [-h] -g <ground_truth> -p <predicted_ocr> -r <results>
 
 
-### cluster_visualisation.py
+### cluster_eval.py
 Generates cluster plots using word embeddings and saves the visualizations as HTML links. Word embeddings can be constructed either from the ground truth data or the predicted transcripts. Leveraging a pretrained gensim model (https://radimrehurek.com/gensim/models/word2vec.html), each word in the label is transformed into a vector. These vectors undergo normalization, ensuring each label is uniquely represented by a single vector.
 
 The gensim model accepts vector dimensions (currently set at 100), and using t-SNE a tool for visualizing high-dimensional data (https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html), each label is plotted in a 2-dimensional space. Each dot is colored to denote its assigned cluster, facilitating the observation of whether word embedding predictions align with clustering algorithm outcomes.
@@ -57,10 +57,10 @@ The resulting HTML plot allows users to hover over dots, revealing the transcrip
 
 To utilize the script, execute it from the command line as follows:
 
-		cluster_visualisation.py [-h] -gt <ground_truth_ocr_output> -c <cluster_output>  -o <path_to_output_directory> -s <cluster_size>
+		cluster_eval.py [-h] -gt <ground_truth_ocr_output> -c <cluster_output>  -o <path_to_output_directory> -s <cluster_size>
 
 
-### evaluation_classifier.py
+### classifiers_eval.py
 This script is designed for evaluating the accuracy of of the TensorFlow classifier.
 
 It performs accuracy assessment and generates confusion matrices for a set of predictions. The script reads an input CSV file containing both predicted (pred) and ground truth (gt) labels, calculates accuracy scores, and produces confusion matrices. 
@@ -81,10 +81,10 @@ It allows for customizable output directory specification and provides a concise
 
 To utilize the script, execute it from the command line as follows:
 
-		evaluation_classifier.py [-h] -o </path/to/outputs> -d </path/to/gt_dataframe>
+		classifiers_eval.py [-h] -o </path/to/outputs> -d </path/to/gt_dataframe>
 
 
-### label_redundancy.py
+### redundancy.py
 This script utilizes the 'label_evaluation' module to assess redundancy in label transcriptions within a dataset. It calculates the percentage of redundancy and saves the result in a text file. The dataset, provided as a JSON file, is specified via command-line arguments. 
 The output, indicating the redundancy percentage, is stored in the user-defined target folder. 
 
@@ -100,10 +100,10 @@ The output, indicating the redundancy percentage, is stored in the user-defined 
 
 To utilize the script, execute it from the command line as follows:
 
-		label_redundancy.py [-h] -d <dataset-dir> -o <output>
+		redundancy.py [-h] -d <dataset-dir> -o <output>
 
 
-### rotation_evaluation.py
+### rotation_eval.py
 This script is designed to perform an evaluation of rotation predictions. It takes as input a CSV file containing relevant data, specifically columns named 'before' and 'pred', and produces two primary outputs.
 
 **Key Features:**
@@ -116,10 +116,10 @@ This script is designed to perform an evaluation of rotation predictions. It tak
 
 To utilize the script, execute it from the command line as follows:
 
-		rotation_evaluation.py path_input_data.csv path_output_results_folder
+		rotation_eval.py [-h] path_input_data.csv path_output_results_folder
 
 
-### label_detection_accuracy.py
+### detection_eval.py
 This script is designed to evaluate the accuracy of segmentation results by calculating Intersection over Union (IoU) scores. It takes as input two CSV files containing ground truth and predicted coordinates, respectively.
 
 **Key Features:**
@@ -134,10 +134,10 @@ This script is designed to evaluate the accuracy of segmentation results by calc
 
 To utilize the script, execute it from the command line as follows:
 
-		label_detection_accuracy.py [-h] -g <ground_truth_coord> -p <predicted_coord> -r <results>
+		detection_eval.py [-h] -g <ground_truth_coord> -p <predicted_coord> -r <results>
 
 
-### evaluation_detect_empty_labels.py
+### analysis_eval.py
 This script is designed to evaluate the accuracy of the pixel analysis results.
 
 **Inputs:**
@@ -154,4 +154,4 @@ Paths to the empty and not_empty folders.
 
 To utilize the script, execute it from the command line as follows:
 
-    	evaluation_detect_empty_labels.py [-h] -e <empty_folder> -n <not_empty_folder>
+    	analysis_eval.py [-h] -e <empty_folder> -n <not_empty_folder>
