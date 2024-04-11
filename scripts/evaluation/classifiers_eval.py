@@ -19,7 +19,7 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'evaluation_classifier.py [-h] -o </path/to/outputs> -d </path/to/gt_dataframe>'
+    usage = 'classifiers_eval.py [-h] -o </path/to/outputs> -d </path/to/gt_dataframe>'
 
     # Define command-line arguments and their descriptions
     parser = argparse.ArgumentParser(

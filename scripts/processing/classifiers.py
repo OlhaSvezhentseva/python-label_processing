@@ -18,7 +18,7 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'image_classifier.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>'
+    usage = 'classifiers.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>'
     
     # Define command-line arguments and their descriptions
     parser = argparse.ArgumentParser(

@@ -14,7 +14,7 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'label_rotation_script.py [-h] -o <output_image_dir> -i <input_image_dir>'
+    usage = 'rotation.py [-h] -o <output_image_dir> -i <input_image_dir>'
 
     # Define command-line arguments and their descriptions
     parser = argparse.ArgumentParser(

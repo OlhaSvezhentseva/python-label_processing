@@ -33,7 +33,7 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'tesseract_ocr.py [-h] [-v] [-t <thresholding>] [-b <blocksize>] \
+    usage = 'tesseract.py [-h] [-v] [-t <thresholding>] [-b <blocksize>] \
             [-c <c_value>] -d <crop-dir> [-multi <multiprocessing>] -o <outdir> [-o <out-dir>]'
     
     # Define command-line arguments and their descriptions

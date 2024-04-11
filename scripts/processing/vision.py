@@ -30,7 +30,7 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'vision_api.py [-h] [-np] -d <crop-dir> -c <credentials> -o <output_dir>'
+    usage = 'vision.py [-h] [-np] -d <crop-dir> -c <credentials> -o <output_dir>'
 
     # Define command-line arguments and their descriptions
     parser = argparse.ArgumentParser(

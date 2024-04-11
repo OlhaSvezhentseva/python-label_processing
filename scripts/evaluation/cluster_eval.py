@@ -29,7 +29,7 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'cluster_visualisation.py [-h] \
+    usage = 'cluster_eval.py [-h] \
     -gt <ground_truth_ocr_output> -c <cluster_output>  -o <path_to_output_directory> -s <cluster_size>'
     parser = argparse.ArgumentParser(
         description="Script for visualizing cluster data.",

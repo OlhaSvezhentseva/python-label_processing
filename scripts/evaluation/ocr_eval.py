@@ -20,7 +20,7 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'ocr_accuracy.py [-h] -g <ground_truth> -p <predicted_ocr> -r <results>'
+    usage = 'ocr_eval.py [-h] -g <ground_truth> -p <predicted_ocr> -r <results>'
 
     # Define command-line arguments and their descriptions
     parser = argparse.ArgumentParser(

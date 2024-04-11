@@ -22,7 +22,7 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'process_ocr.py [-h] -j <ocr-json> -o <out-dir>'
+    usage = 'process.py [-h] -j <ocr-json> -o <out-dir>'
 
     # Define command-line arguments and their descriptions
     parser = argparse.ArgumentParser(
