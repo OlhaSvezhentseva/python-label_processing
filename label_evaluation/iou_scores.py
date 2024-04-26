@@ -137,11 +137,45 @@ def box_plot_iou(df_concat: pd.DataFrame, accuracy_txt_path: str = None) -> go.F
     Returns:
         pio.Figure: plotly.io graph object
     """
-    fig = px.box(df_concat, y="score", points="all", color="class_pred")
-    fig.update_layout(title_text="IOU Scores")
+    # Add a new column indicating whether IOU score is below or above 0.8
+    df_concat['category'] = df_concat['score'].apply(lambda x: 'Labels Below 0.8' if x < 0.8 else 'Labels Above 0.8')
+
+    fig = px.box(df_concat, y="score", points="all", color="category", title="IOU Scores Distribution",
+                 labels={"score": "IOU Score", "category": "IOU Score Category"})
+    fig.update_layout(
+        yaxis=dict(title="IOU Scores"),
+        legend_title_text="IOU Score Threshold",
+        legend=dict(
+            traceorder="normal",
+            title_font=dict(size=14),
+            itemsizing='constant',
+            itemclick="toggleothers",
+            itemdoubleclick="toggle",
+            bgcolor="rgba(0,0,0,0)",
+            bordercolor="rgba(0,0,0,0)"
+        ),
+    )
+
+    # Calculate the percentage of labels below and above 0.8
+    below_08_percentage = (df_concat['category'] == 'Labels Below 0.8').mean() * 100
+    above_08_percentage = (df_concat['category'] == 'Labels Above 0.8').mean() * 100
+
+    # Specify custom legend items with percentages
+    custom_legend_items = [
+        dict(label=f"Box Plot (Labels Below 0.8) - {below_08_percentage:.2f}%", symbol="circle", marker=dict(color="rgba(31, 119, 180, 0.7)")),
+        dict(label=f"Box Plot (Labels Above 0.8) - {above_08_percentage:.2f}%", symbol="circle", marker=dict(color="rgba(255, 127, 14, 0.7)")),
+    ]
+
+    # Add custom legend items to the legend
+    for item in custom_legend_items:
+        fig.add_trace(go.Scatter(visible=False, mode="markers", showlegend=True, legendgroup="legend",
+                                 name=item["label"], marker=dict(symbol="circle", color=item["marker"]["color"])))
+
+    # Center the title
+    fig.update_layout(title=dict(text="IOU Scores Distribution", x=0.5))
 
     # Calculate accuracy percentages and save to text file
-    accuracy_df = df_concat.groupby("class_pred")["score"].mean().reset_index()
+    accuracy_df = df_concat.groupby("category")["score"].mean().reset_index()
     accuracy_df["accuracy_percentage"] = accuracy_df["score"] * 100
 
     if accuracy_txt_path:
@@ -149,4 +183,3 @@ def box_plot_iou(df_concat: pd.DataFrame, accuracy_txt_path: str = None) -> go.F
         accuracy_df.to_csv(accuracy_txt_path, index=False)
 
     return fig
-

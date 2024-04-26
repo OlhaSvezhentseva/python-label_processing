@@ -1,13 +1,12 @@
 # Import third-party libraries
 import pandas as pd
-from sklearn import metrics
 from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pathlib
 from pathlib import Path
-import glob, os
+import os
 
 
 # Accuracy Scores
@@ -66,9 +65,12 @@ def cm (target, pred: pd.DataFrame, gt: pd.DataFrame, out_dir: Path = Path(os.ge
     # Normalise
     cmn = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     fig, ax = plt.subplots(figsize=(15,10))
-    matrix = sns.heatmap(cmn, annot=True, fmt='.2f', xticklabels=target, yticklabels=target, cmap="OrRd")
-    plt.ylabel('Actual')
-    plt.xlabel('Predicted', labelpad=30)
+    matrix = sns.heatmap(cmn, annot=True, fmt='.2f', xticklabels=target, yticklabels=target, cmap="OrRd",
+                        annot_kws={"size": 14})
+    plt.ylabel('Ground truth', fontsize=18)
+    plt.xlabel('Predictions', labelpad=30, fontsize=18)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
     figure = matrix.get_figure()
     filename = f"{Path(out_dir).stem}_cm.png"
     cm_path = f"{out_dir}/{filename}"
