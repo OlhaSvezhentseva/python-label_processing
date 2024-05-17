@@ -65,7 +65,7 @@ def parse_arguments() -> argparse.Namespace:
             type=int,
             default = 1,
             action='store',
-            help=('Optional argument: select which thrsholding should be used primarily.\n'
+            help=('Optional argument: select which thresholding should be used primarily.\n'
                  '1 : Otsu\'s thresholding.\n'
                  '2 : Adaptive mean thresholding.\n'
                  '3 : Gaussian adaptive thresholding.\n'
