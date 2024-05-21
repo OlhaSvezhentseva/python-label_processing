@@ -96,9 +96,10 @@ def rotation_evaluation(input_image_dir: str, output_folder_path: str) -> None:
     plt.yticks(ticks=np.arange(4) + 0.5, labels=[ANGLE_NAMES[i] for i in range(4)])
     plt.xlabel('Predicted labels')
     plt.ylabel('True labels')
-    plt.title('Confusion Matrix')
+    plt.title('Label Rotation confusion matrix with misclassification count', fontsize=20, pad=20)
     plt.savefig(confusion_matrix_plot_path)
     plt.close()
+
 
     
 if __name__ == "__main__":
