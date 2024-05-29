@@ -15,9 +15,7 @@ setup(
         "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
         "Operating System :: OS Independent",
     ],
-    #only include scripts and not __init__.py
     scripts = [script for script in glob.glob("scripts/*/*.py") if "__init__" not in script],
-    #include_package_data=True, #include the static data specified in the MANIFEST.in
     long_description=long_description,
     long_description_content_type="text/markdown",
     platforms=['any'],
