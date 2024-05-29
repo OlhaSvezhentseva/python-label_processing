@@ -21,7 +21,6 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-
 def parse_arguments() -> argparse.Namespace:
     """
     Parse command-line arguments using argparse.
@@ -30,7 +29,7 @@ def parse_arguments() -> argparse.Namespace:
         argparse.Namespace: Parsed command-line arguments.
     """
     usage = 'cluster_eval.py [-h] \
-    -gt <ground_truth_ocr_output> -c <cluster_output>  -o <path_to_output_directory> -s <cluster_size>'
+    -gt <ground truth ocr output> -c <cluster output>  -o <path to output directory> -s <cluster size>'
     parser = argparse.ArgumentParser(
         description="Script for visualizing cluster data.",
         add_help = False,

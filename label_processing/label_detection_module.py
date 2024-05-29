@@ -1,7 +1,5 @@
-# Import Librairies
+# Import third-party libraries
 import cv2
-#import sys
-#import detecto
 import torch
 import os
 import glob
@@ -9,10 +7,8 @@ import detecto.utils
 import concurrent.futures
 import pandas as pd
 import numpy as np
-
 from pathlib import Path
 from detecto.core import Model
-#from torchvision import transforms
 import label_processing.utils
 
 

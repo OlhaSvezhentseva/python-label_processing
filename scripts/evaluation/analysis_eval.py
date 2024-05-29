@@ -12,11 +12,11 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'analysis_eval.py [-h] -e <empty_folder> -n <not_empty_folder>'
+    usage = 'analysis_eval.py [-h] -e <empty folder> -n <not empty folder>'
 
     # Define command-line arguments and their descriptions
     parser = argparse.ArgumentParser(
-        description="Execute the evaluation_detect_empty_labels.py.",
+        description="Script for evaluating the empty label detection script.",
         add_help=False,
         usage=usage
     )

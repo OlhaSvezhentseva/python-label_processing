@@ -23,7 +23,7 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'redundancy.py [-h] -d <dataset-dir> -o <output>'
+    usage = 'redundancy.py [-h] -d <dataset dir> -o <output>'
 
     # Define command-line arguments and their descriptions
     parser = argparse.ArgumentParser(

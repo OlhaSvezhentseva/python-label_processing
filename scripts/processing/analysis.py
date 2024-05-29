@@ -15,7 +15,7 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'analysis.py [-h] -o <output_image_dir> -i <input_image_dir>'
+    usage = 'analysis.py [-h] -o <output image dir> -i <input image dir>'
 
     # Define command-line arguments and their descriptions
     parser = argparse.ArgumentParser(

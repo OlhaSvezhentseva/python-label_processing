@@ -39,7 +39,7 @@ At the end one json file per category is saved in the output folder.
 
 		.. code:: bash
 
-			process_ocr.py [-h] -j <ocr-json> -o <out-dir>
+			process.py [-h] -j <ocr json> -o <output directory>
 	
 
 spelling.py
@@ -72,7 +72,7 @@ If the Edit distance falls below or equals a specified threshold, the script rep
 
 	**Usage:**
 
-    	To run the file make sure you are in the folder "postprocessing" and use the following command:
+    	To run the file make sure you are in the folder "postprocessing" and use the following command (example):
 
    		.. code:: bash
 

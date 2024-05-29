@@ -24,7 +24,7 @@ def parse_arguments() -> argparse.Namespace:
     Returns:
         argparse.Namespace: Parsed command-line arguments.
     """
-    usage = 'detection.py [-h] [-c N] [-np N] -j </path/to/jpgs> -o </path/to/jpgs_outputs>'
+    usage = 'detection.py [-h] [-c N] [-np N] -j <path to jpgs> -o <path to jpgs outputs>'
 
     # Define command-line arguments and their descriptions
     parser = argparse.ArgumentParser(

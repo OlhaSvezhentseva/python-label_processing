@@ -45,9 +45,8 @@ def metrics(target: list, pred: pd.DataFrame, gt: pd.DataFrame, out_dir: Path = 
     return report
 
 
-
 # Confusion Matrix
-def cm (target, pred: pd.DataFrame, gt: pd.DataFrame, out_dir: Path = Path(os.getcwd()))-> plt:
+def cm (target: list, pred: pd.DataFrame, gt: pd.DataFrame, out_dir: Path = Path(os.getcwd()))-> plt:
     """
     Compute confusion matrix to evaluate the performance of the classification.
 

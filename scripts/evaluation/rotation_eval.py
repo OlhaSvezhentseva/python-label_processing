@@ -18,6 +18,47 @@ TEXT_FILE = "accuracy_metrics.txt"
 ANGLE_NAMES = ['0', '90', '180', '270']
 NUM_CLASSES = 4
 
+
+def parse_arguments() -> argparse.Namespace:
+    """
+    Parse command-line arguments and return the parsed arguments.
+
+    Returns:
+        argparse.Namespace: Parsed command-line arguments.
+    """
+    usage = 'rotation_eval.py [-h] -i <input image dir> -o <output folder path>'
+
+    # Define command-line arguments and their descriptions
+    parser = argparse.ArgumentParser(
+        description="Create and save rotation evaluation metrics.",
+        add_help = False,
+        usage = usage)
+
+    parser.add_argument(
+            '-h','--help',
+            action='help',
+            help='Open this help text.'
+            )
+    
+    parser.add_argument(
+            '-i', '--input_image_dir',
+            metavar='',
+            type=str,
+            required = True,
+            help=('Path to the image input folder.')
+            )
+            
+    parser.add_argument(
+            '-o', '--output_folder_path',
+            metavar='',
+            type=str,
+            default = os.getcwd(),
+            help=('Path to the output folder.')
+            )
+
+    return parser.parse_args()
+
+
 def rotate_image(img_path: str , angle: int) -> None:
     """
     Rotates an image by the specified angle and saves it back to the same path.
@@ -166,14 +207,12 @@ def rotation_evaluation(input_image_dir: str, output_folder_path: str) -> None:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Create and save rotation evaluation metrics.")
-    parser.add_argument("input_image_dir", type=str, help="Path to the image input folder.")
-    parser.add_argument("output_folder_path", type=str, help="Path to the output folder.")
-
-    args = parser.parse_args()
+    args = parse_arguments()
+    input = args.input_image_dir
+    output = args.output_folder_path
     start_time = time.time()
 
-    rotation_evaluation(args.input_image_dir, args.output_folder_path)
+    rotation_evaluation(input, output)
     end_time = time.time()
     duration = end_time - start_time
     print(f"Total time taken: {duration} seconds")

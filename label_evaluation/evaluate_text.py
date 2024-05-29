@@ -129,7 +129,7 @@ def create_plot(data: list, name: list, file_name: str) -> None:
     print(f"Plot saved in {file_name}")
 
 
-def evaluate_text_predictions(ground_truth_file: str, predictions_file: str, out_dir) -> tuple:
+def evaluate_text_predictions(ground_truth_file: str, predictions_file: str, out_dir: str) -> tuple:
     """
     Evaluates OCR predictions.
 
