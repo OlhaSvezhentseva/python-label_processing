@@ -11,8 +11,10 @@ Key evaluation steps encompass:
 
 3. Save calculated metrics, visualizations, and other relevant results in specified output folders or files.
 
+
 ## Scripts
 For usage information, run any of these scripts with the option --help.
+
 
 ### ocr_eval.py
 This script evaluates the accuracy of Optical Character Recognition (OCR) output by comparing it to the ground truth. The Levenshtein distance is calculated for each transcript, measuring discrepancies on both character and word levels. This results in two scores: Character Error Rate (CER) and Word Error Rate (WER), indicating the extent to which the model misinterpreted the text.
@@ -35,7 +37,7 @@ The output includes the `ocr_evaluation.csv` file in the specified directory, pr
 
 To utilize the script, execute it from the command line as follows:
 
-		ocr_eval.py [-h] -g <ground_truth> -p <predicted_ocr> -r <results>
+		ocr_eval.py [-h] -g <ground truth> -p <predicted ocr output> -r <results>
 
 
 ### cluster_eval.py
@@ -57,7 +59,7 @@ The resulting HTML plot allows users to hover over dots, revealing the transcrip
 
 To utilize the script, execute it from the command line as follows:
 
-		cluster_eval.py [-h] -gt <ground_truth_ocr_output> -c <cluster_output>  -o <path_to_output_directory> -s <cluster_size>
+		cluster_eval.py [-h] -gt <ground truth ocr output> -c <cluster output>  -o <path to output directory> -s <cluster size>
 
 
 ### classifiers_eval.py
@@ -81,7 +83,7 @@ It allows for customizable output directory specification and provides a concise
 
 To utilize the script, execute it from the command line as follows:
 
-		classifiers_eval.py [-h] -o </path/to/outputs> -d </path/to/gt_dataframe>
+		classifiers_eval.py [-h] -o <path to outputs> -d <path to gt_dataframe>
 
 
 ### redundancy.py
@@ -100,7 +102,7 @@ The output, indicating the redundancy percentage, is stored in the user-defined 
 
 To utilize the script, execute it from the command line as follows:
 
-		redundancy.py [-h] -d <dataset-dir> -o <output>
+		redundancy.py [-h] -d <dataset dir> -o <output>
 
 
 ### rotation_eval.py
@@ -116,7 +118,7 @@ This script is designed to perform an evaluation of rotation predictions. It tak
 
 To utilize the script, execute it from the command line as follows:
 
-		rotation_eval.py [-h] path_input_data.csv path_output_results_folder
+		rotation_eval.py [-h] -i <input image dir> -o <output folder path>
 
 
 ### detection_eval.py
@@ -134,7 +136,7 @@ This script is designed to evaluate the accuracy of segmentation results by calc
 
 To utilize the script, execute it from the command line as follows:
 
-		detection_eval.py [-h] -g <ground_truth_coord> -p <predicted_coord> -r <results>
+		detection_eval.py [-h] -g <ground truth coordinates> -p <predicted coordinates> -r <results>
 
 
 ### analysis_eval.py
@@ -154,4 +156,4 @@ Paths to the empty and not_empty folders.
 
 To utilize the script, execute it from the command line as follows:
 
-    	analysis_eval.py [-h] -e <empty_folder> -n <not_empty_folder>
+    	analysis_eval.py [-h] -e <empty folder> -n <not empty folder>

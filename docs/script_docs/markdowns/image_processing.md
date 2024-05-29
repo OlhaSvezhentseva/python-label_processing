@@ -4,13 +4,16 @@
 This section of the package is designed for the processing of images and the execution of Optical Character Recognition (OCR). 
 Key processing steps encompass:
 
-1. Image classification, distinguishing between multi-label and single-label images, handwritten/printed labels, as well as images containing a QR-Code or not.
+1. Identifying empty labels.
 
-2. Cropping multi-label images to transform them into single-label images.
+2. Image classification, distinguishing between multi-label and single-label images, handwritten/printed labels, as well as images containing a QR-Code or not.
 
-3. Rotation of images to optimize the OCR output.
+3. Cropping multi-label images to transform them into single-label images.
 
-4. Application of OCR, utilizing tools such as Google Vision or Pytesseract, to extract text from the images.
+4. Rotation of single-label images to optimize the OCR output.
+
+5. Application of OCR, utilizing tools such as Google Vision or Pytesseract, to extract text from the images.
+
 
 ## Scripts
 For usage information, run any of these scripts with the option --help.
@@ -37,7 +40,8 @@ To utilize this script, a model must be trained in advance using the detecto obj
 
   To utilize the script, execute it from the command line as follows:
 
-    detection.py [-h] [-c N] [-np N] -j </path/to/jpgs> -o </path/to/jpgs_outputs>
+    detection.py [-h] [-c N] [-np N] -j <path to jpgs> -o <path to jpgs outputs>
+
 
 ### rotation.py
 This script is designed to automate the image rotation process using a pre-trained PyTorch model. 
@@ -59,7 +63,7 @@ The model predicts the angle by which each image needs to be rotated, with possi
 
   To utilize the script, execute it from the command line as follows:
 
-    rotation.py [-h] -i <input_images> -o <rotated_images>
+    rotation.py [-h] -o <output image dir> -i <input image dir>
 
   
 ### classifiers_py
@@ -82,7 +86,7 @@ This script is particularly useful for tasks that involve predicting classes for
 
   To utilize the script, execute it from the command line as follows:
 
-    classifiers.py [-h] -m <model_number> -j <path_to_jpgs> -o <path_to_outputs>
+    classifiers.py [-h] -m <model number> -j <path to jpgs> -o <path to outputs>
 
 
 ### tesseract.py
@@ -139,7 +143,7 @@ Please note that this service incurs costs, as it relies on the Google Cloud API
 
   To utilize the script, execute it from the command line as follows:
 
-    vision.py [-h] [-np] -d <crop-dir> -c <credentials>
+    vision.py [-h] [-np] -d <crop dir> -c <credentials> -o <output dir>
 
 
 ### analysis.py
@@ -164,4 +168,4 @@ Determines whether the image is empty based on a threshold for dark pixels.
 
     To utilize the script, execute it from the command line as follows:
 
-     analysis.py [-h] -e <path_to_empty_folder> -n <path_to_not_empty_folder>
+     analysis.py [-h] -o <output image dir> -i <input image dir>

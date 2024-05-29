@@ -39,7 +39,7 @@ At the end one json file per category is saved in the output folder.
 
 		.. code:: bash
 
-			process.py [-h] -j <ocr json> -o <output directory>
+			process.py [-h] -j <ocr-json> -o <out-dir>
 	
 
 spelling.py

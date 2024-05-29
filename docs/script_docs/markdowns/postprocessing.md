@@ -62,6 +62,6 @@ The corrected transcripts are then stored as `spell_checked_transcripts.json`.
 
 **Usage:**
 
-To run the file make sure you are in the folder "postprocessing" and use the following command:
+To run the file make sure you are in the folder "postprocessing" and use the following command (example):
 
 	spelling.py --transcripts corrected_transcripts.json --freq 20 --dist 0.34
