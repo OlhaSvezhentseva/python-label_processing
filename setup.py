@@ -36,7 +36,7 @@ setup(
         "plotly",
         "pytesseract",
         "regex",
-        "renku-sphinx-theme"
+        "renku-sphinx-theme",
         "scikit-learn",
         "seaborn",
         "sphinx-rtd-theme",
