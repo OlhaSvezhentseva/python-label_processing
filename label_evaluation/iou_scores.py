@@ -172,7 +172,7 @@ def box_plot_iou(df_concat: pd.DataFrame, accuracy_txt_path: str = None) -> go.F
                                  name=item["label"], marker=dict(symbol="circle", color=item["marker"]["color"])))
 
     # Center the title
-    fig.update_layout(title=dict(text="IOU Scores Distribution", x=0.5))
+    fig.update_layout(title=dict(text="Label Detection IOU Scores Distribution", x=0.5))
 
     # Calculate accuracy percentages and save to text file
     accuracy_df = df_concat.groupby("category")["score"].mean().reset_index()
