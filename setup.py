@@ -42,8 +42,8 @@ setup(
         "sphinx-rtd-theme",
         "sphinx",
         "tensorflow==2.15.0",
-        "tesseract",
         "torch",
-        "torchvision"
+        "torchvision",
+        "keras"
     ],
 )
