@@ -8,9 +8,9 @@ Tutorial
 Data
 ----
 To utilize this package, it is essential to have natural-history labels containing text that you aim to extract. 
-Mock data has been supplied in the "tests/testdata" directory for experimentation. 
+Mock data has been supplied in the "unit_tests/testdata" directory for experimentation. 
 We encourage you to test the package with your own dataset. 
-However, if your data substantially differs from the examples outlined in the associated paper, you may consider training your own segmentation and classification models. 
+However, if your data substantially differs from the examples outlined in the associated paper, you may consider training your own label detection and classification models. 
 Code for the training process is available in the "training_notebooks" repository.
 
 1. Preparation
@@ -56,6 +56,7 @@ To initiate the classification process, run the following command:
 
 Upon inspecting the output directory, you will notice the emergence of two new subdirectories: `handwritten` and `printed`. 
 In the subsequent steps, we intend to utilize the labels associated with printed text.
+We also provide two additional classification models: one (model 1, -m 1) for identifying QR codes, and another (model , -m 3) for differentiating between multi-label and single-label images.
 
 5. Label Rotation
 ------------------
@@ -65,7 +66,7 @@ To initiate the rotation process, run the following command:
 
     ``rotation.py -o output -i output/printed``
     
-The rotated pictures are saved in the `output` directory.
+The rotated pictures are saved in the chosen `output` directory.
 
 6. OCR 
 -------
@@ -75,8 +76,8 @@ Let's give it a try:
 
     ``tesseract.py -d output/data_cropped -o output``
 
-The results are in the `output` directory under the name `ocr_preprocessed.json`. 
-The structure is explained in the tesseract_ocr section of this documentation.
+The results are saved in the provided `output` directory under the name `ocr_preprocessed.json`. 
+The structure is explained in the tesseract_ocr section of this documentation. As an alternative to Tesseract, we offer a module called `vision.py`` that utilizes Google Cloud Vision for text extraction. Unlike Tesseract, Google Cloud Vision is a proprietary OCR service that requires payment based on the number of labels processed.
 
 7. Postprocessing
 -----------------
