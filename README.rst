@@ -53,7 +53,7 @@ Installation
 
 Input preparation
 -----------------
-**The modules are best to be performed on JPEG images of labels from entomology databases such as:**
+The modules are best to be performed on **JPEG images** of labels from entomology databases such as:
    
    - `AntWeb`_
    - `Bees&Bytes`_
@@ -61,7 +61,8 @@ Input preparation
    - `Atlas of Living Australia`_
 
 
-**In terms of data acquisition, the following standards are recommended to optimize the outputs:**
+In terms of data acquisition, the following **standards** are recommended to optimize the outputs:
+
 - Standardized, uniform picture quality (macro photography, .jpg format, 300 DPI resolution).
 - Clearly separated labels without overlapping.
 - Horizontal text alignment.

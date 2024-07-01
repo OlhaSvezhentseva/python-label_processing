@@ -8,7 +8,7 @@ Tutorial
 Data
 ----
 To utilize this package, it is essential to have natural-history labels containing text that you aim to extract. 
-Mock data has been supplied in the "unit_tests/testdata" directory for experimentation. 
+Mock data has been supplied in the `unit_tests/testdata`` directory for experimentation. 
 We encourage you to test the package with your own dataset. 
 However, if your data substantially differs from the examples outlined in the associated paper, you may consider training your own label detection and classification models. 
 Code for the training process is available in the "training_notebooks" repository.
