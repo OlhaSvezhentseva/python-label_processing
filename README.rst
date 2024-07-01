@@ -7,13 +7,18 @@ Collection Mining - Entomological Label Information Extraction
 
 Introduction
 ------------
-This package is a comprehensive solution that seamlessly integrates a range of AI models and functional components, meticulously designed to facilitate the detection, classification, rotation, OCR, and clustering of entomology specimen labels. It serves as the foundational framework for the initial steps of information extraction, working in conjunction with the python-mfnb clustering package, which handles clustering in subsequent stages.
+This package is a comprehensive solution that seamlessly integrates a range of AI models and functional components, meticulously designed to facilitate the detection, classification, rotation, OCR, and clustering of entomology specimen labels. 
+It serves as the foundational framework for the initial steps of information extraction, working in conjunction with the python-mfnb clustering package, which handles clustering in subsequent stages.
 
-Moreover, the installation package includes three specialized TensorFlow classifiers, each thoughtfully adapted to accommodate the distinct styles of input labels. This additional functionality enhances the versatility of the package.
 
-In addition to these core features, our package offers a set of modules, designed to streamline label classification during the detection process, optimize image preprocessing before the application of Pytesseract or Google Vision OCR, and refine the postprocessing of OCR outputs to augment the clustering phase.
+Features
+--------
+- **AI Models Integration:** Three specialized TensorFlow classifiers for various label styles.
+- **Text Extraction:** Modules for label classification, image preprocessing, and OCR postprocessing.
+- **Versatility:** Compatible with both Pytesseract and Google Vision OCR.
+- **Efficiency:** Streamlines entomology label processing, saving time and resources.
 
-This comprehensive package allows to efficiently navigate the intricate landscape of entomology label processing while conserving valuable time and resources. It combines precision with versatility, making it an invaluable asset for data processing in the field of entomology.
+For more detailed insights into the methodology, please refer to the forthcoming paper: Margot Belot et al. (in preparation), *A Semi-Automated Pipeline for High Throughput Information Extraction of Insect Specimen Labels*.
 
 
 Installation
@@ -23,11 +28,11 @@ Installation
 
    ``conda create --name mfnb python=3.10``
 
-2. Clone python-mfnb from https://code.naturkundemuseum.berlin/collection-mining/label_processing.git .
+2. Clone the repository:
 
    ``git clone https://code.naturkundemuseum.berlin/collection-mining/label_processing.git``
 
-3. cd in label_processing-main
+3. Navigate to the repository directory:
 
    ``cd <path to python-label_processing-main>``
    
@@ -57,13 +62,12 @@ Input preparation
 
 
 **In terms of data acquisition, the following standards are recommended to optimize the outputs:**
-
-- The pictures quality should be standardized and uniform as much as possible, preferably using macro photography, the .jpg format and 300 DPI resolution.
-- If there are multiple labels in one picture, they should be clearly separated from one another without overlapping. The text in the label should be aligned horizontally.
-- If possible, the specimen shouldn't be present in the picture with the labels.
-- If the labels in the different pictures are similar (same colours and/or same nature/content), they should always be placed the same way at the same spot from one picture to another. *ex: label with location always bottom right, collection number top left, taxonomy top right etc...*
-- A black background like in LEP_PHIL is prefered, but a white background is also acceptable.
-
+- Standardized, uniform picture quality (macro photography, .jpg format, 300 DPI resolution).
+- Clearly separated labels without overlapping.
+- Horizontal text alignment.
+- Exclusion of specimens in the picture.
+- Consistent label placement and orientation across pictures.
+- Preferably black background, but white is acceptable.
 
 .. _AntWeb: https://www.antweb.org/
 .. _Bees&Bytes: https://www.zooniverse.org/projects/mfnberlin/bees-and-bytes  
