@@ -64,10 +64,11 @@ def cm (target: list, pred: pd.DataFrame, gt: pd.DataFrame, out_dir: Path = Path
     # Normalise
     cmn = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     fig, ax = plt.subplots(figsize=(15,10))
-    matrix = sns.heatmap(cmn, annot=True, fmt='.2f', xticklabels=target, yticklabels=target, cmap="OrRd",
+    matrix = sns.heatmap(cmn, annot=True, fmt='.2f', xticklabels=target, yticklabels=target, cmap="Greens",
                         annot_kws={"size": 14})
     plt.ylabel('Ground truth', fontsize=18)
     plt.xlabel('Predictions', labelpad=30, fontsize=18)
+    #plt.title('MfN_PYR_SEASIA Empty Label Detection confusion matrix with accuracy score per class', fontsize=20, pad=20)
     plt.xticks(fontsize=16)
     plt.yticks(fontsize=16)
     figure = matrix.get_figure()
