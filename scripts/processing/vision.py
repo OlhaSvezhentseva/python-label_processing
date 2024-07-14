@@ -11,6 +11,7 @@ from typing import Iterator
 import warnings
 import time
 import threading
+import cv2
 
 # Import the necessary module from the 'label_processing' module package
 from label_processing import vision, utils
@@ -100,6 +101,22 @@ def vision_caller(filename: str, credentials: str, output_dir: str, lock: thread
     return ocr_result
 
 
+def detect_qr_code(image_path: str) -> bool:
+    """
+    Detects if an image contains a QR code.
+
+    Args:
+        image_path (str): The path to the image file.
+
+    Returns:
+        bool: True if a QR code is detected, False otherwise.
+    """
+    image = cv2.imread(image_path)
+    qr_detector = cv2.QRCodeDetector()
+    data, bbox, _ = qr_detector.detectAndDecode(image)
+    return bool(data)  # Return True if QR code data is found
+
+
 def main(crop_dir: str, credentials: str, output_dir: str, encoding: str = 'utf8') -> None:
     """
     Perform OCR on a directory containing JPEG images using Google Cloud Vision API.
@@ -117,6 +134,10 @@ def main(crop_dir: str, credentials: str, output_dir: str, encoding: str = 'utf8
     
     # Get the list of JPEG filenames
     filenames = [file for file in glob.glob(os.path.join(f"{crop_dir}/*.jpg"))]
+
+    # Filter out images containing QR codes
+    filenames = [file for file in filenames if not detect_qr_code(file)]
+    print(f"Number of files to process after filtering QR codes: {len(filenames)}")
 
     # Run API calls on multiple threads
     num_files = len(filenames)
@@ -137,7 +158,7 @@ def main(crop_dir: str, credentials: str, output_dir: str, encoding: str = 'utf8
 
     print("OCR process completed.")
 
-    # Select wheteher it should be saved as utf-8 or ascii
+    # Select whether it should be saved as utf-8 or ascii
     print("Saving OCR results...")
     utils.save_json(results_json, RESULTS_JSON_BOUNDING, output_dir)
 
