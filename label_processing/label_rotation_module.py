@@ -92,10 +92,11 @@ def predict_angles(input_image_dir: str, output_image_dir: str) -> None:
 
     # Load images and labels
     loaded_images = []
-    for img_path in glob(os.path.join(input_image_dir, '*.jpg')):
-        img = cv2.imread(img_path)
-        img = cv2.resize(img, IMAGE_SIZE)
-        loaded_images.append(img)
+    for img_path in glob(os.path.join(input_image_dir, '*')):
+        if img_path.lower().endswith(('.jpg', '.jpeg', '.tiff', '.tif')):
+            img = cv2.imread(img_path, cv2.IMREAD_UNCHANGED)
+            img = cv2.resize(img, IMAGE_SIZE)
+            loaded_images.append(img)
 
     # Load the trained model
     model_path = '../../models/rotation_model.h5'
@@ -117,7 +118,7 @@ def predict_angles(input_image_dir: str, output_image_dir: str) -> None:
     predicted_labels = np.argmax(predictions, axis=1)
 
     # List all image files in the data directory
-    filenames = [os.path.join(input_image_dir, filename) for filename in os.listdir(input_image_dir) if filename.endswith('.jpg')]
+    filenames = [os.path.join(input_image_dir, filename) for filename in os.listdir(input_image_dir) if filename.lower().endswith(('.jpg', '.jpeg', '.tiff', '.tif'))]
 
     # Apply rotation to images based on their predicted angles
     for img_path, predicted_angle in zip(filenames, predicted_labels):
